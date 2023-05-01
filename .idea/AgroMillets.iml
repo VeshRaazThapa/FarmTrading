@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/.pub" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
