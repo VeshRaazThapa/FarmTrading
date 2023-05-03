@@ -61,7 +61,7 @@ class AppCache {
   bool isCustomer() {
     return appState.value.user == null
         ? true
-        : appState.value.user!.userType == "customer";
+        : appState.value.user!.userType == "wholesaler";
   }
 
   bool isLoggedIn() {

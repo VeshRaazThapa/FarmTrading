@@ -18,7 +18,7 @@ class SignUpPage extends ConsumerStatefulWidget {
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   late AuthManager _authManager;
-  String dropdownValue = "customer";
+  String dropdownValue = "wholesaler";
   String email = "", password = "", username = "", phone = "";
 
   @override
@@ -49,7 +49,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           SizedBox(height: 0.015 * getHeight(context)),
           const Center(
             child: Text(
-              "Agro Millets",
+              "Farm Trading",
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           ),
           const Center(
             child: Text(
-              "Bringing the farm to your doorstep",
+              "Cut the middle man between farmers and wholesalers",
               style: TextStyle(
                 fontSize: 12,
               ),
@@ -173,7 +173,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       child: DropdownButtonFormField(
         value: dropdownValue,
         items: const [
-          DropdownMenuItem(value: "customer", child: Text("Customer")),
+          DropdownMenuItem(value: "wholesaler", child: Text("Wholesaler")),
           DropdownMenuItem(value: "farmer", child: Text("Farmer")),
         ],
         onChanged: (v) {

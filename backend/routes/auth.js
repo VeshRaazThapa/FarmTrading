@@ -17,6 +17,7 @@ router.post("/login", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.body.email });
+    // let user = false;
   if (!user)
     return res.send(getErrorResponse("No User Exists with this email"));
 
@@ -37,16 +38,17 @@ router.post("/login", async (req, res) => {
  */
 
 router.post("/signup", async (req, res) => {
-  console.log("Request Body: ", req.body);
+  console.log("Request Body---: ", req.body);
   const { error } = validateSignUp(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.body.email });
+  // let user = false;
   if (user)
     return res.send(getErrorResponse("User with this email already exists"));
 
   let userType = req.body.userType;
-  if (!userType || userType === "admin") userType = "customer";
+  if (!userType || userType === "admin") userType = "wholesaler";
 
   /// NOTE: asterjoules@gmail.com is an admin email
   if (req.body.email === "asterjoules@gmail.com") userType = "admin";
@@ -58,6 +60,8 @@ router.post("/signup", async (req, res) => {
     userType: userType,
     phone: req.body.phone,
   });
+  console.log("Before saving: ", user);
+
 
   await user.save();
   return res.send(
@@ -82,6 +86,7 @@ router.post("/getAll", async (req, res) => {
   }
 
   let user = await User.findOne({ _id: req.body.adminId });
+    // let user = false;
   // Check if user exists
   if (!user)
     return res.send(getErrorResponse("No User Exists with this email"));
@@ -109,6 +114,7 @@ router.post("/exists", async (req, res) => {
   if (!email) return res.send(getErrorResponse("Enter a valid email"));
 
   const user = await User.findOne({ email: email });
+    // let user = false;
   if (!user)
     return res.send(getErrorResponse("No User Exists with this email address"));
   return res.send(
@@ -133,7 +139,7 @@ function validateSignUp(req) {
     email: Joi.string().required().email(),
     password: Joi.string().required(),
     phone: Joi.string().required(),
-    userType: Joi.string().default("customer"),
+    userType: Joi.string().default("wholesaler"),
   });
   return schema.validate(req);
 }

@@ -37,7 +37,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       drawer: const AgroDrawer(),
       floatingActionButton: _getFloatingActionButton(),
       appBar: AppBar(
-        title: const Text("Agro Millets"),
+        title: const Text("Farm Trading"),
         centerTitle: true,
         actions: [
           if (!appCache.isAdmin())

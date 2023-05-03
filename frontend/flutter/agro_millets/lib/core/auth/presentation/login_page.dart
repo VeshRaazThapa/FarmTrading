@@ -50,7 +50,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           SizedBox(height: 0.025 * getHeight(context)),
           const Center(
             child: Text(
-              "Agro Millets",
+              "Farm Trading",
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -59,7 +59,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
           const Center(
             child: Text(
-              "Bringing the farm to your doorstep",
+              "Cut the middle man between farmers and wholesalers",
               style: TextStyle(
                 fontSize: 12,
               ),
@@ -124,6 +124,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
           ),
+
           SizedBox(height: 0.015 * getHeight(context)),
           GestureDetector(
             onTap: () => goToPage(
@@ -147,8 +148,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
           ),
+          // SizedBox(height: 0.015 * getHeight(context)),
+          // ActionButton(
+          //   isFilled: true,
+          //   onPressed: () => goToPage(
+          //     context,
+          //     const SignUpPage(),
+          //     clearStack: true,
+          //   ),
+          //   text: "Sign up",
+          // ),
         ],
       ),
     );
   }
+
 }

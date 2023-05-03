@@ -68,7 +68,7 @@ class AuthManager {
               // TODO: Take these properties after google sign in success
               password: "~",
               phone: "000",
-              userType: "customer");
+              userType: "wholesaler");
         } else {
           return await loginUsingEmailPassword(
             email: user.email,
