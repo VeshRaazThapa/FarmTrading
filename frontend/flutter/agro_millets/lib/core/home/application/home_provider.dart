@@ -9,6 +9,10 @@ class HomeProvider extends ChangeNotifier {
   List<MilletItem> _items = [];
 
   List<MilletItem> getItems() => [..._items];
+  List<Map<String,String>> getItemsCategories() => [{'vegetables': 'VEGETABLES'},
+    {'fruits': 'FRUITS'},
+    {'grains': 'GRAINS'},
+    {'dairy products': 'DAIRY PRODUCTS'},];
 
   void updateItems(List<MilletItem> items) {
     if (listEquals(items, _items)) return;

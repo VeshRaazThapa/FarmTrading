@@ -6,9 +6,11 @@ import 'package:flutter/foundation.dart';
 class MilletItem {
   final String id;
   final String name;
+  final String category;
   final String listedBy;
   final String description;
   final double price;
+  final double quantity;
   final List<dynamic> images;
   final DateTime listedAt;
 
@@ -17,7 +19,9 @@ class MilletItem {
     required this.name,
     required this.listedBy,
     required this.description,
+    required this.category,
     required this.price,
+    required this.quantity,
     required this.images,
     required this.listedAt,
   });
@@ -27,7 +31,9 @@ class MilletItem {
     String? name,
     String? listedBy,
     String? description,
+    String? category,
     double? price,
+    double? quantity,
     List<dynamic>? images,
     DateTime? listedAt,
   }) {
@@ -36,7 +42,9 @@ class MilletItem {
       name: name ?? this.name,
       listedBy: listedBy ?? this.listedBy,
       description: description ?? this.description,
+      category: category ?? this.category,
       price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
       images: images ?? this.images,
       listedAt: listedAt ?? this.listedAt,
     );
@@ -48,7 +56,9 @@ class MilletItem {
       'name': name,
       'listedBy': listedBy,
       'description': description,
+      'category': category,
       'price': price,
+      'quantity': quantity,
       'images': images,
       'listedAt': listedAt.toIso8601String(),
     };
@@ -60,7 +70,9 @@ class MilletItem {
       name: map['name'] as String,
       listedBy: map['listedBy'] as String,
       description: map['description'] as String,
+      category: map['category'] as String,
       price: map['price'] * 1.0,
+      quantity: map['quantity'] * 1.0,
       images: List<dynamic>.from((map['images'] as List<dynamic>)),
       listedAt: DateTime.parse(map['listedAt']),
     );
@@ -73,7 +85,7 @@ class MilletItem {
 
   @override
   String toString() {
-    return 'MilletItem(id: $id, name: $name, listedBy: $listedBy, description: $description, price: $price, images: $images, listedAt: $listedAt)';
+    return 'MilletItem(id: $id, name: $name, listedBy: $listedBy, description: $description,category: $category, price: $price,quantity:$quantity, images: $images, listedAt: $listedAt)';
   }
 
   @override
@@ -84,7 +96,9 @@ class MilletItem {
         other.name == name &&
         other.listedBy == listedBy &&
         other.description == description &&
+        other.category == category &&
         other.price == price &&
+        other.quantity == quantity &&
         listEquals(other.images, images) &&
         other.listedAt == listedAt;
   }
@@ -95,7 +109,9 @@ class MilletItem {
         name.hashCode ^
         listedBy.hashCode ^
         description.hashCode ^
+        category.hashCode ^
         price.hashCode ^
+        quantity.hashCode ^
         images.hashCode ^
         listedAt.hashCode;
   }

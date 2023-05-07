@@ -42,6 +42,21 @@ class HomeManager {
       },
     );
   }
+  attachCategory(String category) async {
+    debugPrint("[home_manager] Attaching Listeners...");
+    var data = await getCategoryItems(category);
+    ref.read(homeProvider).updateItems(data);
+
+    timer = Timer.periodic(
+      const Duration(seconds: 10),
+      (timer) async {
+        if (context.mounted) {
+          var data = await getCategoryAll(category);
+          ref.read(homeProvider).updateItems(data);
+        }
+      },
+    );
+  }
 
   Future<List<MilletItem>> getAllItems() async {
     if (appCache.isFarmer()) {
@@ -49,10 +64,37 @@ class HomeManager {
     }
     return getAll();
   }
+  Future<List<MilletItem>> getCategoryItems(String category) async {
+    if (appCache.isFarmer()) {
+      return await getAllFarmerCategoryItems(appState.value.user!.id,category);
+    }
+    return getCategoryAll(category);
+  }
+  // Future<List<MilletItem>> getAllCategories() async {
+  //   List<MilletItem> list = ['vegetables','fruits','grains','dairy products'];
+  //   return list;
+  // }
 
   Future<List<MilletItem>> getAll() async {
     var response = await http.get(
       Uri.parse("$API_URL/list/getAll"),
+    );
+
+    Map data = json.decode(response.body);
+    if (data["statusCode"] == 200) {
+      List dataMap = data["data"];
+      List<MilletItem> list = [];
+
+      for (var e in dataMap) {
+        list.add(MilletItem.fromMap(e));
+      }
+      return list;
+    }
+    return [];
+  }
+  Future<List<MilletItem>> getCategoryAll(String category) async {
+    var response = await http.get(
+      Uri.parse("$API_URL/list/getAll/$category"),
     );
 
     Map data = json.decode(response.body);
@@ -90,12 +132,35 @@ Future<List<MilletItem>> getAllFarmerItems(String id) async {
   }
   return [];
 }
+Future<List<MilletItem>> getAllFarmerCategoryItems(String id,String category) async {
+  var response = await http.get(
+    Uri.parse("$API_URL/list/getAll/$category/$id"),
+  );
+
+  debugPrint(response.request!.url.toString());
+  Map data = json.decode(response.body);
+
+  if (data["statusCode"] == 200) {
+    List dataMap = data["data"];
+    List<MilletItem> list = [];
+
+    for (var e in dataMap) {
+      list.add(MilletItem.fromMap(e));
+    }
+    debugPrint("Farmer Items $list");
+
+    return list;
+  }
+  return [];
+}
 
 Future<void> addItem({
   required String name,
   required String listedBy,
   required String description,
+  required String category,
   required List<String> images,
+  required double quantity,
   required double price,
 }) async {
   var response = await http.post(
@@ -105,8 +170,10 @@ Future<void> addItem({
       {
         "listedBy": listedBy,
         "name": name,
+        "category":category,
         "description": description,
         "images": images,
+        "quantity": quantity,
         "price": price,
         "comments": [],
       },

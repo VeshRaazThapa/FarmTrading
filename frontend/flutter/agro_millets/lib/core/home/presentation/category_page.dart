@@ -10,19 +10,23 @@ import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/widgets/text/large_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+class CategoryPage extends ConsumerStatefulWidget {
+  final String category;
+
+  const CategoryPage({super.key, required this.category});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
+  ConsumerState<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _CategoryPageState extends ConsumerState<CategoryPage> {
   late HomeManager _homeManager;
+  late String category ='';
 
   @override
   void initState() {
     _homeManager = HomeManager(context, ref);
+    category = this.category;
     super.initState();
   }
 
@@ -53,8 +57,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: ListView(
         children: [
           _getHeading(),
-          AgroCategoryGridView(
-            list: ref.watch(homeProvider).getItemsCategories(),
+          AgroGridView(
+            list: ref.watch(homeProvider).getItems(),
           ),
         ],
       ),
@@ -68,9 +72,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             (appCache.isAdmin() || appCache.isFarmer())) {
           return FloatingActionButton(
             onPressed: () async {
-              // _homeManager.dispose();
+              _homeManager.dispose();
               await goToPage(context, AddItemPage(homeManager: _homeManager));
-              // _homeManager.attach();
+              _homeManager.attachCategory(this.category);
             },
             child: const Icon(Icons.add),
           );
@@ -90,7 +94,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           } else if (appCache.isAdmin()) {
             return const LargeText("All Products");
           }
-          return const LargeText("Categories");
+          return const LargeText("Explore Products");
         },
       ),
     );

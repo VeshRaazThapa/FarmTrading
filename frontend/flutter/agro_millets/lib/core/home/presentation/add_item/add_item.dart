@@ -19,8 +19,9 @@ class AddItemPage extends StatefulWidget {
 class AddItemPageState extends State<AddItemPage> {
   late double height, width;
 
-  String name = "", description = "";
-  double price = 0.0;
+  String name = "", description = "",category="fruits";
+
+  double price = 0.0, quantity=0.0;
   String imageUrl = "";
   bool pickedImage = false;
 
@@ -62,14 +63,15 @@ class AddItemPageState extends State<AddItemPage> {
         isLoading.value = true;
         String itemId = const Uuid().v1();
 
-        String url =
-            await storageManager.uploadItemImage(itemId, File(imageUrl));
+        String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
 
         await addItem(
           name: name,
           listedBy: appState.value.user!.id,
           description: description,
+          category: category,
           images: [url],
+          quantity: quantity,
           price: price,
         );
         isLoading.value = false;
@@ -145,13 +147,47 @@ class AddItemPageState extends State<AddItemPage> {
           ((e) => name = e),
           TextInputType.text,
         ),
+        DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            labelText: 'Category',
+            border: OutlineInputBorder(),
+          ),
+          value: category,
+          items: <DropdownMenuItem<String>>[
+            DropdownMenuItem<String>(
+              value: 'vegetables',
+              child: Text('Vegetables'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'fruits',
+              child: Text('Fruits'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'grains',
+              child: Text('Grains'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'dairy products',
+              child: Text('Dairy Products'),
+            ),
+          ],
+          onChanged: (String? newValue) {
+            setState(() {
+              category = newValue ?? '';
+            });
+          },
+        ),
         _getTextField(
           "Description",
           ((e) => description = e),
           TextInputType.text,
         ),
         _getTextField(
-          "Price",
+          "Quantity (KG)",
+          ((e) => quantity = double.parse(e)),
+          TextInputType.number,
+        ), _getTextField(
+          "Price (Rs.)",
           ((e) => price = double.parse(e)),
           TextInputType.number,
         ),

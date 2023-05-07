@@ -17,15 +17,25 @@ const milletItemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   images: {
     type: [String],
     required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 0,
   },
   price: {
     type: Number,
     required: true,
     min: 0,
   },
+
   listedAt: {
     type: Date,
     default: () => {
@@ -41,9 +51,11 @@ function validateMilletItem(item) {
   const schema = Joi.object().keys({
     listedBy: JoiObjectId().required(),
     name: Joi.string().required(),
+    category: Joi.string().required(),
     description: Joi.string().required(),
     images: Joi.array().items(Joi.string().required()).required(),
     comments: Joi.array(),
+    quantity: Joi.number().required(),
     price: Joi.number().required(),
   });
   return schema.validate(item);

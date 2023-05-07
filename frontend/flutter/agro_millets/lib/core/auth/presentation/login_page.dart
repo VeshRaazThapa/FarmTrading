@@ -43,9 +43,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         children: [
           const SizedBox(height: kToolbarHeight),
           Image.asset(
-            "assets/logo_app.png",
-            height: 100,
-            width: 100,
+            "assets/new_logo.png",
+            height: 150,
+            width: 200,
           ),
           SizedBox(height: 0.025 * getHeight(context)),
           const Center(
