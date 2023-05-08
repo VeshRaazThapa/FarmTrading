@@ -2,7 +2,7 @@ import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/core/home/application/home_provider.dart';
 import 'package:agro_millets/core/home/presentation/add_item/add_item.dart';
 import 'package:agro_millets/core/home/presentation/widgets/agro_grid_view.dart';
-import 'package:agro_millets/core/home/presentation/widgets/agro_category_grid_view.dart';
+import 'package:agro_millets/core/home/presentation/widgets/agro_category_filter_grid_view.dart';
 import 'package:agro_millets/core/home/presentation/widgets/drawer.dart';
 import 'package:agro_millets/core/search/presentation/search_page.dart';
 import 'package:agro_millets/data/cache/app_cache.dart';
@@ -21,12 +21,12 @@ class CategoryPage extends ConsumerStatefulWidget {
 
 class _CategoryPageState extends ConsumerState<CategoryPage> {
   late HomeManager _homeManager;
-  late String category ='';
+  // late String category ='';
 
   @override
   void initState() {
     _homeManager = HomeManager(context, ref);
-    category = this.category;
+    // category = this.wicategory;
     super.initState();
   }
 
@@ -57,8 +57,9 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
       body: ListView(
         children: [
           _getHeading(),
-          AgroGridView(
+          AgroCategoryFilterGridView(
             list: ref.watch(homeProvider).getItems(),
+            category: this.widget.category,
           ),
         ],
       ),
@@ -74,7 +75,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
             onPressed: () async {
               _homeManager.dispose();
               await goToPage(context, AddItemPage(homeManager: _homeManager));
-              _homeManager.attachCategory(this.category);
+              _homeManager.attachCategory(this.widget.category);
             },
             child: const Icon(Icons.add),
           );
