@@ -55,7 +55,7 @@ class _AgroDrawerState extends State<AgroDrawer> {
             );
           }),
           const Spacer(),
-          Image.asset("assets/new_logo.png", height: 50),
+          Image.asset("assets/logo_app.png", height: 50),
           const SizedBox(height: 10),
           FutureBuilder(
               future: PackageInfo.fromPlatform(),
