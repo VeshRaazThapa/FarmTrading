@@ -9,12 +9,12 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/build" />
-      <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/flutter/agro_millets/.dart_tool" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" exported="" name="Dart SDK" level="project" />
     <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>
