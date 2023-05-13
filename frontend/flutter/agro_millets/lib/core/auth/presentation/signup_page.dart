@@ -127,14 +127,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     MdiIcons.google,
                     color: Colors.white,
                   ),
-                  SizedBox(width: 10),
-                  Text(
-                    "Sign up using Google",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  )
+                  // SizedBox(width: 10),
+                  // Text(
+                  //   "Sign up using Google",
+                  //   style: TextStyle(
+                  //     color: Colors.white,
+                  //     fontSize: 16,
+                  //   ),
+                  // )
                 ],
               ),
             ),

@@ -86,7 +86,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Builder(
         builder: (context ) {
           if (appCache.isFarmer()) {
-            return const LargeText("Your Products");
+            return const LargeText("Your Categories");
           } else if (appCache.isAdmin()) {
             return const LargeText("All Products");
           }
