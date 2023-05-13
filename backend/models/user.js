@@ -34,6 +34,16 @@ const userSchema = new mongoose.Schema({
       return new Date();
     },
   },
+  latitude: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  longitude: {
+    type: Number,
+    required: true,
+    min: 0,
+  }
 });
 
 const User = mongoose.model("User", userSchema);
@@ -44,6 +54,8 @@ function validateUser(user) {
     email: Joi.string().required().email(),
     password: Joi.string().required(),
     phone: Joi.string().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
   });
   return schema.validate(user);
 }

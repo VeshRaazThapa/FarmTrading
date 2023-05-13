@@ -59,6 +59,8 @@ router.post("/signup", async (req, res) => {
     password: req.body.password,
     userType: userType,
     phone: req.body.phone,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
   });
   console.log("Before saving: ", user);
 
