@@ -27,7 +27,7 @@ class AgroItem extends StatelessWidget {
     return SizedBox(
       width: 0.5 * getWidth(context),
       height:
-          index % 2 == 0 ? 0.2 * getHeight(context) : 0.3 * getHeight(context),
+          0.3 * getHeight(context),
       child: Stack(
         children: [
           Positioned.fill(
@@ -94,7 +94,7 @@ class AgroItem extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  "₹ ${item.price}",
+                                  "रू ${item.price}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),
                                 ),

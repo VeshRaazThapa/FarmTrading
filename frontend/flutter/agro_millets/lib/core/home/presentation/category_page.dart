@@ -55,10 +55,10 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
         ],
       ),
       body: ListView(
-        children: [
-          _getHeading(),
+          children: [
+          _getHeading(this.widget.category),
           AgroCategoryFilterGridView(
-            list: ref.watch(homeProvider).getItems(),
+              list: ref.watch(homeProvider).getItems(),
             category: this.widget.category,
           ),
         ],
@@ -85,17 +85,18 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
     );
   }
 
-  _getHeading() {
+  _getHeading( String category) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
       child: Builder(
         builder: (context ) {
           if (appCache.isFarmer()) {
-            return const LargeText("Your Products");
+            return LargeText("Your " +  category);
           } else if (appCache.isAdmin()) {
             return const LargeText("All Products");
           }
-          return const LargeText("Explore Products");
+          return  LargeText("Explore All " + category);
         },
       ),
     );

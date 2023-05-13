@@ -25,13 +25,13 @@ class AgroCategoryFilterGridView extends StatelessWidget {
       itemBuilder: (context, index) {
         print(category);
         print(list[index].category);
-        if (category == list[index].category.toString() )
+        if (category == list[index].category )
           {
             return AgroItem(
               index: index,
               item: list[index],
             );
-          } else return new Container();
+          } else return SizedBox.shrink();
       },
     );
   }
