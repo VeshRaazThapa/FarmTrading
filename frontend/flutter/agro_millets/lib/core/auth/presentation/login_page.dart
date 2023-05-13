@@ -69,12 +69,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           CustomTextField(
             onChanged: (v) => email = v,
             label: "Email",
+            // value:"adhikariaarati68@gmail.com",
+
           ),
           const SizedBox(height: 10),
           CustomTextField(
             isPassword: true,
             onChanged: (v) => password = v,
             label: "Password",
+            // value:"adhikariaarati68",
           ),
           SizedBox(height: 0.3 * getHeight(context)),
           ActionButton(
