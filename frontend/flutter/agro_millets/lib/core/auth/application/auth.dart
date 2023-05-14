@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
+
 
 class AuthManager {
   final BuildContext context;
@@ -37,8 +39,8 @@ class AuthManager {
 
     if (data["statusCode"] == 200) {
       ref.read(authProvider).updateUserData(
-            User.fromMap(data["data"]),
-          );
+        User.fromMap(data["data"]),
+      );
 
       return 1;
     } else {
@@ -68,6 +70,7 @@ class AuthManager {
               // TODO: Take these properties after google sign in success
               password: "~",
               phone: "000",
+              coordinate:LatLng(27.0, 85.0),
               userType: "wholesaler");
         } else {
           return await loginUsingEmailPassword(
@@ -91,6 +94,9 @@ class AuthManager {
     required String password,
     required String phone,
     required String userType,
+    required LatLng coordinate,
+
+
   }) async {
     ref.read(authProvider).clearUserData();
     isLoading.value = true;
@@ -100,6 +106,7 @@ class AuthManager {
         "name": name,
         "email": email,
         "password": password,
+        // "coordinate":coordinate,
         "phone": phone,
         "userType": userType,
       },

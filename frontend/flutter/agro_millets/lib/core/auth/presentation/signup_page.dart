@@ -6,7 +6,9 @@ import 'package:agro_millets/main.dart';
 import 'package:agro_millets/widgets/action_button.dart';
 import 'package:agro_millets/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
@@ -20,6 +22,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   late AuthManager _authManager;
   String dropdownValue = "wholesaler";
   String email = "", password = "", username = "", phone = "";
+  MapController mapController = MapController();
+  List<LatLng> selectedCoordinates = [];
+
 
   @override
   void initState() {
@@ -33,9 +38,50 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       isLoading: _authManager.isLoading,
       child: _getSignUpPage(context),
     );
+    return FlutterMap(
+      options: MapOptions(
+        center: LatLng(51.509364, -0.128928),
+        zoom: 9.2,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.example.app',
+        ),
+      ],
+      nonRotatedChildren: [
+        RichAttributionWidget(
+          attributions: [
+            TextSourceAttribution(
+              'OpenStreetMap contributors',
+              // onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   SingleChildScrollView _getSignUpPage(BuildContext context) {
+    List<Marker> buildMarkers() {
+      if (selectedCoordinates.isEmpty) {
+        return [Marker(point:LatLng(27.694549317783395, 85.32055500746131),builder: (BuildContext context) {
+          return Icon(Icons.location_on, color: Colors.red);
+        },)];
+      }
+      return [
+        Marker(
+          point: selectedCoordinates.last,
+          builder: (BuildContext context) {
+            return Icon(Icons.location_on, color: Colors.red);
+          },
+        )
+      ];
+      return selectedCoordinates.map((LatLng latLng) {
+
+      }).toList();
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Column(
@@ -87,7 +133,66 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             keyboardType: TextInputType.phone,
             onChanged: (v) => phone = v,
             label: "Phone",
+          ), // Add this condition
+          SizedBox(
+            height: 200, // Set the desired height for the map
+            width: 500, // Set the width to match the parent widget or provide a fixed width
+            child: Stack(
+              children: [
+                FlutterMap(
+                  mapController: mapController,
+
+                  options: MapOptions(
+                    center: LatLng(27.694549317783395, 85.32055500746131),
+                    zoom: 18,
+                    minZoom: 2, // Set the minimum zoom level
+                    maxZoom: 18,
+                    onTap: (mapController,LatLng latLng) {
+                      setState(() {
+                        selectedCoordinates.add(latLng);
+                      });
+                    },
+                    // Set the maximum zoom level
+                  ),
+
+                  children: [
+                    TileLayer(
+                      urlTemplate: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidmVzaGciLCJhIjoiY2xobHo4OXlpMTcwMDNzcGhzZ2wxZmtzZSJ9.fV25khQviUGZ14rLQC__tw',
+                      userAgentPackageName: 'com.example.agro_millets',
+                    ),
+
+                    MarkerLayer(
+                      markers: buildMarkers(),
+                    ),
+
+                  ],
+
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Column(
+                    children: [
+                      FloatingActionButton(
+                        onPressed: () {
+                          mapController.move(mapController.center,18);
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                      SizedBox(height: 10),
+                      FloatingActionButton(
+                        onPressed: () {
+                          mapController.move(mapController.center,8);
+                        },
+                        child: Icon(Icons.remove),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
+
           _getUserTypeDropDown(context),
           SizedBox(height: 0.025 * getHeight(context)),
           ActionButton(
@@ -98,6 +203,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 name: username.trim(),
                 password: password.trim(),
                 phone: phone.trim(),
+                coordinate: selectedCoordinates.last,
                 userType: dropdownValue,
               );
               if (res == 1 && mounted) {
