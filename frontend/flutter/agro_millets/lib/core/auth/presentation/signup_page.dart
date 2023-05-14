@@ -70,12 +70,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         },)];
       }
       return [
-        Marker(
-          point: selectedCoordinates.last,
-          builder: (BuildContext context) {
-            return Icon(Icons.location_on, color: Colors.red);
-          },
-        )
+      Marker(
+        point: selectedCoordinates.last,
+        builder: (BuildContext context) {
+          return Icon(Icons.location_on, color: Colors.red);
+        },
+      )
       ];
       return selectedCoordinates.map((LatLng latLng) {
 
@@ -134,6 +134,15 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             onChanged: (v) => phone = v,
             label: "Phone",
           ), // Add this condition
+          _getUserTypeDropDown(context),
+          const Center(
+            child: Text(
+              "Pick your location in the map",
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
           SizedBox(
             height: 200, // Set the desired height for the map
             width: 500, // Set the width to match the parent widget or provide a fixed width
@@ -192,8 +201,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               ],
             ),
           ),
-
-          _getUserTypeDropDown(context),
           SizedBox(height: 0.025 * getHeight(context)),
           ActionButton(
             isFilled: false,
@@ -289,4 +296,5 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       ),
     );
   }
+
 }

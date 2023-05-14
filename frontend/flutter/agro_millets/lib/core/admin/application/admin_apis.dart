@@ -6,6 +6,7 @@ import 'package:agro_millets/models/user.dart';
 import 'package:agro_millets/secrets.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 
 class AdminAPIs {
   // http://localhost:3000/api/auth/getAll
@@ -42,6 +43,24 @@ class AdminAPIs {
 
       for (var e in dataMap) {
         list.add(MilletItem.fromMap(e));
+      }
+      return list;
+    }
+    return [];
+  }
+
+  static Future<List<LatLng>> getAllFarmerCoordinates() async {
+    var response = await http.get(
+      Uri.parse("$API_URL/farmer-coordinates/getAll"),
+    );
+
+    Map data = json.decode(response.body);
+    if (data["statusCode"] == 200) {
+      List dataMap = data["data"];
+      List<LatLng> list = [];
+
+      for (var e in dataMap) {
+        list.add(LatLng(e.lattitude, e.longitude));
       }
       return list;
     }

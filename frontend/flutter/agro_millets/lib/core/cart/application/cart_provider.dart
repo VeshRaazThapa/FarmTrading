@@ -15,7 +15,7 @@ class CartProvider extends ChangeNotifier {
     appCache.updateAppCache(AppState(
       cart: [CartItem(count: 1, item: item.item), ...appState.value.cart],
       user: appState.value.user,
-      isLoggedIn: appState.value.isLoggedIn,
+      isLoggedIn: appState.value.isLoggedIn, map: [],
     ));
     notifyListeners();
   }
@@ -32,7 +32,7 @@ class CartProvider extends ChangeNotifier {
     appCache.updateAppCache(AppState(
       cart: list,
       user: appState.value.user,
-      isLoggedIn: appState.value.isLoggedIn,
+      isLoggedIn: appState.value.isLoggedIn, map: [],
     ));
 
     notifyListeners();

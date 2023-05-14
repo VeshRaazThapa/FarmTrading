@@ -5,6 +5,7 @@ const { getSuccessResponse, getErrorResponse } = require("../utils/response");
 const router = express.Router();
 const _ = require("lodash");
 const { default: mongoose } = require("mongoose");
+const {MilletItem} = require("../models/millet_item");
 
 /**
  * Login as a user using {email} {password}
@@ -59,6 +60,8 @@ router.post("/signup", async (req, res) => {
     password: req.body.password,
     userType: userType,
     phone: req.body.phone,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
   });
   console.log("Before saving: ", user);
 
@@ -108,7 +111,11 @@ router.post("/getAll", async (req, res) => {
     )
   );
 });
+router.get("/farmer-coordinates/getAll", async (req, res) => {
+  const items = await User.find({});
 
+  return res.send(getSuccessResponse("Success!", items));
+});
 router.post("/exists", async (req, res) => {
   var email = req.body.email;
   if (!email) return res.send(getErrorResponse("Enter a valid email"));
@@ -139,6 +146,8 @@ function validateSignUp(req) {
     email: Joi.string().required().email(),
     password: Joi.string().required(),
     phone: Joi.string().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
     userType: Joi.string().default("wholesaler"),
   });
   return schema.validate(req);

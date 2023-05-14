@@ -7,6 +7,8 @@ class User {
   final String email;
   final String phone;
   final String userType;
+  final double latitude;
+  final double longitude;
 
   const User({
     required this.id,
@@ -14,6 +16,8 @@ class User {
     required this.email,
     required this.phone,
     required this.userType,
+    required this.latitude,
+    required this.longitude,
   });
 
   @override
@@ -24,13 +28,19 @@ class User {
       String? email,
       String? phone,
       String? userType,
-      String? id}) {
+      String? id,
+      double? latitude,
+      double? longitude,
+
+      }) {
     return User(
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
       userType: userType ?? this.userType,
       id: id ?? this.id,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 
@@ -40,6 +50,8 @@ class User {
       'email': email,
       'phone': phone,
       'userType': userType,
+      'latitude': latitude,
+      'longitude': longitude,
       "_id": id,
     };
   }
@@ -50,6 +62,8 @@ class User {
       email: map['email'] as String,
       phone: map['phone'] ?? "",
       userType: map['userType'] as String,
+      latitude: map['latitude'] as double,
+      longitude: map['longitude'] as double,
       id: map['_id'] as String,
     );
   }

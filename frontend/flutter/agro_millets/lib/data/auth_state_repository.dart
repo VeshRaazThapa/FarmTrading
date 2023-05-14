@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/models/cart_item.dart';
 import 'package:agro_millets/models/user.dart';
+import 'package:latlong2/latlong.dart';
 
 final authProvider =
     ChangeNotifierProvider<AuthProvider>((ref) => AuthProvider());
@@ -33,7 +34,7 @@ class AuthProvider extends ChangeNotifier {
     _authState = AppState(
       isLoggedIn: true,
       user: user,
-      cart: [],
+      cart: [], map: [],
     );
     appCache.updateAppCache(_authState);
     notifyListeners();
@@ -55,10 +56,14 @@ class AppState {
   /// Cart is saved locally on device also 
   final List<CartItem> cart;
 
+  /// Cart is saved locally on device also
+  final List<User>? map;
+
   const AppState({
     this.isLoggedIn = false,
     required this.user,
     required this.cart,
+     this.map,
   });
 
   factory AppState.initial() {
@@ -66,6 +71,7 @@ class AppState {
       user: null,
       isLoggedIn: false,
       cart: [],
+      map: [],
     );
   }
 
@@ -73,11 +79,13 @@ class AppState {
     bool? isLoggedIn,
     User? user,
     List<CartItem>? cart,
+    List<User>? map,
   }) {
     return AppState(
       isLoggedIn: isLoggedIn ?? this.isLoggedIn,
       user: user ?? this.user,
       cart: cart ?? this.cart,
+      map: map ?? this.map,
     );
   }
 
@@ -86,6 +94,7 @@ class AppState {
       'isLoggedIn': isLoggedIn,
       'user': user?.toMap(),
       'cart': cart.map((x) => x.toMap()).toList(),
+      'map': map?.map((x)=>x).toList(),
     };
   }
 
@@ -99,7 +108,12 @@ class AppState {
         (map['cart']).map<CartItem>(
           (x) => CartItem.fromMap(x as Map<String, dynamic>),
         ),
-      ),
+      ), map: List<User>.from(
+        (map['map']).map((item) {
+          return item ;
+
+        }).toList()
+    )
     );
   }
 

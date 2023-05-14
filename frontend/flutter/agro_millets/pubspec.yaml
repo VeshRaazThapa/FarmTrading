@@ -16,7 +16,6 @@ dependencies:
   firebase_storage: ^11.0.16
   flutter:
     sdk: flutter
-  #  flutter_osm_plugin: ^0.53.2
   flutter_map: ^4.0.0
   flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^2.3.2
