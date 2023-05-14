@@ -102,14 +102,20 @@ class AuthManager {
     isLoading.value = true;
     var response = await http.post(
       Uri.parse("$API_URL/auth/signup"),
-      body: {
-        "name": name,
-        "email": email,
-        "password": password,
-        // "coordinate":coordinate,
-        "phone": phone,
-        "userType": userType,
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: json.encode(
+          {
+            "name": name,
+            "email": email,
+            "password": password,
+            "latitude":coordinate.latitude,
+            "longitude":coordinate.longitude,
+            "phone": phone,
+            "userType": userType,
+          }
+      ),
     );
     isLoading.value = false;
     Map<String, dynamic> data = json.decode(response.body);
