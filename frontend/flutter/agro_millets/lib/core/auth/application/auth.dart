@@ -39,8 +39,8 @@ class AuthManager {
 
     if (data["statusCode"] == 200) {
       ref.read(authProvider).updateUserData(
-            User.fromMap(data["data"]),
-          );
+        User.fromMap(data["data"]),
+      );
 
       return 1;
     } else {

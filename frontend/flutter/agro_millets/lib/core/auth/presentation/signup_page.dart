@@ -296,23 +296,5 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       ),
     );
   }
-}
 
-
-bool centerCoordinatesInvalid(MapOptions options) {
-  // Check if zoom level is invalid
-  if (options.zoom.isNaN || options.zoom.isInfinite) {
-    return true;
-  }
-
-  // Check if center coordinates are invalid
-  if (options.center == null ||
-      options.center.latitude.isNaN ||
-      options.center.latitude.isInfinite ||
-      options.center.longitude.isNaN ||
-      options.center.longitude.isInfinite) {
-    return true;
-  }
-
-  return false;
 }
