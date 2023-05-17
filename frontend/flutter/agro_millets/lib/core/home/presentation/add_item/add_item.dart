@@ -19,7 +19,8 @@ class AddItemPage extends StatefulWidget {
 class AddItemPageState extends State<AddItemPage> {
   late double height, width;
 
-  String name = "", description = "",category="fruits";
+  String name = "", description = "",category="fruits",quantityType="kg";
+
 
   double price = 0.0, quantity=0.0;
   String imageUrl = "";
@@ -168,8 +169,20 @@ class AddItemPageState extends State<AddItemPage> {
               child: Text('Grains'),
             ),
             DropdownMenuItem<String>(
-              value: 'dairy products',
-              child: Text('Dairy Products'),
+              value: 'livestock',
+              child: Text('Live stocks'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'oil',
+              child: Text('Oil Seeds'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'lentils',
+              child: Text('Lentils'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'cash',
+              child: Text('Cash Crop'),
             ),
           ],
           onChanged: (String? newValue) {
@@ -181,13 +194,39 @@ class AddItemPageState extends State<AddItemPage> {
         _getTextField(
           "Description",
           ((e) => description = e),
-          TextInputType.text,
+          TextInputType.multiline,
         ),
         _getTextField(
-          "Quantity (KG)",
+          "Quantity",
           ((e) => quantity = double.parse(e)),
           TextInputType.number,
-        ), _getTextField(
+        ),
+        DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            labelText: 'Quantity Type',
+            border: OutlineInputBorder(),
+          ),
+          value: quantityType,
+          items: <DropdownMenuItem<String>>[
+            DropdownMenuItem<String>(
+              value: 'kg',
+              child: Text('K.G'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'litre',
+              child: Text('Litre'),
+            ),
+            DropdownMenuItem<String>(
+              value: 'count',
+              child: Text('Count'),
+            ),
+          ],
+          onChanged: (String? newValue) {
+            setState(() {
+              quantityType = newValue ?? '';
+            });
+          },
+        ),_getTextField(
           "Price (Rs.)",
           ((e) => price = double.parse(e)),
           TextInputType.number,
@@ -220,7 +259,7 @@ class AddItemPageState extends State<AddItemPage> {
       ),
       child: TextField(
         maxLines: null,
-        keyboardType: keyboardType,
+        keyboardType:  TextInputType.multiline,
         onChanged: (value) {
           onChange(value);
           setState(() {});

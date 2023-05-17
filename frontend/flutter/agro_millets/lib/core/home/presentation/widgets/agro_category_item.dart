@@ -62,8 +62,17 @@ class AgroCategoryItem extends StatelessWidget {
                   }
                   if (item.keys.toList()[0] == 'grains' ) {
                     image_path = 'assets/grains.png';
-                  }if (item.keys.toList()[0] == 'dairy products' ) {
-                    image_path = 'assets/dairy.png';
+                  }if (item.keys.toList()[0] == 'livestock' ) {
+                    image_path = 'assets/livestock.jpg';
+                  }
+                  if (item.keys.toList()[0] == 'oil' ) {
+                    image_path = 'assets/oilseeds.jpg';
+                  }
+                  if (item.keys.toList()[0] == 'lentils' ) {
+                    image_path = 'assets/lentils.png';
+                  }
+                  if (item.keys.toList()[0] == 'cash' ) {
+                    image_path = 'assets/cashcrop.jpg';
                   }
                   return Column(
                     children: [
