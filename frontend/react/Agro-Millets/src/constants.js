@@ -2,4 +2,4 @@
 // export const API_URL = "http://localhost:3000/api";
 
 // Original API URL
-export const API_URL = "https://agromillets.adaptable.app/api";
+export const API_URL = "http://192.168.1.67:3000/api";
