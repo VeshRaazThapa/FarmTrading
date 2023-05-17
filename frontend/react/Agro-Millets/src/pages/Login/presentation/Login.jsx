@@ -23,13 +23,13 @@ function Login() {
         {/* Top Left Icon and Text */}
         <div className="absolute flex flex-row justify-center left-3 top-3">
           <img className="h-[25px] mr-1 opacity-50" src={icon} alt="" />
-          <p className="text-sm opacity-75 text-slate-500">Agro-Millets</p>
+          <p className="text-sm opacity-75 text-slate-500">Farm-Trading</p>
         </div>
 
         {/* Center Item  */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-8">
           <h1 className="text-2xl font-black text-semiBoldColor">
-            Welcome to Agro-Millets
+            Welcome to Farm-Trading
           </h1>
           <p className="font-extralight">Please enter your details</p>
 
