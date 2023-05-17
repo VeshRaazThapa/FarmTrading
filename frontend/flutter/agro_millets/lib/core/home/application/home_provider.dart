@@ -12,8 +12,14 @@ class HomeProvider extends ChangeNotifier {
   List<Map<String,String>> getItemsCategories() => [{'vegetables': 'VEGETABLES'},
     {'fruits': 'FRUITS'},
     {'grains': 'GRAINS'},
-    {'dairy products': 'DAIRY PRODUCTS'},];
-
+    {'livestock': 'LIVE STOCKS'},
+    {'oil': 'OIL SEEDS'},
+    {'lentils': 'LENTILS'},
+    {'cash': 'CASH CROP'},];
+  List<Map<String,String>> getQuantityTypes() => [{'kg': 'K.G'},
+    {'litre': 'Litre'},
+    {'count': 'Count'},
+   ];
   void updateItems(List<MilletItem> items) {
     if (listEquals(items, _items)) return;
     _items = items;
