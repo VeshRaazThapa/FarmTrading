@@ -161,6 +161,7 @@ Future<void> addItem({
   required String category,
   required List<String> images,
   required double quantity,
+  required String quantityType,
   required double price,
 }) async {
   var response = await http.post(
@@ -173,6 +174,7 @@ Future<void> addItem({
         "category":category,
         "description": description,
         "images": images,
+        "quantityType": quantityType,
         "quantity": quantity,
         "price": price,
         "comments": [],

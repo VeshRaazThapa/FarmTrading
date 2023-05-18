@@ -143,7 +143,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
               ),
             ),
             Text(
-              "Quantity: ${item.quantity} KG",
+              "Quantity: ${item.quantity} ${item.quantityType}",
               style: const TextStyle(
                   fontSize: 15,
                   color: lightColor,
