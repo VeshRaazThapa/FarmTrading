@@ -64,8 +64,8 @@ class AddItemPageState extends State<AddItemPage> {
         isLoading.value = true;
         String itemId = const Uuid().v1();
 
-        String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
-        // String url = "https://firebasestorage.googleapis.com/v0/b/kisan-7ffff.appspot.com/o/images%2Fitems%2FMaize_mccornick.org_.jpg?alt=media&token=0ca55aad-eb86-45ff-93a2-fa820fa9c5a0";
+        // String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
+        String url = "https://firebasestorage.googleapis.com/v0/b/kisan-7ffff.appspot.com/o/images%2Fitems%2FMaize_mccornick.org_.jpg?alt=media&token=0ca55aad-eb86-45ff-93a2-fa820fa9c5a0";
 
         await addItem(
           name: name,
@@ -74,7 +74,7 @@ class AddItemPageState extends State<AddItemPage> {
           category: category,
           images: [url],
           quantity: quantity,
-          price: price,
+          price: price, quantityType: quantityType,
         );
         isLoading.value = false;
         if (mounted) {

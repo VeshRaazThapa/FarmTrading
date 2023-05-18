@@ -11,6 +11,7 @@ class MilletItem {
   final String description;
   final double price;
   final double quantity;
+  final String quantityType;
   final List<dynamic> images;
   final DateTime listedAt;
 
@@ -22,6 +23,7 @@ class MilletItem {
     required this.category,
     required this.price,
     required this.quantity,
+    required this.quantityType,
     required this.images,
     required this.listedAt,
   });
@@ -45,6 +47,7 @@ class MilletItem {
       category: category ?? this.category,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
+      quantityType: quantityType,
       images: images ?? this.images,
       listedAt: listedAt ?? this.listedAt,
     );
@@ -59,6 +62,7 @@ class MilletItem {
       'category': category,
       'price': price,
       'quantity': quantity,
+      'quantityType': quantityType,
       'images': images,
       'listedAt': listedAt.toIso8601String(),
     };
@@ -73,6 +77,7 @@ class MilletItem {
       category: map['category'] as String,
       price: map['price'] * 1.0,
       quantity: map['quantity'] * 1.0,
+      quantityType:map['quantityType'],
       images: List<dynamic>.from((map['images'] as List<dynamic>)),
       listedAt: DateTime.parse(map['listedAt']),
     );
@@ -99,6 +104,7 @@ class MilletItem {
         other.category == category &&
         other.price == price &&
         other.quantity == quantity &&
+        other.quantityType == quantityType &&
         listEquals(other.images, images) &&
         other.listedAt == listedAt;
   }
@@ -112,6 +118,7 @@ class MilletItem {
         category.hashCode ^
         price.hashCode ^
         quantity.hashCode ^
+        quantityType.hashCode ^
         images.hashCode ^
         listedAt.hashCode;
   }
