@@ -8,9 +8,9 @@ import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/main.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 import '../weather/provider/weatherProvider.dart';
 import '../weather/screens/homeScreen.dart';
@@ -76,7 +76,7 @@ class _AgroDrawerState extends State<AgroDrawer> {
               title: const Text("Logout"),
               leading: const Icon(Icons.logout),
               onTap: () {
-                // ref.read(authProvider).clearUserData();
+                ref.read(authProvider).clearUserData();
                 goToPage(context, const App(), clearStack: true);
               },
             );
