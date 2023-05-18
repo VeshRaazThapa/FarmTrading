@@ -1,5 +1,6 @@
 import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/cart/presentation/cart_page.dart';
+// import 'package:agro_millets/core/home/presentation/weather/view/location_screens.dart';
 import 'package:agro_millets/core/map/presentation/map_page.dart';
 import 'package:agro_millets/core/home/presentation/profile/user_profile.dart';
 import 'package:agro_millets/data/auth_state_repository.dart';
@@ -7,8 +8,12 @@ import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
+
+import '../weather/provider/weatherProvider.dart';
+import '../weather/screens/homeScreen.dart';
 
 class AgroDrawer extends StatefulWidget {
   const AgroDrawer({super.key});
@@ -53,12 +58,32 @@ class _AgroDrawerState extends State<AgroDrawer> {
                 goToPage(context, const MapPage());
               },
             ),
+          if (appCache.isFarmer())
+          ListTile(
+            title: const Text("Weather"),
+            leading: const Icon(Icons.cloud_circle_rounded),
+            onTap: () {
+
+              goToPage(context, MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<WeatherProvider>(
+                    create: (_) => WeatherProvider(),
+                  ),
+                  // Other providers if needed
+                ],
+                child: MaterialApp(
+                  home: HomeScreen(),
+                  // Other app configuration
+                ),
+              ));
+            },
+          ),
           Consumer(builder: (context, ref, child) {
             return ListTile(
               title: const Text("Logout"),
               leading: const Icon(Icons.logout),
               onTap: () {
-                ref.read(authProvider).clearUserData();
+                // ref.read(authProvider).clearUserData();
                 goToPage(context, const App(), clearStack: true);
               },
             );
