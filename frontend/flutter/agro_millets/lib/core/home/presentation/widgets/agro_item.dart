@@ -14,12 +14,14 @@ class AgroItem extends StatelessWidget {
   final int index;
   final MilletItem item;
   final bool showAddCartIcon;
+  final bool showCallIcon;
 
   const AgroItem({
     super.key,
     required this.index,
     required this.item,
     this.showAddCartIcon = true,
+    this.showCallIcon = false,
   });
 
   @override
@@ -98,6 +100,7 @@ class AgroItem extends StatelessWidget {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),
                                 ),
+
                               ],
                             )
                           ]),
