@@ -6,7 +6,7 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final String hint;
   final String value;
-  final String errorText;
+  //final String errorText;
   final bool isPassword;
   final bool isEditable;
 
@@ -27,7 +27,7 @@ class CustomTextField extends StatefulWidget {
     this.onSubmitted,
     this.keyboardType = TextInputType.text,
     this.controller,
-    this.errorText="",
+    //this.errorText="",
   });
 
   @override
@@ -61,7 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         child: TextField(
           enabled: widget.isEditable,
           decoration: InputDecoration(
-            errorText: widget.errorText,
+            //errorText: widget.errorText,
             border: InputBorder.none,
             label: widget.label.isNotEmpty ? Text(widget.label) : null,
             hintText: widget.hint,

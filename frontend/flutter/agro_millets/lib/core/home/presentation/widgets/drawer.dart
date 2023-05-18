@@ -60,7 +60,7 @@ class _AgroDrawerState extends State<AgroDrawer> {
                 goToPage(context, const MapPage());
               },
             ),
-          if (!appCache.isFarmer())
+          if (appCache.isFarmer())
           ListTile(
             title: const Text("Weather"),
             leading: const Icon(Icons.cloud_circle_rounded),
