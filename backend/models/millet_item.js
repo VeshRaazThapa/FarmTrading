@@ -25,6 +25,11 @@ const milletItemSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  quantityType: {
+    type: String,
+    required: true,
+    min: 0,
+  },
   quantity: {
     type: Number,
     required: true,
@@ -55,6 +60,7 @@ function validateMilletItem(item) {
     description: Joi.string().required(),
     images: Joi.array().items(Joi.string().required()).required(),
     comments: Joi.array(),
+    quantityType: Joi.string().required(),
     quantity: Joi.number().required(),
     price: Joi.number().required(),
   });
