@@ -57,7 +57,7 @@ class AppState {
   final List<CartItem> cart;
 
   /// Cart is saved locally on device also
-  final List<User>? map;
+  final List<User?>? map;
 
   const AppState({
     this.isLoggedIn = false,
@@ -108,9 +108,11 @@ class AppState {
         (map['cart']).map<CartItem>(
           (x) => CartItem.fromMap(x as Map<String, dynamic>),
         ),
-      ), map: List<User>.from(
+      ), map: List<User?>.from(
         (map['map']).map((item) {
+          if (item.runtimeType == User) {
           return item ;
+          }
 
         }).toList()
     )
