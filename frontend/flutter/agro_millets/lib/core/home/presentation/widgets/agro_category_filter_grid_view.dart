@@ -31,7 +31,9 @@ class AgroCategoryFilterGridView extends StatelessWidget {
               index: index,
               item: list[index],
             );
-          } else return SizedBox.shrink();
+          } else {
+          return Container();
+        }
       },
     );
   }
