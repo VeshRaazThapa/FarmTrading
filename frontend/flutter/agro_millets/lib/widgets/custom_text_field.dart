@@ -6,7 +6,7 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final String hint;
   final String value;
-
+  final String errorText;
   final bool isPassword;
   final bool isEditable;
 
@@ -27,6 +27,7 @@ class CustomTextField extends StatefulWidget {
     this.onSubmitted,
     this.keyboardType = TextInputType.text,
     this.controller,
+    this.errorText="",
   });
 
   @override
@@ -35,6 +36,7 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   late bool showPassword;
+  bool hasError = false;
 
   @override
   void initState() {
@@ -59,6 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         child: TextField(
           enabled: widget.isEditable,
           decoration: InputDecoration(
+            errorText: widget.errorText,
             border: InputBorder.none,
             label: widget.label.isNotEmpty ? Text(widget.label) : null,
             hintText: widget.hint,
@@ -81,8 +84,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
               widget.onChanged!(e);
             }
           },
+
         ),
       ),
+
     );
   }
 

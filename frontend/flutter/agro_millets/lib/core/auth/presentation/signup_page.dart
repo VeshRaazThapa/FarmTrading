@@ -25,6 +25,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   MapController mapController = MapController();
   List<LatLng> selectedCoordinates = [];
 
+  get hasError => null;
+
 
   @override
   void initState() {
@@ -127,6 +129,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             isPassword: true,
             onChanged: (v) => password = v,
             label: "Password",
+            //errorText: hasError ? "Invalid password" : null,
           ),
           const SizedBox(height: 10),
           CustomTextField(
