@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ItemDetailPage extends ConsumerStatefulWidget {
   final MilletItem item;
@@ -57,14 +58,18 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
         actions: [
           if (appCache.isCustomer())
             IconButton(
-              onPressed: () {
-                CartItem cartItem = CartItem(item: item.id, count: 1);
-                ref.read(cartProvider).addItemToCart(cartItem);
-                CartManager(context, ref, poll: false)
-                    .addItemToCart(item: cartItem);
-              },
-              icon: const Icon(MdiIcons.cartPlus),
+              onPressed:() => UrlLauncher.launch('tel://9812345668'),
+              icon: const Icon(MdiIcons.phoneDial),
             ),
+            IconButton(
+                onPressed: () {
+                  CartItem cartItem = CartItem(item: item.id, count: 1);
+                  ref.read(cartProvider).addItemToCart(cartItem);
+                  CartManager(context, ref, poll: false)
+                      .addItemToCart(item: cartItem);
+                },
+                icon: const Icon(MdiIcons.cartPlus),
+              ),
           if (appCache.isAdmin() || appCache.isOwnerOf(item.listedBy))
             IconButton(
               onPressed: () {
