@@ -61,15 +61,16 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
               onPressed:() => UrlLauncher.launch('tel://9812345668'),
               icon: const Icon(MdiIcons.phoneDial),
             ),
+          if (appCache.isCustomer())
             IconButton(
-                onPressed: () {
-                  CartItem cartItem = CartItem(item: item.id, count: 1);
-                  ref.read(cartProvider).addItemToCart(cartItem);
-                  CartManager(context, ref, poll: false)
-                      .addItemToCart(item: cartItem);
-                },
-                icon: const Icon(MdiIcons.cartPlus),
-              ),
+            onPressed: () {
+              CartItem cartItem = CartItem(item: item.id, count: 1);
+              ref.read(cartProvider).addItemToCart(cartItem);
+              CartManager(context, ref, poll: false)
+                  .addItemToCart(item: cartItem);
+            },
+            icon: const Icon(MdiIcons.cartPlus),
+          ),
           if (appCache.isAdmin() || appCache.isOwnerOf(item.listedBy))
             IconButton(
               onPressed: () {
@@ -126,7 +127,8 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 Text(
                   "रू ${item.price}",
                   style: const TextStyle(
-                      fontSize: 25,
+                      fontSize: 18,
+                      overflow: TextOverflow.ellipsis,
                       color: lightColor,
                       fontWeight: FontWeight.w600),
                 ),
@@ -148,7 +150,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
               ),
             ),
             Text(
-              "Quantity: ${item.quantity} KG",
+              "Quantity: ${item.quantity} ${item.quantityType}",
               style: const TextStyle(
                   fontSize: 15,
                   color: lightColor,
