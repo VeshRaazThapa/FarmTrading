@@ -74,7 +74,7 @@ class AddItemPageState extends State<AddItemPage> {
           category: category,
           images: [url],
           quantity: quantity,
-          price: price,
+          price: price, quantityType: quantityType,
         );
         isLoading.value = false;
         if (mounted) {
