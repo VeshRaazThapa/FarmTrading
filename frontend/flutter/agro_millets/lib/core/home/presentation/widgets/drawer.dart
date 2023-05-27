@@ -1,5 +1,6 @@
 import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/cart/presentation/cart_page.dart';
+import 'package:agro_millets/core/chat/main.dart';
 // import 'package:agro_millets/core/home/presentation/weather/view/location_screens.dart';
 import 'package:agro_millets/core/map/presentation/map_page.dart';
 import 'package:agro_millets/core/home/presentation/profile/user_profile.dart';
@@ -7,9 +8,11 @@ import 'package:agro_millets/data/auth_state_repository.dart';
 import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:provider/provider.dart';
 
 import '../weather/provider/weatherProvider.dart';
@@ -68,6 +71,18 @@ class _AgroDrawerState extends State<AgroDrawer> {
 
               goToPage(context,
                   MyApp()
+                  );
+            },
+          ),
+          if (appCache.isFarmer())
+          ListTile(
+            title: const Text("Chat"),
+            leading: const Icon(Icons.chat_bubble_outline),
+            onTap: () async {
+              await Firebase.initializeApp();
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              goToPage(context,
+                  MyChatApp(prefs: prefs,)
                   );
             },
           ),

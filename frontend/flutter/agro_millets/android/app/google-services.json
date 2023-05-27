@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1028457346219-ns8cs2lucdcf23h12nqp3n3pcca1l8a9.apps.googleusercontent.com",
+          "client_id": "1028457346219-g2aa6bahdrdaae14o5gkq39eev6jma2u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agro_millets",
+            "certificate_hash": "9f0487a1191028a856cb91201e51ea0b414f92eb"
+          }
+        },
+        {
+          "client_id": "1028457346219-o32splgj32hpppc91rv11966o9muqhuu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
