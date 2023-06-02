@@ -1,6 +1,7 @@
 import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/cart/presentation/cart_page.dart';
 import 'package:agro_millets/core/chat/main.dart';
+import 'package:agro_millets/core/home/presentation/news/news_page.dart';
 // import 'package:agro_millets/core/home/presentation/weather/view/location_screens.dart';
 import 'package:agro_millets/core/map/presentation/map_page.dart';
 import 'package:agro_millets/core/home/presentation/profile/user_profile.dart';
@@ -71,6 +72,16 @@ class _AgroDrawerState extends State<AgroDrawer> {
 
               goToPage(context,
                   MyApp()
+                  );
+            },
+          ),
+          if (appCache.isFarmer() && !appCache.isAdmin())
+          ListTile(
+            title: const Text("News"),
+            leading: const Icon(Icons.newspaper_rounded),
+            onTap: () {
+              goToPage(context,
+                  NewsApp()
                   );
             },
           ),
