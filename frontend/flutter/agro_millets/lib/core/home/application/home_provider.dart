@@ -11,10 +11,10 @@ class HomeProvider extends ChangeNotifier {
   List<MilletItem> getItems() => [..._items];
   List<Map<String,String>> getItemsCategories() => [{'vegetables': 'VEGETABLES'},
     {'fruits': 'FRUITS'},
-    {'grains': 'GRAINS'},
+    {'cereals': 'CEREALS'},
     {'livestock': 'LIVE STOCKS'},
     {'oil': 'OIL SEEDS'},
-    {'lentils': 'LENTILS'},
+    {'pulses': 'PULSES'},
     {'cash': 'CASH CROP'},];
   List<Map<String,String>> getQuantityTypes() => [{'kg': 'K.G'},
     {'litre': 'Litre'},
