@@ -55,7 +55,7 @@ class _NewsAppState extends State<NewsApp> {
   bool notFound = false;
   List<int> data = [];
   bool isLoading = false;
-  String baseApi = 'https://newsapi.org/v2/top-headlines?';
+  String baseApi = 'https://newsapi.org/v2/everything?q=crops';
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +85,11 @@ class _NewsAppState extends State<NewsApp> {
                   else
                     Container(),
                   const SizedBox(height: 10),
-                  if (category != null)
-                    Text('Category = $category')
-                  else
-                    Container(),
-                  const SizedBox(height: 20),
+                  // if (category != null)
+                  //   Text('Category = $category')
+                  // else
+                  //   Container(),
+                  // const SizedBox(height: 20),
                 ],
               ),
               ListTile(
@@ -109,7 +109,7 @@ class _NewsAppState extends State<NewsApp> {
                   for (int i = 0; i < listOfCountry.length; i++)
                     DropDownList(
                       call: () {
-                        country = listOfCountry[i]['code'];
+                        country = listOfCountry[i]['name'];
                         cName = listOfCountry[i]['name']!.toUpperCase();
                         getNews();
                       },
@@ -117,19 +117,19 @@ class _NewsAppState extends State<NewsApp> {
                     ),
                 ],
               ),
-              ExpansionTile(
-                title: const Text('Category'),
-                children: [
-                  for (int i = 0; i < listOfCategory.length; i++)
-                    DropDownList(
-                      call: () {
-                        category = listOfCategory[i]['code'];
-                        getNews();
-                      },
-                      name: listOfCategory[i]['name']!.toUpperCase(),
-                    )
-                ],
-              ),
+              // ExpansionTile(
+              //   title: const Text('Category'),
+              //   children: [
+              //     for (int i = 0; i < listOfCategory.length; i++)
+              //       DropDownList(
+              //         call: () {
+              //           category = listOfCategory[i]['code'];
+              //           getNews();
+              //         },
+              //         name: listOfCategory[i]['name']!.toUpperCase(),
+              //       )
+              //   ],
+              // ),
               ExpansionTile(
                 title: const Text('Channel'),
                 children: [
@@ -291,7 +291,10 @@ class _NewsAppState extends State<NewsApp> {
   }
 
   Future<void> getDataFromApi(String url) async {
+    print(url);
     final http.Response res = await http.get(Uri.parse(url));
+    print(res.statusCode);
+    print('---------');
     if (res.statusCode == 200) {
       if (jsonDecode(res.body)['totalResults'] == 0) {
         notFound = !isLoading;
@@ -334,22 +337,22 @@ class _NewsAppState extends State<NewsApp> {
       setState(() => news = []);
       pageNum = 1;
     }
-    baseApi = 'https://newsapi.org/v2/top-headlines?pageSize=10&page=$pageNum&';
+    baseApi = 'https://newsapi.org/v2/everything?pageSize=10&page=$pageNum&';
 
-    baseApi += country == null ? 'country=in&' : 'country=$country&';
+    baseApi += country == null ? 'q=crops&' : 'q=crops $country&';
     baseApi += category == null ? '' : 'category=$category&';
     baseApi += 'apiKey=$apiKey';
     if (channel != null) {
       country = null;
       category = null;
       baseApi =
-          'https://newsapi.org/v2/top-headlines?pageSize=10&page=$pageNum&sources=$channel&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
+          'https://newsapi.org/v2/everything?q=crops&pageSize=10&page=$pageNum&sources=$channel&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
     }
     if (searchKey != null) {
       country = null;
       category = null;
       baseApi =
-          'https://newsapi.org/v2/top-headlines?pageSize=10&page=$pageNum&q=$searchKey&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
+          'https://newsapi.org/v2/everything?q=crops&pageSize=10&page=$pageNum&q=$searchKey&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
     }
     //print(baseApi);
     getDataFromApi(baseApi);
