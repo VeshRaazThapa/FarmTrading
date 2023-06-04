@@ -23,18 +23,18 @@ class _ArticalNewsState extends State<ArticalNews> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text('News',),),
+      appBar: AppBar(centerTitle: true, title: const Text('Agro-News',),),
       body: Stack(
         children: [
-          // WebView(
-          //   initialUrl: widget.newsUrl,
-          //   javascriptMode: JavascriptMode.unrestricted,
-          //   onWebViewCreated: (WebViewController controller) {
-          //     _completer.complete(controller);
-          //   },
-          //   onPageFinished: (String finish) =>
-          //       setState(() => _isLoadingPage = false),
-          // ),
+          WebView(
+            initialUrl: widget.newsUrl,
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (WebViewController controller) {
+              _completer.complete(controller);
+            },
+            onPageFinished: (String finish) =>
+                setState(() => _isLoadingPage = false),
+          ),
           if (_isLoadingPage)
             Container(
               alignment: FractionalOffset.center,

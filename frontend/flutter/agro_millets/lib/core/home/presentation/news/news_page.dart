@@ -55,7 +55,7 @@ class _NewsAppState extends State<NewsApp> {
   bool notFound = false;
   List<int> data = [];
   bool isLoading = false;
-  String baseApi = 'https://newsapi.org/v2/top-headlines?';
+  String baseApi = 'https://newsapi.org/v2/top-headlines?q=farm&q=agriculture&';
 
   @override
   Widget build(BuildContext context) {
@@ -334,7 +334,7 @@ class _NewsAppState extends State<NewsApp> {
       setState(() => news = []);
       pageNum = 1;
     }
-    baseApi = 'https://newsapi.org/v2/top-headlines?pageSize=10&page=$pageNum&';
+    baseApi = 'https://newsapi.org/v2/top-headlines?q=farm&q=agriculture&pageSize=10&page=$pageNum&';
 
     baseApi += country == null ? 'country=in&' : 'country=$country&';
     baseApi += category == null ? '' : 'category=$category&';
@@ -343,13 +343,13 @@ class _NewsAppState extends State<NewsApp> {
       country = null;
       category = null;
       baseApi =
-          'https://newsapi.org/v2/top-headlines?pageSize=10&page=$pageNum&sources=$channel&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
+          'https://newsapi.org/v2/top-headlines?q=farm&q=agriculture&pageSize=10&page=$pageNum&sources=$channel&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
     }
     if (searchKey != null) {
       country = null;
       category = null;
       baseApi =
-          'https://newsapi.org/v2/top-headlines?pageSize=10&page=$pageNum&q=$searchKey&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
+          'https://newsapi.org/v2/top-headlines?q=farm&q=agriculture&pageSize=10&page=$pageNum&q=$searchKey&apiKey=58b98b48d2c74d9c94dd5dc296ccf7b6';
     }
     //print(baseApi);
     getDataFromApi(baseApi);
