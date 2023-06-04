@@ -61,7 +61,7 @@ class _NewsAppState extends State<NewsApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'News',
+      title: 'Argo-News',
       theme: isSwitched
           ? ThemeData(
               fontFamily: GoogleFonts.poppins().fontFamily,
@@ -147,7 +147,7 @@ class _NewsAppState extends State<NewsApp> {
         ),
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('News'),
+          title: const Text('Agro-News'),
           actions: [
             IconButton(
               onPressed: () {
