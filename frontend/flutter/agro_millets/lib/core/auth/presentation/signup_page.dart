@@ -1,5 +1,7 @@
 import 'package:agro_millets/core/auth/application/auth.dart';
 import 'package:agro_millets/core/auth/presentation/login_page.dart';
+import 'package:agro_millets/core/auth/presentation/phone_otp.dart';
+import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
 import 'package:agro_millets/core/home/presentation/widgets/loading_widget.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/main.dart';
@@ -131,12 +133,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             label: "Password",
             //errorText: hasError ? "Invalid password" : null,
           ),
-          const SizedBox(height: 10),
-          CustomTextField(
-            keyboardType: TextInputType.phone,
-            onChanged: (v) => phone = v,
-            label: "Phone",
-          ), // Add this condition
+          // const SizedBox(height: 10),
+          // CustomTextField(
+          //   keyboardType: TextInputType.phone,
+          //   onChanged: (v) => phone = v,
+          //   label: "Phone",
+          // ), // Add this condition
           _getUserTypeDropDown(context),
           const Center(
             child: Text(
@@ -212,12 +214,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 email: email.trim(),
                 name: username.trim(),
                 password: password.trim(),
-                phone: phone.trim(),
+                phone: 'phone',
                 coordinate: selectedCoordinates.last,
                 userType: dropdownValue,
               );
               if (res == 1 && mounted) {
-                goToPage(context, const RolePage(), clearStack: true);
+                goToPage(context, const MyPhone(), clearStack: true);
               }
             },
             text: "Sign up",
@@ -227,7 +229,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             onTap: () async {
               var res = await _authManager.googleAuth();
               if (res == 1 && mounted) {
-                goToPage(context, const RolePage(), clearStack: true);
+                goToPage(context, const MyPhone(), clearStack: true);
               }
             },
             child: Container(
