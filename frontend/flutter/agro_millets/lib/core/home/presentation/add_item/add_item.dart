@@ -165,8 +165,8 @@ class AddItemPageState extends State<AddItemPage> {
               child: Text('Fruits'),
             ),
             DropdownMenuItem<String>(
-              value: 'grains',
-              child: Text('Grains'),
+              value: 'cereals',
+              child: Text('Cereals'),
             ),
             DropdownMenuItem<String>(
               value: 'livestock',
@@ -177,8 +177,8 @@ class AddItemPageState extends State<AddItemPage> {
               child: Text('Oil Seeds'),
             ),
             DropdownMenuItem<String>(
-              value: 'lentils',
-              child: Text('Lentils'),
+              value: 'pulses',
+              child: Text('Pulses'),
             ),
             DropdownMenuItem<String>(
               value: 'cash',

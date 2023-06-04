@@ -75,9 +75,8 @@ class _AgroDrawerState extends State<AgroDrawer> {
                   );
             },
           ),
-          if (appCache.isFarmer() && !appCache.isAdmin())
           ListTile(
-            title: const Text("News"),
+            title: const Text("Agro-News"),
             leading: const Icon(Icons.newspaper_rounded),
             onTap: () {
               goToPage(context,

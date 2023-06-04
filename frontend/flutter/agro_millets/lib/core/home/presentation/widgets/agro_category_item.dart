@@ -60,7 +60,7 @@ class AgroCategoryItem extends StatelessWidget {
                   if (item.keys.toList()[0] == 'vegetables' ) {
                     image_path = 'assets/vegetables.png';
                   }
-                  if (item.keys.toList()[0] == 'grains' ) {
+                  if (item.keys.toList()[0] == 'cereals' ) {
                     image_path = 'assets/grains.png';
                   }if (item.keys.toList()[0] == 'livestock' ) {
                     image_path = 'assets/livestock.jpg';
@@ -68,7 +68,7 @@ class AgroCategoryItem extends StatelessWidget {
                   if (item.keys.toList()[0] == 'oil' ) {
                     image_path = 'assets/oilseeds.jpg';
                   }
-                  if (item.keys.toList()[0] == 'lentils' ) {
+                  if (item.keys.toList()[0] == 'pulses' ) {
                     image_path = 'assets/lentils.png';
                   }
                   if (item.keys.toList()[0] == 'cash' ) {
