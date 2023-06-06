@@ -1,14 +1,33 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/state_manager.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
+
+import '../../../globals.dart';
 
 class MyPhone extends StatefulWidget {
-  const MyPhone({Key? key}) : super(key: key);
+
+
+  const MyPhone({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MyPhone> createState() => _MyPhoneState();
 }
-
+class VerificationData {
+  static String verificationId = '';
+}
 class _MyPhoneState extends State<MyPhone> {
   TextEditingController countryController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  var verificationId = ''.obs;
+  // static String verificationId = '';
 
   @override
   void initState() {
@@ -43,7 +62,7 @@ class _MyPhoneState extends State<MyPhone> {
                 height: 10,
               ),
               Text(
-                "We need to register your phone without getting started!",
+                "We need to register your phone before getting started!",
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -82,7 +101,11 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                     Expanded(
                         child: TextField(
+                          controller: _phoneController,
                       keyboardType: TextInputType.phone,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
+                          ],
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Phone",
@@ -102,8 +125,13 @@ class _MyPhoneState extends State<MyPhone> {
                         primary: Colors.green.shade600,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'verify');
+                    onPressed: () async {
+                      String phone = countryController.text+' '+_phoneController.text;
+                      await phoneAuthentication(phone);
+                      // print(phone_number_verified);
+                      // print('-----');
+                      goToPage(context,MyVerify(verificationId:this.verificationId.value,phone:phone));
+                      // Navigator.pushNamed(context, 'verify');
                     },
                     child: Text("Send the code")),
               )
@@ -113,4 +141,56 @@ class _MyPhoneState extends State<MyPhone> {
       ),
     );
   }
-}
+
+  Future<void> sendOTPCode(String phoneNumber) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle verification failure
+      },
+      codeSent: (String verificationId, [int? forceResendingToken]) {
+        VerificationData.verificationId = verificationId;
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Handle timeout error if needed
+      }, verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {  },
+    );
+  }
+
+  Future<void> phoneAuthentication(String phoneNo) async {
+    print(phoneNo);
+    await _auth.verifyPhoneNumber(
+        phoneNumber: '+977 98-61698983',
+        verificationCompleted: (credential
+            ) async {      await _auth.signInWithCredential(credential);
+    },
+    verificationFailed: (e) {
+    if (e.code == 'invalid-phone-number'){
+      print(
+      'the provided no is not valid'
+      );
+
+  } else {
+      print('Something Went Wrong. Try Again');
+  }
+
+
+  }, codeSent: (verificationId,resendToken) async {
+        print('The Code has been sent.......');
+        this.verificationId.value=verificationId;
+        // await verifyOTP('123456');
+        }, codeAutoRetrievalTimeout: (verificationId){
+      print('The Code retrieval timout.......');
+
+      this.verificationId.value = verificationId;
+        }
+  );
+  }
+  // Future<bool>verifyOTP(String otp) async {
+  //   print(verificationId.value);
+  //   print('------');
+  // var credentials = await _auth.signInWithCredential(PhoneAuthProvider.credential(verificationId: verificationId.value, smsCode: otp));
+  // return credentials.user != null ? true:false;
+  }
+
+

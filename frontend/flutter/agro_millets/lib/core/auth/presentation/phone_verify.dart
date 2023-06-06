@@ -1,14 +1,32 @@
+import 'package:agro_millets/core/auth/presentation/phone_otp.dart';
+import 'package:agro_millets/core/auth/presentation/signup_page.dart';
+import 'package:agro_millets/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 
+import '../../home/presentation/news/constants.dart';
+
 class MyVerify extends StatefulWidget {
-  const MyVerify({Key? key}) : super(key: key);
+  final String verificationId;
+  final String phone;
+
+  const MyVerify({Key? key,required this.verificationId,required this.phone,}) : super(key: key);
 
   @override
   State<MyVerify> createState() => _MyVerifyState();
 }
 
 class _MyVerifyState extends State<MyVerify> {
+  String pinValue ='';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController _pinController = TextEditingController();
+  Key _pinputKey = UniqueKey();
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
@@ -73,7 +91,7 @@ class _MyVerifyState extends State<MyVerify> {
                 height: 10,
               ),
               Text(
-                "We need to register your phone without getting started!",
+                "We need to register your phone before getting started!",
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -87,9 +105,10 @@ class _MyVerifyState extends State<MyVerify> {
                 // defaultPinTheme: defaultPinTheme,
                 // focusedPinTheme: focusedPinTheme,
                 // submittedPinTheme: submittedPinTheme,
-
+                key: _pinputKey,
+                controller: _pinController,
                 showCursor: true,
-                onCompleted: (pin) => print(pin),
+                onCompleted: (pin) =>pinValue = pin,
               ),
               SizedBox(
                 height: 20,
@@ -102,7 +121,26 @@ class _MyVerifyState extends State<MyVerify> {
                         primary: Colors.green.shade600,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {},
+                    onPressed: () async {
+                      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                        verificationId: this.widget.verificationId,
+                        smsCode: pinValue,
+                      );
+                      try {
+                        var credentials = await _auth.signInWithCredential(credential);
+                        bool success = credentials.user != null ? true:false;
+                        if (success) {
+                          goToPage(context, SignUpPage(phone:this.widget.phone));
+                        }
+                      } catch(e) {
+                        _pinController.clear();
+                        _pinputKey = UniqueKey();
+                        showFailureToast('Invalid Verification Pin');
+                      }
+                      // print('Finally Pin verified');
+                      // print(value);
+
+                    },
                     child: Text("Verify Phone Number")),
               ),
               Row(

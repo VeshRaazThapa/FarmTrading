@@ -7,12 +7,17 @@ import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    // Set androidProvider to `AndroidProvider.debug`
+    androidProvider: AndroidProvider.debug,
+  );
   await EasyLocalization.ensureInitialized();
   await appCache.getDataFromDevice();
 
@@ -68,4 +73,5 @@ class RolePage extends StatelessWidget {
         ? const AdminPage()
         : const HomePage();
   }
+
 }

@@ -1,4 +1,5 @@
 import 'package:agro_millets/core/auth/application/auth.dart';
+import 'package:agro_millets/core/auth/presentation/phone_otp.dart';
 import 'package:agro_millets/core/auth/presentation/signup_page.dart';
 import 'package:agro_millets/core/home/presentation/widgets/loading_widget.dart';
 import 'package:agro_millets/globals.dart';
@@ -130,7 +131,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           GestureDetector(
             onTap: () => goToPage(
               context,
-              const SignUpPage(),
+              const MyPhone(),
               clearStack: true,
             ),
             child: RichText(
