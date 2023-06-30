@@ -2,6 +2,7 @@ import 'package:agro_millets/core/auth/application/auth.dart';
 import 'package:agro_millets/core/auth/presentation/login_page.dart';
 import 'package:agro_millets/core/auth/presentation/phone_otp.dart';
 import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
+import 'package:agro_millets/core/home/presentation/news/constants.dart';
 import 'package:agro_millets/core/home/presentation/widgets/loading_widget.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/main.dart';
@@ -10,11 +11,15 @@ import 'package:agro_millets/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
-  const SignUpPage({super.key});
+  final String phone;
+  const SignUpPage({Key? key,required this.phone}) : super(key: key);
+  // const SignUpPage(this.phone, {super.key});
+
 
   @override
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
@@ -33,6 +38,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   void initState() {
     _authManager = AuthManager(context, ref);
+    showSuccessToast('Your Phone Number Is Verified');
     super.initState();
   }
 
@@ -210,16 +216,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           ActionButton(
             isFilled: false,
             onPressed: () async {
+
               var res = await _authManager.signUpUsingEmailPassword(
                 email: email.trim(),
                 name: username.trim(),
                 password: password.trim(),
-                phone: 'phone',
+                phone: this.widget.phone.trim(),
                 coordinate: selectedCoordinates.last,
                 userType: dropdownValue,
               );
               if (res == 1 && mounted) {
-                goToPage(context, const MyPhone(), clearStack: true);
+                goToPage(context, RolePage(), clearStack: true);
               }
             },
             text: "Sign up",
@@ -229,7 +236,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             onTap: () async {
               var res = await _authManager.googleAuth();
               if (res == 1 && mounted) {
-                goToPage(context, const MyPhone(), clearStack: true);
+                goToPage(context, const RolePage(), clearStack: true);
               }
             },
             child: Container(
