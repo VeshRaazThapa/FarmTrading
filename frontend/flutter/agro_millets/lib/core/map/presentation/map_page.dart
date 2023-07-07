@@ -1,16 +1,16 @@
-import 'package:agro_millets/colors.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:agro_millets/core/map/application/map_manager.dart';
 import 'package:agro_millets/core/map/application/map_provider.dart';
-import 'package:agro_millets/core/home/application/home_manager.dart';
-import 'package:agro_millets/core/home/presentation/widgets/agro_item.dart';
-import 'package:agro_millets/globals.dart';
-import 'package:agro_millets/models/cart_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 import 'dart:math';
 import '../../../models/user.dart';
 import 'package:agro_millets/data/cache/app_cache.dart';
@@ -28,6 +28,12 @@ class _MapPageState extends ConsumerState<MapPage> {
   MapController mapController = MapController();
   List<LatLng> farmerCoordinates = [];
   var logged_in_user = appState.value.user;
+  late LatLng map_latlng_view= LatLng(logged_in_user!.latitude, logged_in_user!.longitude);
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  Timer? _debounce;
+  List<OSMdata> _options = <OSMdata>[];
+
 
   @override
   void initState() {
@@ -43,6 +49,14 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    OutlineInputBorder inputBorder = OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.blue),
+    );
+    OutlineInputBorder inputFocusBorder = OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.blue, width: 3.0),
+    );
+
     List<Marker> buildMarkers() {
       List<User> map = ref.watch(mapProvider).getMap();
       if (map.isEmpty) {
@@ -51,57 +65,110 @@ class _MapPageState extends ConsumerState<MapPage> {
         },)];
       }
 
-      return map.map((User user) {
+      var markers = map.map((User user) {
         Coordinate coord1 = Coordinate(user.latitude,user.longitude); // Berlin coordinates
         Coordinate coord2 = Coordinate(logged_in_user?.latitude , logged_in_user?.longitude); // Paris coordinates
 
         double distance = distanceBetweenCoordinates(coord1, coord2);
 
         return Marker(
-            point: LatLng(user.latitude,user.longitude),
-            builder: (ctx) => GestureDetector(
+          point: LatLng(user.latitude,user.longitude),
+          builder: (ctx) => GestureDetector(
 
-              onTap: () {
+            onTap: () {
 
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: Text(user.name),
-                    content: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            user.userType + "\n" + user.phone + "\n" + "Distance: " + distance.toStringAsFixed(2) + " KM",
-                            style: const TextStyle(fontSize: 16),
-                          ),
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  // contentPadding: EdgeInsets.zero, // Remove default padding
+                  title:  Row(
+                    // Remove default padding
+                    children: [
+                      Icon(
+                        Icons.person_outline_rounded,
+                        // color: Colors.,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        user.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        IconButton(
-                          onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
-                          icon: const Icon(MdiIcons.phoneDial),
+                      ),
+                    ],
+                  )
+                  ,
+                  content: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.category_outlined),
+                            SizedBox(width: 5),
+                            Text(
+                              user.userType,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            // Icon(Icons.category_outlined),
+                            Icon(Icons.nordic_walking_outlined),
+                            SizedBox(width: 5),
+                            Text(
+                              distance.toStringAsFixed(2) + " KM",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(Icons.phone_android_outlined),
+                            // Container(
+                            //   // padding: EdgeInsets.only(right: 5.0), // Adjust the left padding as needed
+                            //   child:
+                            // )
+                            // ,
+                            // SizedBox(width: 5),
+                            Text(
+                              user.phone,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            IconButton(
+                              padding: EdgeInsets.only(right: 0.0),
+                              onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
+                              icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('Close'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
                   ),
-                );
-              },
-              child: Row(
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              );
+
+            },
+            child: OverflowBox(
+              minWidth: 0,
+              maxWidth: double.infinity,
+              maxHeight: double.infinity,
+              child: Column(
                 children: [
-                  Icon(Icons.location_on, color: Colors.red),
-                  // SizedBox(width: 8),
-                  //
                   Container(
                     color: Colors.white, // Background color
                     child: Text(
-                      distance.toStringAsFixed(2) + " KM",
+                      distance.toStringAsFixed(1) + " KM",
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.normal,
@@ -109,79 +176,211 @@ class _MapPageState extends ConsumerState<MapPage> {
                       ),
                     ),
                   ),
-
+                  Icon(Icons.location_on, color: Colors.red),
+                  // SizedBox(width: 8),
                 ],
               ),
+            ),
+              // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
+
+
+
+
+
+
+
+          ),
+          // builder: (BuildContext context) {
+          //   return Icon(Icons.location_on, color: Colors.red);
+          // },
+
+        );
+      }).toList();
+      markers.add(
+          Marker(
+            point: LatLng(logged_in_user!.latitude,logged_in_user!.longitude),
+            builder: (ctx) => GestureDetector(
+
+              child: OverflowBox(
+                minWidth: 0,
+                maxWidth: double.infinity,
+                maxHeight: double.infinity,
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.white, // Background color
+                      child: Text(
+                        'Your Location',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.blue, // Font color
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.location_on, color: Colors.green),
+                    // SizedBox(width: 8),
+                  ],
+                ),
+              ),
+              // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
+
+
+
+
+
+
+
             ),
             // builder: (BuildContext context) {
             //   return Icon(Icons.location_on, color: Colors.red);
             // },
 
-          );
-      }).toList();
+          )
+      );
+      return markers;
     }
 
     return Scaffold(
+
       appBar: AppBar(
-        title: const Text("Sellers Near You"),
+        title: const Text("Farmers Near You"),
       ),
-      body: SizedBox(
-        // height: 200, // Set the desired height for the map
-        // width: 500, // Set the width to match the parent widget or provide a fixed width
-        child: Stack(
-          children: [
-            FlutterMap(
-              mapController: mapController,
-
-              options: MapOptions(
-                center: LatLng(logged_in_user!.latitude, logged_in_user!.longitude),
-                zoom: 9,
-                minZoom: 2, // Set the minimum zoom level
-                maxZoom: 18,
-                // onTap: (mapController,LatLng latLng) {
-                //   setState(() {
-                //     farmerCoordinates.add(latLng);
-                //   });
-                // },
-                // Set the maximum zoom level
-              ),
-
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:Column(
               children: [
-                TileLayer(
-                  urlTemplate: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidmVzaGciLCJhIjoiY2xobHo4OXlpMTcwMDNzcGhzZ2wxZmtzZSJ9.fV25khQviUGZ14rLQC__tw',
-                  userAgentPackageName: 'com.example.agro_millets',
-                ),
+                TextFormField(
+                    controller: _searchController,
+                    focusNode: _focusNode,
+                    decoration: InputDecoration(
+                      hintText: 'Search Location',
+                      border: inputBorder,
+                      focusedBorder: inputFocusBorder,
+                    ),
+                    onChanged: (String value) {
+                      if (_debounce?.isActive ?? false) _debounce?.cancel();
 
-                MarkerLayer(
-                  markers: buildMarkers(),
-                ),
+                      _debounce =
+                          Timer(const Duration(milliseconds: 2000), () async {
+                            if (kDebugMode) {
+                              print(value);
+                            }
+                            var client = http.Client();
+                            try {
+                              String url =
+                                  'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1';
+                              if (kDebugMode) {
+                                print(url);
+                              }
+                              var response = await client.post(Uri.parse(url));
+                              var decodedResponse =
+                              jsonDecode(utf8.decode(response.bodyBytes))
+                              as List<dynamic>;
+                              if (kDebugMode) {
+                                print(decodedResponse);
+                              }
+                              _options = decodedResponse
+                                  .map((e) => OSMdata(
+                                  displayname: e['display_name'],
+                                  lat: double.parse(e['lat']),
+                                  lon: double.parse(e['lon'])))
+                                  .toList();
+                              setState(() {});
+                            } finally {
+                              client.close();
+                            }
 
+                            setState(() {});
+                          });
+                    }),
+                StatefulBuilder(builder: ((context, setState) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _options.length > 5 ? 5 : _options.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_options[index].displayname),
+                          subtitle: Text(
+                              '${_options[index].lat},${_options[index].lon}'),
+                          onTap: () {
+                            mapController.move(
+                                LatLng(
+                                    _options[index].lat, _options[index].lon),
+                                9.0);
+
+                            _focusNode.unfocus();
+                            _options.clear();
+                            setState(() {});
+                          },
+                        );
+                      });
+                })),
               ],
-
-            ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: Column(
+            )
+          ),
+          Expanded(
+            child: SizedBox(
+              child: Stack(
                 children: [
-                  FloatingActionButton(
-                    onPressed: () {
-                      mapController.move(mapController.center,18);
-                    },
-                    child: Icon(Icons.add),
+                  FlutterMap(
+                    mapController: mapController,
+
+                    options: MapOptions(
+                      center: map_latlng_view,
+                      zoom: 9,
+                      minZoom: 2, // Set the minimum zoom level
+                      maxZoom: 18,
+                      // onTap: (mapController,LatLng latLng) {
+                      //   setState(() {
+                      //     farmerCoordinates.add(latLng);
+                      //   });
+                      // },
+                      // Set the maximum zoom level
+                    ),
+
+                    children: [
+                      TileLayer(
+                        urlTemplate: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidmVzaGciLCJhIjoiY2xobHo4OXlpMTcwMDNzcGhzZ2wxZmtzZSJ9.fV25khQviUGZ14rLQC__tw',
+                        userAgentPackageName: 'com.example.agro_millets',
+                      ),
+
+                      MarkerLayer(
+                        markers: buildMarkers(),
+                      ),
+
+                    ],
+
                   ),
-                  SizedBox(height: 10),
-                  FloatingActionButton(
-                    onPressed: () {
-                      mapController.move(mapController.center,8);
-                    },
-                    child: Icon(Icons.remove),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Column(
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            mapController.move(mapController.center, 18);
+                          },
+                          child: Icon(Icons.add),
+                        ),
+                        SizedBox(height: 10),
+                        FloatingActionButton(
+                          onPressed: () {
+                            mapController.move(mapController.center, 8);
+                          },
+                          child: Icon(Icons.remove),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
 
     );
