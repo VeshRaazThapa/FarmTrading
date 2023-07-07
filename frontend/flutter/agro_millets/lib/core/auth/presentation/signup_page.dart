@@ -48,28 +48,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       isLoading: _authManager.isLoading,
       child: _getSignUpPage(context),
     );
-    return FlutterMap(
-      options: MapOptions(
-        center: LatLng(51.509364, -0.128928),
-        zoom: 9.2,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
-      ],
-      nonRotatedChildren: [
-        RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              // onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-            ),
-          ],
-        ),
-      ],
-    );
+
   }
 
   SingleChildScrollView _getSignUpPage(BuildContext context) {
