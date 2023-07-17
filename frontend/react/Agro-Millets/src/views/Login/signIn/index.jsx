@@ -4,7 +4,7 @@ import farm from "../../../assets/farm.jpg";
 import icon from "../../../assets/icon.png";
 import login from "../application/auth";
 import { toast } from "react-toastify";
-import appState from "../../../data/AppState";
+import appState from "../../../../src/data/AppState";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -66,7 +66,7 @@ function Login() {
             onClick={async () => {
               var data = await login(email, password);
               if (data.statusCode === 200) {
-                history.push("/home");
+                history.push("/shop");
               }
             }}
             className="bg-lightColor rounded-lg text-white font-semibold text-lg w-[100%]  py-3"

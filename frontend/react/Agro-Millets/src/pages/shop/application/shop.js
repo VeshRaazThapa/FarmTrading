@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../../../constants";
 import { toast } from "react-toastify";
-import appState from "../../../data/AppState";
+import appState from "../../../../src/data/AppState";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import { ToastContainer } from "react-toastify";

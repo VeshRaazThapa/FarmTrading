@@ -1,6 +1,6 @@
 import NavBar from "../../../components/NavBar";
 import { useHistory } from "react-router-dom";
-import appState from "../../../data/AppState";
+import appState from "../../../../src/data/AppState";
 
 function Profile() {
   var user = appState.getUserData();

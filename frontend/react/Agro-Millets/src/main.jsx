@@ -33,6 +33,7 @@ ReactDOM.render(
         <HashRouter>
           <Switch>
             <Route path="/" exact component={Login}/>
+            {/*<Route path="/" exact component={Login}/>*/}
             <Route path="/shop" component={ShopLayout}/>
             <Route path="/login" component={LoginLayout}/>
             <Route path="/profile" component={ProfileLayout}/>

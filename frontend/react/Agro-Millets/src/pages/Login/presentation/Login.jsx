@@ -66,7 +66,7 @@ function Login() {
             onClick={async () => {
               var data = await login(email, password);
               if (data.statusCode === 200) {
-                history.push("/home");
+                history.push("/shop");
               }
             }}
             className="bg-lightColor rounded-lg text-white font-semibold text-lg w-[100%]  py-3"
