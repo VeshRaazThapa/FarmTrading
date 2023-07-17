@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Rating from "react-rating";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import appState from "../data/AppState";
 import { addToCart, removeFromCart } from "../pages/Cart/application/cart";
 import { deleteItem, getItem } from "../pages/shop/application/shop";
 import Button from "./Button";
+import "@fortawesome/fontawesome-free/css/all.css";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ShopItem({ itemId, isCart = false }) {
   var [count, setCount] = useState(1);
@@ -19,7 +23,8 @@ function ShopItem({ itemId, isCart = false }) {
     });
   }, []);
 
-  var navigate = useNavigate();
+    const history = useHistory();
+
 
   console.log(loading, item);
 
@@ -51,7 +56,7 @@ function ShopItem({ itemId, isCart = false }) {
         >
           <div className="h-40 w-[100%] relative">
             <img
-              onClick={() => navigate("/item/" + item._id)}
+              onClick={() => history.push("/item/" + item._id)}
               className="h-40 w-[100%] rounded-t-lg object-cover"
               src={item.images[0]}
               alt=""

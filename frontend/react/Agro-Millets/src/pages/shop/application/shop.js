@@ -2,7 +2,10 @@ import axios from "axios";
 import { API_URL } from "../../../constants";
 import { toast } from "react-toastify";
 import appState from "../../../data/AppState";
+import "@fortawesome/fontawesome-free/css/all.css";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default async function getAll() {
   var res = await axios.get(API_URL + "/list/getAll");
 

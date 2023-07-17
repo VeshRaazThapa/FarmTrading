@@ -8,10 +8,12 @@ import Footer from "../../../components/Footer";
 import NavBar from "../../../components/NavBar";
 import { motion } from "framer-motion";
 import { gridItems, galleryImages, data, features } from "../../../data/data";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 
 function Home() {
+  const history = useHistory();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -83,7 +85,10 @@ function Home() {
               <br />
               Check out now
             </h2>
-            <Button text="Shop Now" path="/shop" />
+            <Button
+              text="Shop Now"
+              onClick={() => history.push("/shop")}
+            />
           </div>
         </section>
         <Footer />
@@ -126,8 +131,11 @@ function TopSection() {
           transition={{ duration: 1, delay: 0.5 }}
           className="flex gap-4 mt-5"
         >
-          <Button text="Learn More" path="/about" />
-          <Button text="Explore Products" path="/shop" />
+          <Button text="Learn More" onClick={() => history.push("/about")} />
+          <Button
+            text="Explore Products"
+            onClick={() => history.push("/shop")}
+          />
         </motion.div>
       </div>
     </section>
@@ -173,7 +181,7 @@ function OurMottoSection() {
 }
 
 function ExploreProducts() {
-  const navigate = useNavigate();
+  const history = useHistory();
   return (
     <section>
       <div>
@@ -210,7 +218,7 @@ function ExploreProducts() {
 
                     <div className="bg-black m-2 bg-opacity-10 hidden group-hover:flex justify-center items-center absolute inset-0 rounded-md ">
                       <button
-                        onClick={() => navigate("/shop")}
+                        onClick={() => history.push("/shop")}
                         className="bg-green-500 text-white px-5 py-[2vh] rounded-md"
                       >
                         ADD TO CART

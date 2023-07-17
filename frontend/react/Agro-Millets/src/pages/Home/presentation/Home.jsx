@@ -2,13 +2,12 @@ import NavBar from "../../../components/NavBar";
 
 import Landing from "./Landing";
 
-function Home() {
+export default function Home() {
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       <Landing />
     </>
   );
 }
 
-export default Home;

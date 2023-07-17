@@ -1,8 +1,11 @@
 import NavBar from "../../../components/NavBar";
 import { useEffect, useState } from "react";
 import getAll from "../application/shop";
-import { useNavigate } from "react-router-dom";
 import ShopItem from "../../../components/ShopItem";
+import "@fortawesome/fontawesome-free/css/all.css";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Shop() {
   var [list, setList] = useState([]);
@@ -21,7 +24,7 @@ function Shop() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       <section className="w-[100%] mt-[8vh] bg-white min-h-screen">
         <div className=" w-[100%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-8 lg:p-10 ">
           {list.map((e, i) => {

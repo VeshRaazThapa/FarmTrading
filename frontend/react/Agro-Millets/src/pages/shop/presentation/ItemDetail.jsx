@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { addComment, getItem } from "../application/shop";
 import { useEffect, useState } from "react";
 import NavBar from "../../../components/NavBar";
@@ -33,7 +33,8 @@ function ItemDetail() {
 
 function LoadedPage({ item }) {
   const [comment, setComment] = useState("");
-  var navigate = useNavigate();
+    const history = useHistory();
+
 
 
 
@@ -90,7 +91,7 @@ function LoadedPage({ item }) {
             if (res) {
               window.location.reload();
             } else {
-              navigate("/");
+              history.push("/");
             }
           }}
         >
