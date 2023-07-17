@@ -145,7 +145,7 @@ function validateSignUp(req) {
     name: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-    phone: Joi.string().required(),
+    phone: Joi.string(),
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),
     userType: Joi.string().default("wholesaler"),

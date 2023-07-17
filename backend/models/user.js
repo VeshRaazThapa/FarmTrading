@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    unique:true,
+    required: false,
   },
   name: {
     type: String,
@@ -53,7 +54,7 @@ function validateUser(user) {
     name: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-    phone: Joi.string().required(),
+    phone: Joi.string(),
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),
   });
