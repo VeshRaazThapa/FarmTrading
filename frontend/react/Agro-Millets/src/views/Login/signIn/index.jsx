@@ -19,7 +19,7 @@ function Login() {
 
   return (
     <>
-      <section className="float-left relative h-screen w-screen lg:w-[50%] bg-white">
+      <section className="float-left relative h-screen w-screen lg:w-[100%] bg-white">
         {/* Top Left Icon and Text */}
         <div className="absolute flex flex-row justify-center left-3 top-3">
           <img className="h-[25px] mr-1 opacity-50" src={icon} alt="" />
@@ -76,9 +76,9 @@ function Login() {
         </div>
       </section>
       {/* Image Part */}
-      <section className="hidden lg:block float-right h-screen lg:w-[50%] bg-green-300">
-        <img className="w-[100%] h-[100%] object-cover" src={farm} alt="" />
-      </section>
+      {/*<section className="hidden lg:block float-right h-screen lg:w-[50%] bg-green-300">*/}
+      {/*  <img className="w-[100%] h-[100%] object-cover" src={farm} alt="" />*/}
+      {/*</section>*/}
     </>
   );
 }
