@@ -4,24 +4,27 @@ const Joi = require("joi");
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    unique: true,
     required: true,
+    unique: true, 
+    match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   },
   phone: {
     type: String,
     required: true,
+    unique: true, 
+    match: /^\+(?:[0-9] ?){6,14}[0-9]$/,
   },
   name: {
     type: String,
     required: true,
-    min: 5,
-    max: 50,
+    match: /^[A-Za-z]{5,50}$/,
   },
   password: {
     type: String,
     required: true,
     min: 5,
     max: 1024,
+    match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,1024}$/,
   },
   userType: {
     type: String,
