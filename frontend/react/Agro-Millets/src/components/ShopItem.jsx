@@ -104,29 +104,30 @@ function ShopItem({ itemId, isCart = false }) {
                   }}
                   className="cursor-pointer flex-1 h-[100%] flex justify-center items-center"
                 >
-                  <i className="fa-solid fa-minus"></i>
+                  {/*<i className="fa-solid fa-cheatsheet"></i>*/}
                 </div>
-                <div className="flex-1 h-[100%] flex justify-center items-center text-center bg-slate-200">
-                  {count}
+                  {/*{console.log(item)}*/}
+                <div className="flex-1 h-[100%] flex justify-center items-center text-center">
+                    {item.category}
                 </div>
-                <div
-                  onClick={() => {
-                    setCount((count) => count + 1);
-                    console.log(count);
-                  }}
-                  className="cursor-pointer flex-1 h-[100%] flex justify-center items-center text-center"
-                >
-                  <i className="fa-solid fa-plus"></i>
-                </div>
+                {/*<div*/}
+                {/*  // onClick={() => {*/}
+                {/*  //   setCount((count) => count + 1);*/}
+                {/*  //   console.log(count);*/}
+                {/*  // }}*/}
+                {/*  className="cursor-pointer flex-1 h-[100%] flex justify-center items-center text-center"*/}
+                {/*>*/}
+                {/*  /!*<i className="fa-solid fa-plus"></i>*!/*/}
+                {/*</div>*/}
               </div>
-              <div
-                onClick={async () => {
-                  await addToCart(item._id, count);
-                }}
-                className="ml-2 lg:ml-4 w-[40px] h-[40px] bg-green-400 flex justify-center items-center rounded-md"
-              >
-                <i className="fa-solid fa-cart-shopping text-white"></i>
-              </div>
+              {/*<div*/}
+              {/*  onClick={async () => {*/}
+              {/*    await addToCart(item._id, count);*/}
+              {/*  }}*/}
+              {/*  className="ml-2 lg:ml-4 w-[40px] h-[40px] bg-green-400 flex justify-center items-center rounded-md"*/}
+              {/*>*/}
+              {/*  <i className="fa-solid fa-cart-shopping text-white"></i>*/}
+              {/*</div>*/}
 
               {!isCart && appState.getUserData().userType === "admin" && (
                 <div

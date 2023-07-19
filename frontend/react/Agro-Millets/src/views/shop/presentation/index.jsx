@@ -4,10 +4,14 @@ import getAll from "../application/shop";
 import ShopItem from "../../../components/ShopItem";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-import { ToastContainer } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import appState from "../../../data/AppState.js";
+import {useHistory} from "react-router-dom";
 function Shop() {
   var [list, setList] = useState([]);
+  const history = useHistory();
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -19,6 +23,12 @@ function Shop() {
     return () => {
       // Clean up here
     };
+  }, []);
+  useEffect(() => {
+    if (!appState.isUserLoggedIn()) {
+      history.push("/");
+      toast("Your are not Logged in " );
+    }
   }, []);
 
   return (
