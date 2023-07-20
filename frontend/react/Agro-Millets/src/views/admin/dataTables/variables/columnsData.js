@@ -4,16 +4,16 @@ export const columnsDataDevelopment = [
     accessor: "name",
   },
   {
-    Header: "TECH",
-    accessor: "tech",
+    Header: "ACCESS",
+    accessor: "access",
   },
   {
-    Header: "DATE",
-    accessor: "date",
+    Header: "DATE JOINED",
+    accessor: "date_joined",
   },
   {
-    Header: "PROGRESS",
-    accessor: "progress",
+    Header: "PRODUCTS",
+    accessor: "products",
   },
 ];
 

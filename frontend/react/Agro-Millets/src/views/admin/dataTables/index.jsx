@@ -50,7 +50,7 @@ export default function Settings() {
           columnsData={columnsDataDevelopment}
           tableData={tableDataDevelopment}
         />
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
+        <CheckTable columnsData={columnsDataDevelopment} tableData={tableDataCheck} />
         <ColumnsTable
           columnsData={columnsDataColumns}
           tableData={tableDataColumns}

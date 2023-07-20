@@ -6,7 +6,7 @@ import {
   MdPerson,
   MdHome,
   MdLock,
-  MdOutlineShoppingCart,
+  MdOutlineShoppingCart, MdSupervisedUserCircle,
 } from "react-icons/md";
 import Home from "./pages/Home/presentation/Home";
 
@@ -25,18 +25,6 @@ import Profile from "./views/profile/detail/index.jsx";
 
 const routes = [
   {
-    name: "Main Dashboard",
-    layout: "/admin",
-    path: "/default",
-    icon: <Icon
-        as={MdHome}
-        width='20px'
-        height='20px'
-        color='inherit'
-    />,
-    component: MainDashboard,
-  },
-  {
     name: "Shop",
     layout: "/shop",
     path: "/presentation",
@@ -51,6 +39,19 @@ const routes = [
     component: Shop,
     secondary: true,
   },
+  {
+    name: "Users",
+    layout: "/admin",
+    path: "/default",
+    icon: <Icon
+        as={MdSupervisedUserCircle}
+        width='20px'
+        height='20px'
+        color='inherit'
+    />,
+    component: MainDashboard,
+  },
+
   {
     name: "Profile",
     layout: "/profile",

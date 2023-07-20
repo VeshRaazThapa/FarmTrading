@@ -4,16 +4,16 @@ export const columnsDataCheck = [
     accessor: "name",
   },
   {
-    Header: "PROGRESS",
-    accessor: "progress",
+    Header: "ACCESS",
+    accessor: "access",
   },
   {
-    Header: "QUANTITY",
-    accessor: "quantity",
+    Header: "DATE JOINED",
+    accessor: "date_joined",
   },
   {
-    Header: "DATE",
-    accessor: "date",
+    Header: "PRODUCTS",
+    accessor: "products",
   },
 ];
 export const columnsDataComplex = [
