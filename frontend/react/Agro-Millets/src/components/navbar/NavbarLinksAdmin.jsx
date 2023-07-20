@@ -55,7 +55,7 @@ export default function HeaderLinks(props) {
             p="10px"
             borderRadius="30px"
             boxShadow={shadow}>
-            <SearchBar mb={secondary ? {base: '10px', md: 'unset'} : 'unset'} me="10px" borderRadius="30px"/>
+            {/*<SearchBar mb={secondary ? {base: '10px', md: 'unset'} : 'unset'} me="10px" borderRadius="30px"/>*/}
             <Flex
                 bg={ethBg}
                 display={secondary ? 'flex' : 'none'}
@@ -168,14 +168,14 @@ export default function HeaderLinks(props) {
                 {/*</MenuList>*/}
             </Menu>
 
-            <ThemeEditor navbarIcon={navbarIcon}/>
+            {/*<ThemeEditor navbarIcon={navbarIcon}/>*/}
 
             <Menu>
                 <MenuButton p="0px">
                     <Avatar
                         _hover={{cursor: 'pointer'}}
                         color="white"
-                        name="Adela Parkson"
+                        name={user.name}
                         bg="#11047A"
                         size="sm"
                         w="40px"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   IconButton,
   Input,
@@ -7,45 +7,85 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import search from "../../../pages/Search/application/search.js";
+import {toast} from "react-toastify";
+import NavBar from "../../NavBar.jsx";
+import Loading from "../../Loading.jsx";
+import ShopItem from "../../ShopItem.jsx";
+
+
 export function SearchBar(props) {
-  // Pass the computed styles into the `__css` prop
-  const { variant, background, children, placeholder, borderRadius, ...rest } =
-    props;
-  // Chakra Color Mode
-  const searchIconColor = useColorModeValue("gray.700", "white");
-  const inputBg = useColorModeValue("secondaryGray.300", "navy.900");
-  const inputText = useColorModeValue("gray.700", "gray.100");
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState(null);
+  const [query, setQuery] = useState("");
+
+  const searchForQuery = async () => {
+    setLoading(true);
+    if (query.length >= 3 && query) {
+      console.log(query);
+      const data = await search(query);
+      setLoading(false);
+      setItems(data);
+      return;
+    }
+    setLoading(false);
+    toast.info("Enter atleast 3 characters to search");
+  };
+
   return (
-    <InputGroup w={{ base: "100%", md: "200px" }} {...rest}>
-      <InputLeftElement
-        children={
-          <IconButton
-            bg='inherit'
-            borderRadius='inherit'
-            _hover='none'
-            _active={{
-              bg: "inherit",
-              transform: "none",
-              borderColor: "transparent",
+    <>
+      {/*<NavBar title="Search" />*/}
+      <section className="mt-[8vh] ">
+        <div className="flex flex-row lg:mx-16 p-5">
+          <input
+            onChange={(e) => {
+              setQuery(e.target.value);
             }}
-            _focus={{
-              boxShadow: "none",
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                searchForQuery();
+              }
             }}
-            icon={
-              <SearchIcon color={searchIconColor} w='15px' h='15px' />
-            }></IconButton>
-        }
-      />
-      <Input
-        variant='search'
-        fontSize='sm'
-        bg={background ? background : inputBg}
-        color={inputText}
-        fontWeight='500'
-        _placeholder={{ color: "gray.400", fontSize: "14px" }}
-        borderRadius={borderRadius ? borderRadius : "30px"}
-        placeholder={placeholder ? placeholder : "Search..."}
-      />
-    </InputGroup>
+            type="text"
+            placeholder="Enter your query"
+            className="bg-semiDarkColor bg-opacity-10 w-[100%] py-3  border-2 outline-none border-white focus:border-darkColor focus:rounded-lg focus:outline-none px-2 transition-all mr-3 "
+          ></input>
+          <button
+            onClick={() => searchForQuery()}
+            className="bg-accentColor text-white px-4  rounded-md"
+          >
+            Search
+          </button>
+        </div>
+
+        {items != null ? (
+          loading ? (
+            <Loading />
+          ) : (
+            <LoadedPage items={items} />
+          )
+        ) : (
+          ''
+        )}
+      </section>
+    </>
   );
 }
+
+function LoadedPage({ items }) {
+  return (
+    <>
+      <section className=" min-h-[92vh] w-[100%] p-6 lg:px-24 ">
+        <h1 className="text-3xl font-bold">
+          {items.length > 0 ? "Results" : "No Results"}
+        </h1>
+        <div className=" w-[100%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5  mt-5">
+          {items.map((e) => (
+            <ShopItem key={e._id} itemId={e._id} />
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
+

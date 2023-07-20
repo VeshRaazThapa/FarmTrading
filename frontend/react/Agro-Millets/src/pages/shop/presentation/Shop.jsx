@@ -1,11 +1,12 @@
 import NavBar from "../../../components/NavBar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import getAll from "../application/shop";
 import ShopItem from "../../../components/ShopItem";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {SearchBar} from "../../../components/navbar/searchBar/SearchBar.jsx";
 
 function Shop() {
   var [list, setList] = useState([]);
