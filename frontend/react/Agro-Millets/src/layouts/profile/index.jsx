@@ -127,7 +127,7 @@ export default function UserReports(props) {
 							<Box>
 								<Navbar
 									onOpen={onOpen}
-									logoText={'Horizon UI Dashboard PRO'}
+									logoText={'Farm Trading'}
 									brandText={getActiveRoute(routes)}
 									secondary={getActiveNavbar(routes)}
 									message={getActiveNavbarText(routes)}

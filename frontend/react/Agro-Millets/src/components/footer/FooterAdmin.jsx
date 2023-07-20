@@ -38,15 +38,15 @@ export default function Footer() {
         {" "}
         &copy; {1900 + new Date().getYear()}
         <Text as='span' fontWeight='500' ms='4px'>
-          Horizon UI. All Rights Reserved. Made with love by
-          <Link
-            mx='3px'
-            color={textColor}
-            href='https://www.simmmple.com?ref=horizon-chakra-free'
-            target='_blank'
-            fontWeight='700'>
-            Simmmple!
-          </Link>
+          Farm Trading
+          {/*<Link*/}
+          {/*  mx='3px'*/}
+          {/*  color={textColor}*/}
+          {/*  href='https://www.simmmple.com?ref=horizon-chakra-free'*/}
+          {/*  target='_blank'*/}
+          {/*  fontWeight='700'>*/}
+          {/*  Simmmple!*/}
+          {/*</Link>*/}
         </Text>
       </Text>
       <List display='flex'>
