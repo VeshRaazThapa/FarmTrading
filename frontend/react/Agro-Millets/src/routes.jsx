@@ -59,16 +59,16 @@ const routes = [
     icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
     component: Profile,
   },
-  {
-    name: "Sign In",
-    layout: "/login",
-    path: "/signIn",
-    icon: (
-      <Icon as={MdLock} width='20px' height='20px' color='inherit' />
-    ),
-    component: Login,
-    secondary: true,
-  },
+  // {
+  //   name: "Sign In",
+  //   layout: "/login",
+  //   path: "/signIn",
+  //   icon: (
+  //     <Icon as={MdLock} width='20px' height='20px' color='inherit' />
+  //   ),
+  //   component: Login,
+  //   secondary: true,
+  // },
   // {
   //   name: "Data Tables",
   //   layout: "/admin",

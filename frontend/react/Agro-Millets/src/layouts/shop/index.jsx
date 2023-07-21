@@ -142,7 +142,7 @@ export default function UserReports(props) {
 								<Switch>
 									{getRoutes(routes)}
 									{/*<Redirect from='/' to='/home/default' />*/}
-									<Redirect from='/shop' to='/shop/presentation/default' />
+									<Redirect from='/shop' to='/shop/presentation' />
 
 								</Switch>
 							</Box>
