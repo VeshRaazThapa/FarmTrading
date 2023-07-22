@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import farm from "../../../assets/farm.jpg";
 import icon from "../../../assets/icon.png";
 import login from "../application/auth";
 import { toast } from "react-toastify";
