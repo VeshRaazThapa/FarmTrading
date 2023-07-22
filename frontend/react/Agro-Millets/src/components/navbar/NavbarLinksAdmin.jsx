@@ -1,11 +1,8 @@
 // Chakra Imports
 import {
     Avatar,
-    Button,
     Flex,
     Icon,
-    Image,
-    Link,
     Menu,
     MenuButton,
     MenuItem,
@@ -15,16 +12,12 @@ import {
 } from '@chakra-ui/react';
 // Custom Components
 import {ItemContent} from '../menu/ItemContent';
-import {SearchBar} from '../navbar/searchBar/SearchBar';
 import {SidebarResponsive} from '../sidebar/Sidebar';
 import PropTypes from 'prop-types';
 import React from 'react';
 // Assets
-import navImage from '../../assets/img/layout/Navbar.png';
-import {MdNotificationsNone, MdInfoOutline} from 'react-icons/md';
-import {FaEthereum} from 'react-icons/fa';
+import {MdNotificationsNone} from 'react-icons/md';
 import routes from '../../routes';
-import {ThemeEditor} from './ThemeEditor';
 import appState from "../../data/AppState.js";
 
 export default function HeaderLinks(props) {
