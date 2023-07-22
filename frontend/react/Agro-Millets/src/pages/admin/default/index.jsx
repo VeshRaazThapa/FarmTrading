@@ -39,11 +39,11 @@ import {
     MdBarChart, MdCategory,
      MdPersonOutline,
 } from "react-icons/md";
-import CheckTable from "../../../views/admin/default/components/CheckTable";
+import CheckTable from "../../../pages/admin/default/components/CheckTable";
 import {
   columnsDataCheck
 } from "./variables/columnsData.jsx";
-import tableDataCheck from "../../../views/admin/default/variables/tableDataCheck.json";
+import tableDataCheck from "../../../pages/admin/default/variables/tableDataCheck.json";
 import appState from "../../../data/AppState.js";
 import {toast} from "react-toastify";
 

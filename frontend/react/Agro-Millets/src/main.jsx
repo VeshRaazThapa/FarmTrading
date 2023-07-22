@@ -4,12 +4,12 @@ import {Route, HashRouter, Switch} from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import "react-toastify/dist/ReactToastify.css";
-import Search from "./views/Search/presentation/Search";
+import Search from "./pages/Search/presentation/Search";
 import AdminLayout from "./navigations/admin";
 import ShopLayout from "./navigations/shop";
 import LoginLayout from "./navigations/login";
 import ProfileLayout from "./navigations/profile";
-import Login from "./views/Login/presentation/Login.jsx";
+import Login from "./pages/Login/presentation/Login.jsx";
 import "./../src/assets/css/App.css";
 import "./index.css";
 import {ChakraProvider} from "@chakra-ui/react";

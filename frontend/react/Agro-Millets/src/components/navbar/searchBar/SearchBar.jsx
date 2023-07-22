@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import search from "../../../views/Search/application/search.js";
+import search from "../../../pages/Search/application/search.js";
 import {toast} from "react-toastify";
 import Loading from "../../Loading.jsx";
 import ShopItem from "../../ShopItem.jsx";

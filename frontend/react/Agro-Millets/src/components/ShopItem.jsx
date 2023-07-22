@@ -4,7 +4,7 @@ import Rating from "react-rating";
 import { useHistory } from "react-router-dom";
 import appState from "../data/AppState";
 // import { addToCart, removeFromCart } from "../pages/Cart/application/cart";
-import { deleteItem, getItem } from "../views/shop/application/shop";
+import { deleteItem, getItem } from "../pages/shop/application/shop";
 // import Button from "./Button";
 import "@fortawesome/fontawesome-free/css/all.css";
 

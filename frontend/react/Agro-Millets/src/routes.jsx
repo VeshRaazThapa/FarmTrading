@@ -6,9 +6,9 @@ import {
     MdOutlineShoppingCart, MdSupervisedUserCircle,
 } from "react-icons/md";
 
-import MainDashboard from "./views/admin/default";
-import Shop from "./views/shop/presentation";
-import Profile from "./views/profile/detail/index.jsx";
+import MainDashboard from "./pages/admin/default";
+import Shop from "./pages/shop/presentation";
+import Profile from "./pages/profile/detail/index.jsx";
 
 const routes = [
     {
