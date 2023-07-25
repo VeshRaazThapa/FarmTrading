@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Rating from "react-rating";
 import { useHistory } from "react-router-dom";
 import appState from "../data/AppState";
-import { addToCart, removeFromCart } from "../pages/Cart/application/cart";
+// import { addToCart, removeFromCart } from "../pages/Cart/application/cart";
 import { deleteItem, getItem } from "../pages/shop/application/shop";
-import Button from "./Button";
+// import Button from "./Button";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import { ToastContainer } from "react-toastify";
@@ -28,20 +28,6 @@ function ShopItem({ itemId, isCart = false }) {
 
   console.log(loading, item);
 
-  if (!loading && !item) {
-    return (
-      <div className="bg-green-100 text-green-700 text-bold text-2xl flex flex-col justify-center items-center text-center p-10 rounded-lg">
-        <h1>Item has been removed by admin</h1>
-        <div className="h-2"></div>
-        <Button
-          onClick={async () => {
-            await removeFromCart(itemId);
-          }}
-          text="Remove Item"
-        />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -61,17 +47,17 @@ function ShopItem({ itemId, isCart = false }) {
               src={item.images[0]}
               alt=""
             />
-            {isCart && (
-              <div
-                onClick={async () => {
-                  await removeFromCart(itemId);
-                  window.location.reload();
-                }}
-                className="absolute top-2 right-2 ml-2 lg:ml-4 w-[40px] h-[40px] bg-red-400 flex justify-center items-center rounded-md"
-              >
-                <i className="fa-solid fa-trash text-white"></i>
-              </div>
-            )}
+            {/*{isCart && (*/}
+            {/*  <div*/}
+            {/*    onClick={async () => {*/}
+            {/*      await removeFromCart(itemId);*/}
+            {/*      window.location.reload();*/}
+            {/*    }}*/}
+            {/*    className="absolute top-2 right-2 ml-2 lg:ml-4 w-[40px] h-[40px] bg-red-400 flex justify-center items-center rounded-md"*/}
+            {/*  >*/}
+            {/*    <i className="fa-solid fa-trash text-white"></i>*/}
+            {/*  </div>*/}
+            {/*)}*/}
           </div>
 
           <div className="px-4 py-2  rounded-lg ">

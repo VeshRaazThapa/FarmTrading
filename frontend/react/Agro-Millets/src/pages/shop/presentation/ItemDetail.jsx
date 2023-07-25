@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import NavBar from "../../../components/NavBar";
 import Loading from "../../../components/Loading";
 import Rating from "react-rating";
-import Button from "../../../components/Button";
+import "@fortawesome/fontawesome-free/css/all.css";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function ItemDetail() {
   const { id } = useParams();
   const [item, setItem] = useState({});

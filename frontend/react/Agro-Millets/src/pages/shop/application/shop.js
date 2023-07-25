@@ -2,10 +2,8 @@ import axios from "axios";
 import { API_URL } from "../../../constants";
 import { toast } from "react-toastify";
 import appState from "../../../../src/data/AppState";
-import "@fortawesome/fontawesome-free/css/all.css";
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 export default async function getAll() {
   var res = await axios.get(API_URL + "/list/getAll");
 
@@ -50,6 +48,7 @@ export async function deleteItem(itemId) {
     toast.error("You must be an admin to delete an item");
     return 0;
   }
+
   var res = await axios.post(API_URL + "/admin/deleteItem", {
     adminId: appState.getUserData()._id,
     itemId: itemId,

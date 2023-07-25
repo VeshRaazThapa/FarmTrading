@@ -1,15 +1,7 @@
 import React, {useState} from "react";
-import {
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
+
 import search from "../../../pages/Search/application/search.js";
 import {toast} from "react-toastify";
-import NavBar from "../../NavBar.jsx";
 import Loading from "../../Loading.jsx";
 import ShopItem from "../../ShopItem.jsx";
 
