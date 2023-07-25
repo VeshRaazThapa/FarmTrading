@@ -18,5 +18,6 @@ export default async function login(email, password) {
     toast.error(res.data.message);
   }
   appState.saveUserData(res.data.data, true);
+  console.log(appState.UserData);
   return res.data;
 }

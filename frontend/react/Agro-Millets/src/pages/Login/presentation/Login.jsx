@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import farm from "../../../assets/farm.jpg";
+import { useHistory } from "react-router-dom";
 import icon from "../../../assets/icon.png";
 import login from "../application/auth";
 import { toast } from "react-toastify";
@@ -9,17 +8,17 @@ import appState from "../../../data/AppState";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  var navigate = useNavigate();
+  var history = useHistory();
   useEffect(() => {
     if (appState.isUserLoggedIn()) {
-      navigate("/shop");
+      history.push("/shop");
       toast("Logged in as " + appState.getUserData().name);
     }
   }, []);
 
   return (
     <>
-      <section className="float-left relative h-screen w-screen lg:w-[50%] bg-white">
+      <section className="float-center absolute h-screen w-screen lg:w-[100%] bg-white">
         {/* Top Left Icon and Text */}
         <div className="absolute flex flex-row justify-center left-3 top-3">
           <img className="h-[25px] mr-1 opacity-50" src={icon} alt="" />
@@ -66,7 +65,7 @@ function Login() {
             onClick={async () => {
               var data = await login(email, password);
               if (data.statusCode === 200) {
-                navigate("/home");
+                history.push("/shop");
               }
             }}
             className="bg-lightColor rounded-lg text-white font-semibold text-lg w-[100%]  py-3"
@@ -76,9 +75,9 @@ function Login() {
         </div>
       </section>
       {/* Image Part */}
-      <section className="hidden lg:block float-right h-screen lg:w-[50%] bg-green-300">
-        <img className="w-[100%] h-[100%] object-cover" src={farm} alt="" />
-      </section>
+      {/*<section className="hidden lg:block float-right h-screen lg:w-[50%] bg-green-300">*/}
+      {/*  <img className="w-[100%] h-[100%] object-cover" src={farm} alt="" />*/}
+      {/*</section>*/}
     </>
   );
 }

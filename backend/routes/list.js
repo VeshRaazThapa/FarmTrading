@@ -90,4 +90,15 @@ router.post("/getComments", async (req, res) => {
   return res.send(getSuccessResponse("Success!", item.comments));
 });
 
+router.post("/getUsers", async (req, res) => {
+  var data = req.body;
+  console.log(`Update User `, data);
+  if (!mongoose.Types.ObjectId.isValid(data._id)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let items = await User.find({});
+  return res.send(getSuccessResponse("Success!", items));
+});
+
 module.exports = router;
