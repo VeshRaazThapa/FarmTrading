@@ -330,19 +330,17 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             ),
           ),
           SizedBox(width: 0.1 * getWidth(context)),
-          // Expanded(
-          //   child: Consumer(builder: (context, ref, child) {
-          //     return ActionButton(
-          //       text: "Add to Cart",
-          //       onPressed: () async {
-          //         await cloudDatabase.addItemToCart(CartItem(
-          //           item: item,
-          //           amount: amount,
-          //         ));
-          //       },
-          //     );
-          //   }),
-          // ),
+          Expanded(
+            child: Consumer(builder: (context, ref, child) {
+              return Text(
+                "Recommended",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                ),
+              );
+            }),
+          ),
         ],
       ),
     );
