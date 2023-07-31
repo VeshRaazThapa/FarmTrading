@@ -35,28 +35,28 @@ function Login() {
 
           <div className="pt-10"></div>
           {/* Email Field */}
-          <div className="flex flex-col w-[100%]">
-            <label htmlFor="input">Email</label>
+          <div className="flex flex-col items-center justify-center w-[100%] ">
+            {/* <label htmlFor="input">Email</label> */}
             <input
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
               type="text"
               placeholder="Your email address"
-              className="bg-semiDarkColor bg-opacity-10 w-[100%] py-3 mt-1 border-2 outline-none border-white focus:border-darkColor focus:rounded-lg focus:outline-none px-2 transition-all "
+              className="bg-semiDarkColor bg-opacity-10 w-[50%] py-3 mt-1 border-2 outline-none border-white focus:border-darkColor focus:rounded-lg focus:outline-none px-2 transition-all "
             ></input>
           </div>
           <div className="pt-2"></div>
           {/* Password Field */}
-          <div className="flex flex-col w-[100%] ">
-            <label htmlFor="input">Password</label>
+          <div className="flex flex-col items-center justify-center w-[100%] ">
+            {/* <label htmlFor="input">Password</label> */}
             <input
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
               type="text"
               placeholder="Enter your password"
-              className="bg-semiDarkColor bg-opacity-10 w-[100%] py-3 mt-1 border-2 outline-none border-white focus:border-darkColor focus:rounded-lg focus:outline-none px-2 transition-all "
+              className="bg-semiDarkColor bg-opacity-10 w-[50%] py-3 mt-1 border-2 outline-none border-white focus:border-darkColor focus:rounded-lg focus:outline-none px-2 transition-all "
             ></input>
           </div>
           <div className="pt-5"></div>
@@ -69,7 +69,7 @@ function Login() {
                 history.push("/shop");
               }
             }}
-            className="bg-lightColor rounded-lg text-white font-semibold text-lg w-[100%]  py-3"
+            className="bg-lightColor rounded-lg text-white font-semibold text-lg w-[50%]  py-3"
           >
             Login
           </button>
