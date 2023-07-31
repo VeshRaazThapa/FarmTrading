@@ -55,7 +55,7 @@ class _NewsAppState extends State<NewsApp> {
   bool notFound = false;
   List<int> data = [];
   bool isLoading = false;
-  String baseApi = 'https://newsapi.org/v2/everything?q=farm';
+  String baseApi = 'https://newsapi.org/v2/everything?q=agriculture';
 
   @override
   Widget build(BuildContext context) {
