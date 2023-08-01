@@ -3,7 +3,7 @@ import React from "react";
 import {Icon} from "@chakra-ui/react";
 import {
     MdPerson,
-    MdOutlineShoppingCart, MdSupervisedUserCircle,
+     MdApps, MdAdd,
 } from "react-icons/md";
 
 import MainDashboard from "./pages/admin/default";
@@ -12,12 +12,12 @@ import Profile from "./pages/profile/detail/index.jsx";
 
 const routes = [
     {
-        name: "Shop",
+        name: "Product",
         layout: "/shop",
         path: "/presentation",
         icon: (
             <Icon
-                as={MdOutlineShoppingCart}
+                as={MdAdd}
                 width='20px'
                 height='20px'
                 color='inherit'
@@ -27,11 +27,11 @@ const routes = [
         secondary: true,
     },
     {
-        name: "Admin",
+        name: "App Details",
         layout: "/admin",
         path: "/default",
         icon: <Icon
-            as={MdSupervisedUserCircle}
+            as={MdApps}
             width='20px'
             height='20px'
             color='inherit'
