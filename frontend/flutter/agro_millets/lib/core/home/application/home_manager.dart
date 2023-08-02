@@ -157,6 +157,7 @@ Future<List<MilletItem>> getAllFarmerCategoryItems(String id,String category) as
 Future<void> addItem({
   required String name,
   required String listedBy,
+  String? farmer,
   required String description,
   required String category,
   required List<String> images,
@@ -170,6 +171,7 @@ Future<void> addItem({
     body: json.encode(
       {
         "listedBy": listedBy,
+        "farmer": farmer,
         "name": name,
         "category":category,
         "description": description,

@@ -142,6 +142,14 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 color: Colors.grey,
               ),
             ),
+            SizedBox(height: 0.01 * getHeight(context)),
+            Text(
+              'Farmer : ${item.farmer}',
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.grey,
+              ),
+            ),
             Text(
               item.description,
               style: const TextStyle(

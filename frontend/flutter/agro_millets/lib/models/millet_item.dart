@@ -8,6 +8,7 @@ class MilletItem {
   final String name;
   final String category;
   final String listedBy;
+  String? farmer = 'ruxali';
   final String description;
   final double price;
   final double quantity;
@@ -19,6 +20,7 @@ class MilletItem {
     required this.id,
     required this.name,
     required this.listedBy,
+    this.farmer,
     required this.description,
     required this.category,
     required this.price,
@@ -32,6 +34,7 @@ class MilletItem {
     String? id,
     String? name,
     String? listedBy,
+    String? farmer,
     String? description,
     String? category,
     double? price,
@@ -43,6 +46,7 @@ class MilletItem {
       id: id ?? this.id,
       name: name ?? this.name,
       listedBy: listedBy ?? this.listedBy,
+      farmer: farmer ?? this.farmer,
       description: description ?? this.description,
       category: category ?? this.category,
       price: price ?? this.price,
@@ -58,6 +62,7 @@ class MilletItem {
       '_id': id,
       'name': name,
       'listedBy': listedBy,
+      'farmer': farmer,
       'description': description,
       'category': category,
       'price': price,
@@ -73,11 +78,12 @@ class MilletItem {
       id: map['_id'] as String,
       name: map['name'] as String,
       listedBy: map['listedBy'] as String,
+      farmer: map['farmer'] ?? "ruxali" as String,
       description: map['description'] as String,
       category: map['category'] as String,
       price: map['price'] * 1.0,
       quantity: map['quantity'] * 1.0,
-      quantityType:map['quantityType'],
+      quantityType: map['quantityType'],
       images: List<dynamic>.from((map['images'] as List<dynamic>)),
       listedAt: DateTime.parse(map['listedAt']),
     );
@@ -90,7 +96,7 @@ class MilletItem {
 
   @override
   String toString() {
-    return 'MilletItem(id: $id, name: $name, listedBy: $listedBy, description: $description,category: $category, price: $price,quantity:$quantity, images: $images, listedAt: $listedAt)';
+    return 'MilletItem(id: $id, name: $name, listedBy: $listedBy,farmer:$farmer, description: $description,category: $category, price: $price,quantity:$quantity, images: $images, listedAt: $listedAt)';
   }
 
   @override
@@ -100,6 +106,7 @@ class MilletItem {
     return other.id == id &&
         other.name == name &&
         other.listedBy == listedBy &&
+        other.farmer == farmer &&
         other.description == description &&
         other.category == category &&
         other.price == price &&
@@ -114,6 +121,7 @@ class MilletItem {
     return id.hashCode ^
         name.hashCode ^
         listedBy.hashCode ^
+        farmer.hashCode ^
         description.hashCode ^
         category.hashCode ^
         price.hashCode ^
