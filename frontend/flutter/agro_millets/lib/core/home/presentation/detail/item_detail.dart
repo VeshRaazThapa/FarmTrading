@@ -294,8 +294,8 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             List<MilletItem> list = snapshot.data ?? [];
-            print(list);
-            print('--------------');
+            // print(list);
+            // print('--------------');
             return SizedBox(
               height: 400, // Set a specific height here
               child: ListView.separated(
