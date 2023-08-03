@@ -65,10 +65,11 @@ class AddItemPageState extends State<AddItemPage> {
         String itemId = const Uuid().v1();
 
         String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
-        // String url = "https://firebasestorage.googleapis.com/v0/b/kisan-7ffff.appspot.com/o/images%2Fitems%2FMaize_mccornick.org_.jpg?alt=media&token=0ca55aad-eb86-45ff-93a2-fa820fa9c5a0";
+        // String url = "https://firebasestorage.googleapis.com/v0/b/kisan-7ffff.appspot.com/o/images%2Fitems%2Fgreen-grapes.jpeg?alt=media&token=4532f813-ebbf-40fc-b188-8fc99d45e938";
 
         await addItem(
           name: name,
+          farmer: appState.value.user!.name,
           listedBy: appState.value.user!.id,
           description: description,
           category: category,

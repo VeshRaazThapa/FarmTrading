@@ -5,6 +5,10 @@ const { MilletItem, validateMilletItem } = require("../models/millet_item");
 const { Comment, validateComment } = require("../models/comment");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
+const json2csv = require('json2csv').parse;
+const fs = require('fs');
+const { spawn } = require('child_process');
+const { execFile } = require('child_process');
 
 router.get("/getRecent", async (req, res) => {
   const items = await MilletItem.find().sort({ dateField: -1 }).limit(5);
@@ -14,8 +18,59 @@ router.get("/getRecent", async (req, res) => {
 
 router.get("/getAll", async (req, res) => {
   const items = await MilletItem.find({});
-
   return res.send(getSuccessResponse("Success!", items));
+});
+
+router.post("/getRecommendations", async (req, res) => {
+     const { itemName } = req.body;
+     console.log(itemName);
+    // Fetch all items from MongoDB
+     const items = await MilletItem.find({});
+     try {
+
+
+         // Map the retrieved data to the required fields for CSV conversion
+         const mappedItems = items.map((item) => ({
+           id:item.id,
+           farmer_id: item.listedBy,
+           product_name: item.name,
+           category: item.category,
+           quantity: item.quantity,
+         }));
+
+         // Convert the mapped data into CSV format
+         const fields = ['id','farmer_id', 'product_name', 'category', 'quantity'];
+         const opts = { fields, header: true };
+         const csvData = json2csv(mappedItems, opts);
+
+         // Write the CSV data to a file
+         fs.writeFileSync('output.csv', csvData, 'utf-8');
+         console.log('CSV file saved successfully as "output.csv"');
+       } catch (error) {
+         console.error('Error while saving data to CSV:', error);
+       }
+      const pythonScript = 'recommendations.py';
+      const productToSearch = itemName; // Replace this with the product name you want to search
+      execFile('python', [pythonScript, productToSearch], (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error executing the Python script: ${error.message}`);
+          return;
+        }
+            const milletItemIds = JSON.parse(stdout);
+      // Query to filter MilletItems based on the list of IDs
+      const items = MilletItem.find({ _id: { $in: milletItemIds } })
+            .then((filteredItems) => {
+              console.log("Filtered MilletItems:");
+              console.log(filteredItems);
+              return res.send(getSuccessResponse("Success!", filteredItems));
+
+            })
+            .catch((err) => {
+              console.error("Error filtering MilletItems:", err);
+      })
+      });
+
+
 });
 
 router.get("/getAll/:farmerID", async (req, res) => {
@@ -40,6 +95,7 @@ router.post("/addItem", async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.body.listedBy)) {
     return res.status(404).send(getErrorResponse("Invalid User ID"));
   }
+
   let item = new MilletItem(req.body);
   await item.save();
 

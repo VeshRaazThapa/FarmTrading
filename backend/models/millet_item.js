@@ -9,6 +9,10 @@ const milletItemSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  farmer: {
+    type: String,
+    required: false,
+  },
   name: {
     type: String,
     required: true,
@@ -56,6 +60,7 @@ function validateMilletItem(item) {
   const schema = Joi.object().keys({
     listedBy: JoiObjectId().required(),
     name: Joi.string().required(),
+    farmer: Joi.string(),
     category: Joi.string().required(),
     description: Joi.string().required(),
     images: Joi.array().items(Joi.string().required()).required(),

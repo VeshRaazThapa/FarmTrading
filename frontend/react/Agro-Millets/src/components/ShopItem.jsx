@@ -64,17 +64,21 @@ function ShopItem({ itemId, isCart = false }) {
             <h1 className="text-xl font-bold text-gray-700 hover:text-gray-900 hover:cursor-pointer">
               {item.name}
             </h1>
+                <div className="h-[1vh]"></div>
+                        <p className="text-lg text-gray-700 hover:text-gray-900">
+                                      { item.farmer ? `Farmer: `  + item.farmer : `Farmer: ` + "Man Bahadur" }
+                                    </p>
 
             <p className="text-lg text-green-500 font-bold">
-              {`₹ ` + item.price + "/kg"}
+              {`रू ` + item.price + "/" + item.quantityType}
             </p>
 
-            <div className="h-[1vh]"></div>
-            <Rating
-              initialRating={4.0}
-              fullSymbol="fa-solid fa-star text-amber-400 "
-              emptySymbol="fa-regular fa-star text-gray-300"
-            />
+
+{/*             <Rating */}
+{/*               initialRating={4.0} */}
+{/*               fullSymbol="fa-solid fa-star text-amber-400 " */}
+{/*               emptySymbol="fa-regular fa-star text-gray-300" */}
+{/*             /> */}
             {/* <RatingComponent /> */}
 
             <div className="h-[1vh]"></div>

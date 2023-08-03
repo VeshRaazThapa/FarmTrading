@@ -16,8 +16,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
+import '../../../admin/application/admin_apis.dart';
+
 class ItemDetailPage extends ConsumerStatefulWidget {
   final MilletItem item;
+
   const ItemDetailPage({Key? key, required this.item}) : super(key: key);
 
   @override
@@ -58,19 +61,19 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
         actions: [
           if (appCache.isCustomer())
             IconButton(
-              onPressed:() => UrlLauncher.launch('tel://9812345668'),
+              onPressed: () => UrlLauncher.launch('tel://9812345668'),
               icon: const Icon(MdiIcons.phoneDial),
             ),
           if (appCache.isCustomer())
             IconButton(
-            onPressed: () {
-              CartItem cartItem = CartItem(item: item.id, count: 1);
-              ref.read(cartProvider).addItemToCart(cartItem);
-              CartManager(context, ref, poll: false)
-                  .addItemToCart(item: cartItem);
-            },
-            icon: const Icon(MdiIcons.cartPlus),
-          ),
+              onPressed: () {
+                CartItem cartItem = CartItem(item: item.id, count: 1);
+                ref.read(cartProvider).addItemToCart(cartItem);
+                CartManager(context, ref, poll: false)
+                    .addItemToCart(item: cartItem);
+              },
+              icon: const Icon(MdiIcons.cartPlus),
+            ),
           if (appCache.isAdmin() || appCache.isOwnerOf(item.listedBy))
             IconButton(
               onPressed: () {
@@ -142,6 +145,14 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 color: Colors.grey,
               ),
             ),
+            SizedBox(height: 0.01 * getHeight(context)),
+            Text(
+              'Farmer : ${item.farmer}',
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.grey,
+              ),
+            ),
             Text(
               item.description,
               style: const TextStyle(
@@ -190,7 +201,10 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: ref.watch(commentProvider).getComments().length,
+              itemCount: ref
+                  .watch(commentProvider)
+                  .getComments()
+                  .length,
               itemBuilder: (context, index) {
                 var list = ref.watch(commentProvider).getComments();
                 if (appCache.isAdmin()) {
@@ -225,9 +239,17 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 }
               },
             ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 40),
+            if (appCache.isCustomer())
+              const Text(
+                "Products you may like",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            if (appCache.isCustomer())
+              _getRecommendedProducts(context)
 
-            // _getQuantityIncrementer(context)
           ],
         ),
       ),
@@ -266,83 +288,166 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     _commentController.text = "";
   }
 
-  Container _getQuantityIncrementer(BuildContext context) {
-    return Container(
-      height: 0.1 * getHeight(context),
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      // color: Colors.red,
-      child: Row(
-        children: [
-          Container(
-            width: 0.3 * getWidth(context),
-            height: 0.06 * getHeight(context),
-            margin: const EdgeInsets.symmetric(vertical: 5.0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(0.3)),
-              borderRadius: BorderRadius.circular(30.0),
-            ),
+  FutureBuilder<List<MilletItem>> _getRecommendedProducts(BuildContext context) {
+    return FutureBuilder(
+        future: AdminAPIs.getAllRecommendedItems(widget.item),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            List<MilletItem> list = snapshot.data ?? [];
+            // print(list);
+            // print('--------------');
+            return SizedBox(
+              height: 400, // Set a specific height here
+              child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Divider(
+                      color: Colors.grey.withOpacity(0.2),
+                    ),
+                  );
+                },
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    // onDismissed: (direction) {
+                      // if (direction == DismissDirection.endToStart) {
+                      //   deleteItem(list[index].id);
+                      //   list.removeWhere((element) =>
+                      //   element.id == list[index].id);
+                      // }
+                    // },
+                    // key: ValueKey(list[index].id),
+                    // background: Container(
+                    //   decoration: const BoxDecoration(
+                    //     gradient: LinearGradient(
+                    //       begin: Alignment.centerLeft,
+                    //       end: Alignment.centerRight,
+                    //       colors: [
+                    //         Colors.white,
+                    //         Colors.red,
+                    //       ],
+                    //     ),
+                    //   ),
+                    //   child: Row(
+                    //     children: const [
+                    //       Spacer(),
+                    //       Icon(
+                    //         Icons.delete,
+                    //         color: Colors.white,
+                    //       ),
+                    //       SizedBox(width: 20),
+                    //     ],
+                    //   ),
+                    // ),
+                    child: ListTile(
+                      onTap: () {
+                        goToPage(context, ItemDetailPage(item: list[index]));
+                      },
+                      leading: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(
+                          list[index].images[0],
+                        ),
+                      ),
+                      title: Text(
+                        list[index].name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      subtitle: Text(timeago.format(list[index].listedAt)),
+                      trailing: Text(
+                        "रू ${list[index].price}",
+                        style: const TextStyle(
+                          color: semiDarkColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+            // return ListView.separated(
+            //   separatorBuilder: (context, index) {
+            //     return Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //       child: Divider(
+            //         color: Colors.grey.withOpacity(0.2),
+            //       ),
+            //     );
+            //   },
+            //   itemCount: list.length,
+            //   itemBuilder: (context, index) {
+            //     return Dismissible(
+            //       onDismissed: (direction) {
+            //         if (direction == DismissDirection.endToStart) {
+            //           deleteItem(list[index].id);
+            //           list.removeWhere((element) =>
+            //           element.id == list[index].id);
+            //         }
+            //       },
+            //       key: ValueKey(list[index].id),
+            //       background: Container(
+            //         decoration: const BoxDecoration(
+            //           gradient: LinearGradient(
+            //             begin: Alignment.centerLeft,
+            //             end: Alignment.centerRight,
+            //             colors: [
+            //               Colors.white,
+            //               Colors.red,
+            //             ],
+            //           ),
+            //         ),
+            //         child: Row(
+            //           children: const [
+            //             Spacer(),
+            //             Icon(
+            //               Icons.delete,
+            //               color: Colors.white,
+            //             ),
+            //             SizedBox(width: 20),
+            //           ],
+            //         ),
+            //       ),
+            //       child: ListTile(
+            //         onTap: () {
+            //           goToPage(context, ItemDetailPage(item: list[index]));
+            //         },
+            //         leading: CircleAvatar(
+            //           radius: 30,
+            //           backgroundImage: NetworkImage(
+            //             list[index].images[0],
+            //           ),
+            //         ),
+            //         title: Text(
+            //           list[index].name,
+            //           style: const TextStyle(
+            //             fontSize: 16,
+            //             fontWeight: FontWeight.w500,
+            //           ),
+            //         ),
+            //         subtitle: Text(timeago.format(list[index].listedAt)),
+            //         trailing: Text(
+            //           "₹ ${list[index].price}",
+            //           style: const TextStyle(
+            //             color: semiDarkColor,
+            //             fontWeight: FontWeight.w700,
+            //           ),
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // );
+          }
 
-            // color: Colors.green,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    if (amount == 0) {
-                      showToast("Can not reduce below 0");
-                      return;
-                    }
-                    amount--;
-                    setState(() {});
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey.withOpacity(0.4)),
-                      padding: const EdgeInsets.all(5.0),
-                      child: const Icon(Icons.remove)),
-                ),
-                Text(
-                  "$amount",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    if (amount == 50) {
-                      showToast("You can only order 50 items at a time");
-                      return;
-                    }
-                    amount++;
-                    setState(() {});
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey.withOpacity(0.4)),
-                      padding: const EdgeInsets.all(5.0),
-                      child: const Icon(Icons.add)),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 0.1 * getWidth(context)),
-          Expanded(
-            child: Consumer(builder: (context, ref, child) {
-              return Text(
-                "Recommended",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 17,
-                ),
-              );
-            }),
-          ),
-        ],
-      ),
-    );
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
+
   }
 }
