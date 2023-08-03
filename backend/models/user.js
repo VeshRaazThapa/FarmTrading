@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    match: /^[A-Za-z]{5,50}$/,
+    match: /^[A-Za-z0-9]{5,50}$/,
   },
   password: {
     type: String,

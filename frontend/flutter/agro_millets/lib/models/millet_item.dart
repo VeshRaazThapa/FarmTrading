@@ -8,7 +8,7 @@ class MilletItem {
   final String name;
   final String category;
   final String listedBy;
-  String? farmer = 'ruxali';
+  String? farmer = 'Man Bahadur';
   final String description;
   final double price;
   final double quantity;
@@ -78,7 +78,7 @@ class MilletItem {
       id: map['_id'] as String,
       name: map['name'] as String,
       listedBy: map['listedBy'] as String,
-      farmer: map['farmer'] ?? "ruxali" as String,
+      farmer: map['farmer'] ?? "Man Bahadur" as String,
       description: map['description'] as String,
       category: map['category'] as String,
       price: map['price'] * 1.0,

@@ -64,6 +64,13 @@ class HomeManager {
     }
     return getAll();
   }
+  Future<List<MilletItem>> getAllRecommendedItems(MilletItem item) async {
+    if (appCache.isFarmer()) {
+      return await getAllRecommendedItems(item);
+    }
+    return getAll();
+  }
+
   Future<List<MilletItem>> getCategoryItems(String category) async {
     if (appCache.isFarmer()) {
       return await getAllFarmerCategoryItems(appState.value.user!.id,category);
@@ -132,6 +139,29 @@ Future<List<MilletItem>> getAllFarmerItems(String id) async {
   }
   return [];
 }
+Future<List<MilletItem>> getAllRecommendedItems(MilletItem item) async {
+  var response = await http.post(
+    Uri.parse("$API_URL/list/getRecommendations"),
+    body: {"itemName": item.name},
+  );
+
+  debugPrint(response.request!.url.toString());
+  Map data = json.decode(response.body);
+
+  if (data["statusCode"] == 200) {
+    List dataMap = data["data"];
+    List<MilletItem> list = [];
+
+    for (var e in dataMap) {
+      list.add(MilletItem.fromMap(e));
+    }
+    debugPrint("Recommended Items $list");
+
+    return list;
+  }
+  return [];
+}
+
 Future<List<MilletItem>> getAllFarmerCategoryItems(String id,String category) async {
   var response = await http.get(
     Uri.parse("$API_URL/list/getAll/$category/$id"),
