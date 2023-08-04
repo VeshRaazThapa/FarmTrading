@@ -22,8 +22,8 @@ router.get("/getAll", async (req, res) => {
 });
 
 router.post("/getRecommendations", async (req, res) => {
-     const { itemName } = req.body;
-     console.log(itemName);
+     const { itemID } = req.body;
+     console.log(itemID);
     // Fetch all items from MongoDB
      const items = await MilletItem.find({});
      try {
@@ -50,7 +50,7 @@ router.post("/getRecommendations", async (req, res) => {
          console.error('Error while saving data to CSV:', error);
        }
       const pythonScript = 'recommendations.py';
-      const productToSearch = itemName; // Replace this with the product name you want to search
+      const productToSearch = itemID; // Replace this with the product id you want to search
       execFile('python', [pythonScript, productToSearch], (error, stdout, stderr) => {
         if (error) {
           console.error(`Error executing the Python script: ${error.message}`);

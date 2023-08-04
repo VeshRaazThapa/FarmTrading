@@ -52,7 +52,7 @@ class AdminAPIs {
 
     var response = await http.post(
       Uri.parse("$API_URL/list/getRecommendations"),
-      body: {"itemName": item.name},
+      body: {"itemID": item.id},
     );
 
     Map data = json.decode(response.body);
