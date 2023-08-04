@@ -242,7 +242,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
               const SizedBox(height: 40),
             if (appCache.isCustomer())
               const Text(
-                "Products you may like",
+                "Recommended Products",
                 style: TextStyle(
                   fontSize: 20,
                 ),
