@@ -16,7 +16,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
+import '../../../../models/order_item.dart';
 import '../../../admin/application/admin_apis.dart';
+import '../../../order/presentation/order_form_page.dart';
 
 class ItemDetailPage extends ConsumerStatefulWidget {
   final MilletItem item;
@@ -29,6 +31,7 @@ class ItemDetailPage extends ConsumerStatefulWidget {
 
 class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
   late CommentManager _commentManager;
+  late HomeManager _homeManager;
   late MilletItem item;
   final TextEditingController _commentController = TextEditingController();
 
@@ -38,12 +41,14 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
   void initState() {
     item = widget.item;
     _commentManager = CommentManager(context, ref, item.id);
+    _homeManager = HomeManager(context, ref);
     super.initState();
   }
 
   @override
   void dispose() {
     _commentManager.dispose();
+    _homeManager.dispose();
     super.dispose();
   }
 
@@ -128,7 +133,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 ),
                 const Spacer(),
                 Text(
-                  "रू ${item.price}",
+                  "रू ${item.price}/${item.quantityType}",
                   style: const TextStyle(
                       fontSize: 18,
                       overflow: TextOverflow.ellipsis,
@@ -163,14 +168,62 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             Text(
               "Quantity: ${item.quantity} ${item.quantityType}",
               style: const TextStyle(
-                  fontSize: 15,
-                  color: lightColor,
-                  fontWeight: FontWeight.w600),
+                  fontSize: 15, color: lightColor, fontWeight: FontWeight.w600),
             ),
-
             SizedBox(height: 0.025 * getHeight(context)),
             const Divider(height: 10),
             SizedBox(height: 0.025 * getHeight(context)),
+            if (appCache.isCustomer())
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: InkWell(
+                  onTap: () async {
+                    // CartItem cartItem = MilletOrder(listedBy: item.listedBy,farmerId: item.listedBy,price: (item.price * ));
+                    // ref.read(cartProvider).addItemToCart(cartItem);
+                    // CartManager(context, ref, poll: false)
+                    //     .addItemToCart(item: cartItem);
+                      _homeManager.dispose();
+                      await goToPage(context, AddItemOrderPage(homeManager: _homeManager,milletItem: item,));
+                      _homeManager.attachOrder(appState.value.user);
+
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 1.0,
+                          blurRadius: 5.0,
+                          offset: const Offset(0.0, -2),
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 15.0),
+                      height: 0.075 * getHeight(context),
+                      decoration: BoxDecoration(
+                        color: lightColor,
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Order Now!",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(height: 40),
             const Text(
               "Comments",
               style: TextStyle(
@@ -197,14 +250,10 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 ),
               ],
             ),
-
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: ref
-                  .watch(commentProvider)
-                  .getComments()
-                  .length,
+              itemCount: ref.watch(commentProvider).getComments().length,
               itemBuilder: (context, index) {
                 var list = ref.watch(commentProvider).getComments();
                 if (appCache.isAdmin()) {
@@ -239,7 +288,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 }
               },
             ),
-              const SizedBox(height: 40),
+            const SizedBox(height: 40),
             if (appCache.isCustomer())
               const Text(
                 "Recommended Products",
@@ -247,9 +296,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                   fontSize: 20,
                 ),
               ),
-            if (appCache.isCustomer())
-              _getRecommendedProducts(context)
-
+            if (appCache.isCustomer()) _getRecommendedProducts(context),
           ],
         ),
       ),
@@ -288,7 +335,8 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     _commentController.text = "";
   }
 
-  FutureBuilder<List<MilletItem>> _getRecommendedProducts(BuildContext context) {
+  FutureBuilder<List<MilletItem>> _getRecommendedProducts(
+      BuildContext context) {
     return FutureBuilder(
         future: AdminAPIs.getAllRecommendedItems(widget.item),
         builder: (context, snapshot) {
@@ -311,11 +359,11 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 itemBuilder: (context, index) {
                   return Container(
                     // onDismissed: (direction) {
-                      // if (direction == DismissDirection.endToStart) {
-                      //   deleteItem(list[index].id);
-                      //   list.removeWhere((element) =>
-                      //   element.id == list[index].id);
-                      // }
+                    // if (direction == DismissDirection.endToStart) {
+                    //   deleteItem(list[index].id);
+                    //   list.removeWhere((element) =>
+                    //   element.id == list[index].id);
+                    // }
                     // },
                     // key: ValueKey(list[index].id),
                     // background: Container(
@@ -359,7 +407,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                       ),
                       subtitle: Text(timeago.format(list[index].listedAt)),
                       trailing: Text(
-                        "रू ${list[index].price}",
+                        "रू ${list[index].price}/${list[index].quantityType} ",
                         style: const TextStyle(
                           color: semiDarkColor,
                           fontWeight: FontWeight.w700,
@@ -447,7 +495,5 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             child: CircularProgressIndicator(),
           );
         });
-
-
   }
 }

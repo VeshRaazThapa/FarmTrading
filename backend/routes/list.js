@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getErrorResponse, getSuccessResponse } = require("../utils/response");
 const { MilletItem, validateMilletItem } = require("../models/millet_item");
+const { MilletOrder, validateMilletOrder } = require("../models/order_item");
 const { Comment, validateComment } = require("../models/comment");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
@@ -20,6 +21,32 @@ router.get("/getAll", async (req, res) => {
   const items = await MilletItem.find({});
   return res.send(getSuccessResponse("Success!", items));
 });
+
+router.get("/getAllOrders", async (req, res) => {
+  const items = await MilletOrder.find({});
+  // console.log(items);
+  // console.log("--testing--");
+  return res.send(getSuccessResponse("Success!", items));
+});
+
+router.post("/removeOrder", async (req, res) => {
+  var { itemId } = req.body;
+
+
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(404).send(getErrorResponse("Invalid Item ID"));
+  }
+
+  const result = await MilletOrder.findByIdAndDelete( itemId );
+
+  if (result) {
+        return res.send({ message: "Order deleted successfully" });
+      } else {
+        return res.status(404).send({ message: "Order not found" });
+  }
+});
+
+
 
 router.post("/getRecommendations", async (req, res) => {
      const { itemID } = req.body;
@@ -60,8 +87,8 @@ router.post("/getRecommendations", async (req, res) => {
       // Query to filter MilletItems based on the list of IDs
       const items = MilletItem.find({ _id: { $in: milletItemIds } })
             .then((filteredItems) => {
-              console.log("Filtered MilletItems:");
-              console.log(filteredItems);
+//              console.log("Filtered MilletItems:");
+//              console.log(filteredItems);
               return res.send(getSuccessResponse("Success!", filteredItems));
 
             })
@@ -113,6 +140,17 @@ router.get("/getItem/:id", async (req, res) => {
   }
   return res.send(getSuccessResponse("Success", item));
 });
+router.get("/getOrderItem/:id", async (req, res) => {
+  console.log(req.params.id);
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(404).send(getErrorResponse("Invalid Product ID"));
+  }
+  let item = await MilletOrder.findOne({ _id: req.params.id });
+  if (!item) {
+    return res.status(404).send(getErrorResponse("No Product Found"));
+  }
+  return res.send(getSuccessResponse("Success", item));
+});
 
 router.post("/comment", async (req, res) => {
   const { commentBy, itemID } = req.body;
@@ -155,6 +193,65 @@ router.post("/getUsers", async (req, res) => {
 
   let items = await User.find({});
   return res.send(getSuccessResponse("Success!", items));
+});
+
+// order
+router.post("/addOrder", async (req, res) => {
+  console.log(req.body);
+  var quantity_to_be_reduced = req.body.quantity;
+  let orderd_item = await MilletItem.findOne({ _id: req.body.item });
+  var final_item_quantity = orderd_item.quantity - quantity_to_be_reduced
+  var itemID = req.body.item;
+
+  const { error } = validateMilletOrder(req.body);
+  if (error) return res.send(getErrorResponse(error.details[0].message));
+
+  if (!mongoose.Types.ObjectId.isValid(req.body.listedBy)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let item = new MilletOrder(req.body);
+  await item.save();
+
+  const filter = { _id: itemID };
+  const update = { $set: { quantity: final_item_quantity } };
+
+  try {
+      await MilletItem.updateOne(filter, update);
+      console.log("Item quantity updated successfully!");
+    } catch (error) {
+      console.error("Error updating item quantity:", error);
+      // Handle the error accordingly
+    }
+
+
+  return res.send(getSuccessResponse("Order is Added", item));
+});
+router.get("/getAllDeliveries/:farmerID", async (req, res) => {
+  var farmerID = req.params.farmerID;
+  if (!mongoose.Types.ObjectId.isValid(farmerID)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let items = await MilletOrder.find({});
+
+  //TODO: Check if this works
+  items = items.filter((item) => item.farmerId.toString() === farmerID);
+
+  return res.send(getSuccessResponse("Success", items));
+});
+router.get("/getAllOrder/:wholesalerID", async (req, res) => {
+  var wholesalerID = req.params.wholesalerID;
+  if (!mongoose.Types.ObjectId.isValid(wholesalerID)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let items = await MilletOrder.find({});
+
+  //TODO: Check if this works
+  items = items.filter((item) => item.listedBy.toString() === wholesalerID);
+
+  return res.send(getSuccessResponse("Success", items));
 });
 
 module.exports = router;

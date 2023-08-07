@@ -2,32 +2,37 @@ import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/cart/application/cart_manager.dart';
 import 'package:agro_millets/core/cart/application/cart_provider.dart';
 import 'package:agro_millets/core/home/application/home_manager.dart';
+import 'package:agro_millets/core/home/application/home_provider.dart';
 import 'package:agro_millets/core/home/presentation/widgets/agro_item.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/models/cart_item.dart';
+import 'package:agro_millets/models/order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class CartPage extends ConsumerStatefulWidget {
-  const CartPage({super.key});
+import '../../../data/cache/app_cache.dart';
+import '../../home/presentation/widgets/agro_item_order.dart';
+
+class OrderPage extends ConsumerStatefulWidget {
+  const OrderPage({super.key});
 
   @override
-  ConsumerState<CartPage> createState() => _CartPageState();
+  ConsumerState<OrderPage> createState() => _OrderPageState();
 }
 
-class _CartPageState extends ConsumerState<CartPage> {
-  late CartManager cartManager;
+class _OrderPageState extends ConsumerState<OrderPage> {
+  late HomeManager homeManager;
 
   @override
   void initState() {
-    cartManager = CartManager(context, ref);
+    homeManager = HomeManager(context, ref);
     super.initState();
   }
 
   @override
   void dispose() {
-    cartManager.dispose();
+    homeManager.dispose();
     super.dispose();
   }
 
@@ -35,14 +40,19 @@ class _CartPageState extends ConsumerState<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Your Cart"),
+        title: const Text("Your Orders"),
       ),
       body: Stack(
         children: [
           Positioned.fill(
             child: Consumer(
               builder: (context, ref, child) {
-                List<CartItem> cart = ref.watch(cartProvider).getCart();
+                List<MilletOrder> orders;
+                if (appCache.isFarmer()){
+                   orders = ref.watch(homeProvider).getAllDeliveries();
+                } else {
+                   orders = ref.watch(homeProvider).getAllOrders();
+                }
 
                 return MasonryGridView.count(
                   shrinkWrap: true,
@@ -55,15 +65,16 @@ class _CartPageState extends ConsumerState<CartPage> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  itemCount: cart.length,
+                  itemCount: orders.length,
                   itemBuilder: (context, index) {
                     return FutureBuilder(
-                      future: getItemById(cart[index].item),
+                      future: getItemById(orders[index].item),
                       builder: (context, snapshot) {
                         if (snapshot.hasData && snapshot.data != null) {
-                          return AgroItem(
+                          return AgroItemOrder(
                             index: index,
                             item: snapshot.data!,
+                            itemOrder: orders[index],
                             showAddCartIcon: false,
                           );
                         } else if (snapshot.hasError) {
@@ -79,41 +90,6 @@ class _CartPageState extends ConsumerState<CartPage> {
                   },
                 );
               },
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration:
-                  BoxDecoration(color: Theme.of(context).cardColor, boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  spreadRadius: 1.0,
-                  blurRadius: 5.0,
-                  offset: const Offset(0.0, -2),
-                )
-              ]),
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: 15.0, vertical: 15.0),
-                height: 0.075 * getHeight(context),
-                decoration: BoxDecoration(
-                  color: lightColor,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Order Now!",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
             ),
           ),
         ],

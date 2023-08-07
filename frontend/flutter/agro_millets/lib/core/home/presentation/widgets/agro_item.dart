@@ -53,7 +53,7 @@ class AgroItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: LayoutBuilder(builder: (context, constraints) {
-                  print(item);
+                  //print(item);
                   return Column(
                     children: [
                       Expanded(
@@ -98,7 +98,7 @@ class AgroItem extends StatelessWidget {
                                 // const Spacer(),
                                 const Spacer(),
                                 Text(
-                                  "रू ${item.price}",
+                                  "रू ${item.price}/${item.quantityType}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),
                                 ),

@@ -23,6 +23,7 @@ function NavBar() {
         <NavBarItem text="Home" route="/home" />
         <NavBarItem text="About" route="/about" />
         <NavBarItem text="Shop" route="/shop" />
+        <NavBarItem text="Order" route="/order" />
 
         {/* Desktop Icons */}
         <div className="hidden md:flex">
@@ -68,6 +69,7 @@ function NavBar() {
         >
           <MobileNavBarItem text="Home" route="/home" />
           <MobileNavBarItem text="Shop" route="/shop" />
+          <MobileNavBarItem text="Order" route="/order" />
           <MobileNavBarItem text="Search" route="/search" />
           <MobileNavBarItem text="Profile" route="/profile" />
           <MobileNavBarItem text="Cart" route="/cart" />

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
+import '../../../models/order_item.dart';
+
 class AdminAPIs {
   // http://localhost:3000/api/auth/getAll
 
@@ -103,4 +105,27 @@ class AdminAPIs {
     }
     return [];
   }
+
+  // orders
+  static Future<List<MilletOrder>> getAllOrders(User user) async {
+    // var response = await http.get(
+    //   Uri.parse("$API_URL/list/getAllOrder"),
+    // );
+    var response = await http.post(
+      Uri.parse("$API_URL/list/getAllOrder"),
+      body: {"wholesalerID": user.id},
+    );
+    Map data = json.decode(response.body);
+    if (data["statusCode"] == 200) {
+      List dataMap = data["data"];
+      List<MilletOrder> list = [];
+
+      for (var e in dataMap) {
+        list.add(MilletOrder.fromMap(e));
+      }
+      return list;
+    }
+    return [];
+  }
+
 }

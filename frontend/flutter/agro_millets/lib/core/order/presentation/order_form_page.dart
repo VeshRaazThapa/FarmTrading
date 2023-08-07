@@ -8,21 +8,32 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-class AddItemPage extends StatefulWidget {
+import '../../../globals.dart';
+import '../../../models/millet_item.dart';
+
+class AddItemOrderPage extends StatefulWidget {
   final HomeManager homeManager;
-  const AddItemPage({Key? key, required this.homeManager}) : super(key: key);
+  final MilletItem milletItem;
+
+  const AddItemOrderPage(
+      {Key? key, required this.homeManager, required this.milletItem})
+      : super(key: key);
 
   @override
-  AddItemPageState createState() => AddItemPageState();
+  AddItemOrderPageState createState() => AddItemOrderPageState();
 }
 
-class AddItemPageState extends State<AddItemPage> {
+class AddItemOrderPageState extends State<AddItemOrderPage> {
   late double height, width;
 
-  String name = "", description = "",category="fruits",quantityType="kg";
+  String name = "",
+      description = "",
+      category = "fruits",
+      quantityType = "kg";
 
 
-  double price = 0.0, quantity=0.0;
+  double price = 0.0,
+      quantity = 0.0;
   String imageUrl = "";
   bool pickedImage = false;
 
@@ -30,16 +41,22 @@ class AddItemPageState extends State<AddItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return LoadingWidget(
       isLoading: isLoading,
-      child: _getAddItemPage(context),
+      child: _getAddItemOrderPage(context),
     );
-    // return _getAddItemPage(context);
+    // return _getAddItemOrderPage(context);
   }
 
-  Scaffold _getAddItemPage(BuildContext context) {
+  Scaffold _getAddItemOrderPage(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -49,7 +66,7 @@ class AddItemPageState extends State<AddItemPage> {
         ),
         centerTitle: true,
         title: const Text(
-          "Add Product",
+          "Add Your order",
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -61,25 +78,31 @@ class AddItemPageState extends State<AddItemPage> {
   _getFloatingActionButton(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () async {
-        isLoading.value = true;
-        String itemId = const Uuid().v1();
 
-        String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
+        // String orderId = const Uuid().v1();
+
+        // String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
         // String url = "https://firebasestorage.googleapis.com/v0/b/kisan-7ffff.appspot.com/o/images%2Fitems%2FMaize_mccornick.org_.jpg?alt=media&token=0ca55aad-eb86-45ff-93a2-fa820fa9c5a0";
-
-        await addItem(
-          name: name,
-          listedBy: appState.value.user!.id,
-          description: description,
-          category: category,
-          images: [url],
-          quantity: quantity,
-          price: price, quantityType: quantityType,
-        );
-        isLoading.value = false;
-        if (mounted) {
-          Navigator.pop(context);
+        if (quantity <= widget.milletItem.quantity) {
+          isLoading.value = true;
+          await addItemOrder(
+              listedBy: appState.value.user!.id,
+              farmerId: widget.milletItem.listedBy,
+              quantity: quantity,
+              phoneFarmer:appState.value.user!.phone,
+              phoneCustomer:appState.value.user!.phone,
+              quantityType: widget.milletItem.quantityType,
+              price: quantity * widget.milletItem.price,
+              item: widget.milletItem.id
+          );
+          isLoading.value = false;
+          if (mounted) {
+            Navigator.pop(context);
+          }
+        } else {
+          showToast("Quantity most be below ${widget.milletItem.quantity}");
         }
+
       },
       label: Row(
         children: const [
@@ -118,128 +141,26 @@ class AddItemPageState extends State<AddItemPage> {
   _getImageSelector() {
     return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: SizedBox(
-            height: 0.3 * height,
-            width: double.infinity,
-            child: pickedImage
-                ? GestureDetector(
-              onTap: () {
-                pickAnImage();
-              },
-              child: Image.file(
-                File(imageUrl),
-                fit: BoxFit.contain,
-              ),
-            )
-                : ActionButton(
-              onPressed: () async {
-                await pickAnImage();
-              },
-              text: ("Pick an Image"),
-            ),
-          ),
-        ),
         Container(
           height: 0.025 * height,
         ),
         _getTextField(
-          "Name",
-          ((e) => name = e),
-          TextInputType.text,
-        ),
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            labelText: 'Category',
-            border: OutlineInputBorder(),
-          ),
-          value: category,
-          items: <DropdownMenuItem<String>>[
-            DropdownMenuItem<String>(
-              value: 'vegetables',
-              child: Text('Vegetables'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'fruits',
-              child: Text('Fruits'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'grains',
-              child: Text('Cereals'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'livestock',
-              child: Text('Live stocks'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'oil',
-              child: Text('Oil Seeds'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'lentils',
-              child: Text('Pulses'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'cash',
-              child: Text('Cash Crop'),
-            ),
-          ],
-          onChanged: (String? newValue) {
-            setState(() {
-              category = newValue ?? '';
-            });
-          },
-        ),
-        _getTextField(
-          "Description",
-          ((e) => description = e),
-          TextInputType.multiline,
-        ),
-        _getTextField(
-          "Quantity",
+          "Quantity less than ${widget.milletItem.quantity}",
           ((e) => quantity = double.parse(e)),
           TextInputType.number,
         ),
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            labelText: 'Quantity Type',
-            border: OutlineInputBorder(),
-          ),
-          value: quantityType,
-          items: <DropdownMenuItem<String>>[
-            DropdownMenuItem<String>(
-              value: 'kg',
-              child: Text('K.G'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'litre',
-              child: Text('Litre'),
-            ),
-            DropdownMenuItem<String>(
-              value: 'count',
-              child: Text('Count'),
-            ),
-          ],
-          onChanged: (String? newValue) {
-            setState(() {
-              quantityType = newValue ?? '';
-            });
-          },
-        ),_getTextField(
-          "Price (Rs.)",
-          ((e) => price = double.parse(e)),
-          TextInputType.number,
-        ),
+        // _getTextField(
+        //   "Price (Rs.)",
+        //   ((e) => price = double.parse(e)),
+        //   TextInputType.number,
+        // ),
       ],
     );
   }
 
-  _getTextField(
-      String hintText,
+  _getTextField(String hintText,
       Function onChange,
-      TextInputType keyboardType,
-      ) {
+      TextInputType keyboardType,) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       padding: const EdgeInsets.symmetric(
@@ -247,7 +168,9 @@ class AddItemPageState extends State<AddItemPage> {
         vertical: 5.0,
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: Theme
+            .of(context)
+            .cardColor,
         borderRadius: BorderRadius.circular(8.0),
         boxShadow: [
           BoxShadow(
@@ -257,9 +180,9 @@ class AddItemPageState extends State<AddItemPage> {
           ),
         ],
       ),
-      child: TextField(
+      child: TextFormField(
         maxLines: null,
-        keyboardType:  TextInputType.multiline,
+        keyboardType: TextInputType.multiline,
         onChanged: (value) {
           onChange(value);
           setState(() {});
@@ -268,21 +191,20 @@ class AddItemPageState extends State<AddItemPage> {
           hintText: hintText,
           border: InputBorder.none,
         ),
+        // validator: _textFieldValidator,
       ),
     );
   }
-
-  Future<bool> pickAnImage() async {
-    XFile? file = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-    );
-    if (file != null) {
-      imageUrl = file.path;
-      pickedImage = true;
-      setState(() {});
-      return true;
-    }
-    return false;
-  }
 }
+
+// String? _textFieldValidator(String? value) {
+//   // Perform your validation here
+//   // For example, you can check if the value is empty or doesn't meet specific requirements.
+//   if (value == null || value.isEmpty) {
+//     return 'Please enter a value.';
+//   }
+//
+//   // Add more validation conditions as needed.
+//
+//   return null; // Return null if the input is valid.
+// }

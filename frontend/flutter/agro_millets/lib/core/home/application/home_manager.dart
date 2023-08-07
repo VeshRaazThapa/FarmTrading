@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../models/order_item.dart';
+import '../../../models/user.dart';
+
 class HomeManager {
   final BuildContext context;
   Timer? timer;
@@ -31,6 +34,13 @@ class HomeManager {
     debugPrint("[home_manager] Attaching Listeners...");
     var data = await getAllItems();
     ref.read(homeProvider).updateItems(data);
+    if (appCache.isFarmer()) {
+      var deliveryData = await getAllDeliveries(appState.value.user!);
+      ref.read(homeProvider).updateItemDeliveries(deliveryData);
+    } else {
+      var orderData = await getAllOrders(appState.value.user!);
+      ref.read(homeProvider).updateItemOrder(orderData);
+    }
 
     timer = Timer.periodic(
       const Duration(seconds: 10),
@@ -38,10 +48,18 @@ class HomeManager {
         if (context.mounted) {
           var data = await getAllItems();
           ref.read(homeProvider).updateItems(data);
+          if (appCache.isCustomer()) {
+            var deliveryData = await getAllDeliveries(appState.value.user!);
+            ref.read(homeProvider).updateItemDeliveries(deliveryData);
+          } else {
+            var orderData = await getAllOrders(appState.value.user!);
+            ref.read(homeProvider).updateItemOrder(orderData);
+          }
         }
       },
     );
   }
+
   attachCategory(String category) async {
     debugPrint("[home_manager] Attaching Listeners...");
     var data = await getCategoryItems(category);
@@ -58,12 +76,45 @@ class HomeManager {
     );
   }
 
+  attachOrder(User? user) async {
+    debugPrint("[home_manager] Attaching Listeners...");
+    var data = await getAllOrders(user!);
+    ref.read(homeProvider).updateItemOrder(data);
+
+    timer = Timer.periodic(
+      const Duration(seconds: 10),
+      (timer) async {
+        if (context.mounted) {
+          var data = await getAllOrders(user);
+          ref.read(homeProvider).updateItemOrder(data);
+        }
+      },
+    );
+  }
+
+  // attachDeliveries(User? user) async {
+  //   debugPrint("[home_manager] Attaching Listeners...");
+  //   var data = await getAllDeliveries(user!);
+  //   ref.read(homeProvider).updateItemDeliveries(data);
+  //
+  //   timer = Timer.periodic(
+  //     const Duration(seconds: 10),
+  //     (timer) async {
+  //       if (context.mounted) {
+  //         var data = await getAllDeliveries(user);
+  //         ref.read(homeProvider).updateItemDeliveries(data);
+  //       }
+  //     },
+  //   );
+  // }
+
   Future<List<MilletItem>> getAllItems() async {
     if (appCache.isFarmer()) {
       return await getAllFarmerItems(appState.value.user!.id);
     }
     return getAll();
   }
+
   Future<List<MilletItem>> getAllRecommendedItems(MilletItem item) async {
     if (appCache.isFarmer()) {
       return await getAllRecommendedItems(item);
@@ -73,10 +124,11 @@ class HomeManager {
 
   Future<List<MilletItem>> getCategoryItems(String category) async {
     if (appCache.isFarmer()) {
-      return await getAllFarmerCategoryItems(appState.value.user!.id,category);
+      return await getAllFarmerCategoryItems(appState.value.user!.id, category);
     }
     return getCategoryAll(category);
   }
+
   // Future<List<MilletItem>> getAllCategories() async {
   //   List<MilletItem> list = ['vegetables','fruits','grains','dairy products'];
   //   return list;
@@ -99,6 +151,7 @@ class HomeManager {
     }
     return [];
   }
+
   Future<List<MilletItem>> getCategoryAll(String category) async {
     var response = await http.get(
       Uri.parse("$API_URL/list/getAll/$category"),
@@ -139,6 +192,7 @@ Future<List<MilletItem>> getAllFarmerItems(String id) async {
   }
   return [];
 }
+
 Future<List<MilletItem>> getAllRecommendedItems(MilletItem item) async {
   var response = await http.post(
     Uri.parse("$API_URL/list/getRecommendations"),
@@ -155,14 +209,15 @@ Future<List<MilletItem>> getAllRecommendedItems(MilletItem item) async {
     for (var e in dataMap) {
       list.add(MilletItem.fromMap(e));
     }
-    debugPrint("Recommended Items $list");
+    //debugPrint("Recommended Items $list");
 
     return list;
   }
   return [];
 }
 
-Future<List<MilletItem>> getAllFarmerCategoryItems(String id,String category) async {
+Future<List<MilletItem>> getAllFarmerCategoryItems(
+    String id, String category) async {
   var response = await http.get(
     Uri.parse("$API_URL/list/getAll/$category/$id"),
   );
@@ -178,6 +233,52 @@ Future<List<MilletItem>> getAllFarmerCategoryItems(String id,String category) as
       list.add(MilletItem.fromMap(e));
     }
     debugPrint("Farmer Items $list");
+
+    return list;
+  }
+  return [];
+}
+
+Future<List<MilletOrder>> getAllOrders(User user) async {
+  var response = await http.get(
+    Uri.parse("$API_URL/list/getAllOrder/${appState.value.user!.id}"),
+    // body: {"wholesalerID": user.id},
+  );
+
+  debugPrint(response.request!.url.toString());
+  Map data = json.decode(response.body);
+
+  if (data["statusCode"] == 200) {
+    List dataMap = data["data"];
+    List<MilletOrder> list = [];
+
+    for (var e in dataMap) {
+      list.add(MilletOrder.fromMap(e));
+    }
+    debugPrint("Wholesaler Orders $list");
+
+    return list;
+  }
+  return [];
+}
+
+Future<List<MilletOrder>> getAllDeliveries(User user) async {
+  var response = await http.get(
+    Uri.parse("$API_URL/list/getAllDeliveries/${appState.value.user!.id}"),
+    // body: {"wholesalerID": user.id},
+  );
+
+  debugPrint(response.request!.url.toString());
+  Map data = json.decode(response.body);
+
+  if (data["statusCode"] == 200) {
+    List dataMap = data["data"];
+    List<MilletOrder> list = [];
+
+    for (var e in dataMap) {
+      list.add(MilletOrder.fromMap(e));
+    }
+    debugPrint("Wholesaler Orders $list");
 
     return list;
   }
@@ -203,7 +304,7 @@ Future<void> addItem({
         "listedBy": listedBy,
         "farmer": farmer,
         "name": name,
-        "category":category,
+        "category": category,
         "description": description,
         "images": images,
         "quantityType": quantityType,
@@ -213,6 +314,36 @@ Future<void> addItem({
       },
     ),
   );
+  showToast("Your item has been added");
+}
+
+Future<void> addItemOrder({
+  required String listedBy,
+  required String farmerId,
+  required double quantity,
+  required String quantityType,
+  required String phoneCustomer,
+  required String phoneFarmer,
+  required double price,
+  required String item,
+}) async {
+  var response = await http.post(
+    Uri.parse("$API_URL/list/addOrder"),
+    headers: {"content-type": "application/json"},
+    body: json.encode(
+      {
+        "listedBy": listedBy,
+        "farmerId": farmerId,
+        "phoneCustomer": phoneCustomer,
+        "phoneFarmer": phoneFarmer,
+        "quantityType": quantityType,
+        "quantity": quantity,
+        "price": price,
+        "item": item,
+      },
+    ),
+  );
+  showToast("Your order has been added");
 }
 
 Future<MilletItem?> getItemById(String id) async {
@@ -240,7 +371,7 @@ Future<void> deleteItem(String id) async {
     ),
   );
 
-  print(response.body.toString());
+  //print(response.body.toString());
   var data = json.decode(response.body);
   showToast(data["message"]);
 }
