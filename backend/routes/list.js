@@ -22,6 +22,32 @@ router.get("/getAll", async (req, res) => {
   return res.send(getSuccessResponse("Success!", items));
 });
 
+router.get("/getAllOrders", async (req, res) => {
+  const items = await MilletOrder.find({});
+  // console.log(items);
+  // console.log("--testing--");
+  return res.send(getSuccessResponse("Success!", items));
+});
+
+router.post("/removeOrder", async (req, res) => {
+  var { itemId } = req.body;
+
+
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(404).send(getErrorResponse("Invalid Item ID"));
+  }
+
+  const result = await MilletOrder.findByIdAndDelete( itemId );
+
+  if (result) {
+        return res.send({ message: "Order deleted successfully" });
+      } else {
+        return res.status(404).send({ message: "Order not found" });
+  }
+});
+
+
+
 router.post("/getRecommendations", async (req, res) => {
      const { itemID } = req.body;
      console.log(itemID);
@@ -109,6 +135,17 @@ router.get("/getItem/:id", async (req, res) => {
     return res.status(404).send(getErrorResponse("Invalid Product ID"));
   }
   let item = await MilletItem.findOne({ _id: req.params.id });
+  if (!item) {
+    return res.status(404).send(getErrorResponse("No Product Found"));
+  }
+  return res.send(getSuccessResponse("Success", item));
+});
+router.get("/getOrderItem/:id", async (req, res) => {
+  console.log(req.params.id);
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(404).send(getErrorResponse("Invalid Product ID"));
+  }
+  let item = await MilletOrder.findOne({ _id: req.params.id });
   if (!item) {
     return res.status(404).send(getErrorResponse("No Product Found"));
   }
@@ -216,7 +253,5 @@ router.get("/getAllOrder/:wholesalerID", async (req, res) => {
 
   return res.send(getSuccessResponse("Success", items));
 });
-
-
 
 module.exports = router;

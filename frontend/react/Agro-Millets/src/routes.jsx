@@ -3,11 +3,12 @@ import React from "react";
 import {Icon} from "@chakra-ui/react";
 import {
     MdPerson,
-     MdApps, MdAdd,
+     MdApps, MdAdd,MdLocalShipping
 } from "react-icons/md";
 
 import MainDashboard from "./pages/admin/default";
 import Shop from "./pages/shop/presentation";
+import Order from "./pages/order/presentation";
 import Profile from "./pages/profile/detail/index.jsx";
 
 const routes = [
@@ -20,10 +21,23 @@ const routes = [
                 as={MdAdd}
                 width='20px'
                 height='20px'
-                color='inherit'
-            />
-        ),
+                color='inherit'/>),
         component: Shop,
+        secondary: true,
+    },
+     {
+        name: "Orders",
+        layout: "/order",
+        path: "/items",
+        icon: (
+            <Icon
+                as={MdLocalShipping}
+                width='20px'
+                height='20px'
+                color='inherit'
+           />
+        ),
+        component: Order,
         secondary: true,
     },
     {

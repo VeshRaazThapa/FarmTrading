@@ -53,6 +53,7 @@ export function SidebarLinks(props) {
       } else if (
         route.layout === "/admin" ||
         route.layout === "/shop" ||
+        route.layout === "/order" ||
         route.layout === "/auth" ||
         route.layout === "/login" ||
         route.layout === "/profile" ||

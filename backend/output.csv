@@ -1,7 +1,7 @@
 "id","farmer_id","product_name","category","quantity"
 "6466c33d08bb89a9c55326da","645861ecc63c10c1af2c7355","Red Lentils ","lentils",20
 "6466c84808bb89a9c55327d9","645861ecc63c10c1af2c7355","Mango","fruits",50
-"6466c87c08bb89a9c55327ed","645861ecc63c10c1af2c7355","White Potato","vegetables",90
+"6466c87c08bb89a9c55327ed","645861ecc63c10c1af2c7355","White Potato","vegetables",85
 "6466c91a08bb89a9c553284d","645861ecc63c10c1af2c7355","Coffee Beans","cash",30
 "6466cd6a08bb89a9c5532867","645861ecc63c10c1af2c7355","Milk","livestock",100
 "6466ce5908bb89a9c55328e4","645861ecc63c10c1af2c7355","Mustard Seeds","oil",60
