@@ -81,41 +81,6 @@ class _CartPageState extends ConsumerState<CartPage> {
               },
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration:
-                  BoxDecoration(color: Theme.of(context).cardColor, boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  spreadRadius: 1.0,
-                  blurRadius: 5.0,
-                  offset: const Offset(0.0, -2),
-                )
-              ]),
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: 15.0, vertical: 15.0),
-                height: 0.075 * getHeight(context),
-                decoration: BoxDecoration(
-                  color: lightColor,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Order Now!",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

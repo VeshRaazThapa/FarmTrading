@@ -158,7 +158,7 @@ class _MyPhoneState extends State<MyPhone> {
   }
 
   Future<void> phoneAuthentication(String phoneNo) async {
-    print(phoneNo);
+    //print(phoneNo);
     await _auth.verifyPhoneNumber(
         phoneNumber: '+977 98-61698983',
         verificationCompleted: (credential

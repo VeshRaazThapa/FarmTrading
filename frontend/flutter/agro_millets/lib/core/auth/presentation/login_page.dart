@@ -93,39 +93,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             text: "Log in",
           ),
           SizedBox(height: 0.015 * getHeight(context)),
-          GestureDetector(
-            onTap: () async {
-              var res = await _authManager.googleAuth();
-              if (res == 1 && mounted) {
-                goToPage(context, const RolePage(), clearStack: true);
-              }
-            },
-            // text: "Login using Google",
-            child: Container(
-              height: 0.06 * getHeight(context),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    MdiIcons.google,
-                    color: Colors.white,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    "Log in using Google",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     var res = await _authManager.googleAuth();
+          //     if (res == 1 && mounted) {
+          //       goToPage(context, const RolePage(), clearStack: true);
+          //     }
+          //   },
+          //   // text: "Login using Google",
+          //   child: Container(
+          //     height: 0.06 * getHeight(context),
+          //     decoration: BoxDecoration(
+          //       color: Theme.of(context).primaryColor,
+          //       borderRadius: BorderRadius.circular(10.0),
+          //     ),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: const [
+          //         Icon(
+          //           MdiIcons.google,
+          //           color: Colors.white,
+          //         ),
+          //         SizedBox(width: 10),
+          //         Text(
+          //           "Log in using Google",
+          //           style: TextStyle(
+          //             color: Colors.white,
+          //             fontSize: 16,
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
           SizedBox(height: 0.015 * getHeight(context)),
           GestureDetector(

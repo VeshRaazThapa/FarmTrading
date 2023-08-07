@@ -119,7 +119,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 ),
                 const Spacer(),
                 Text(
-                  "रू ${item.price}",
+                  "रू ${item.price} /${item.quantityType}",
                   style: const TextStyle(
                       fontSize: 25,
                       color: lightColor,

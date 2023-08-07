@@ -23,8 +23,8 @@ class AgroCategoryFilterGridView extends StatelessWidget {
       crossAxisSpacing: 10,
       itemCount: list.length,
       itemBuilder: (context, index) {
-        print(category);
-        print(list[index].category);
+        //print(category);
+        //print(list[index].category);
         if (category == list[index].category )
           {
             return AgroItem(
