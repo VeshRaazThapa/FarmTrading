@@ -1,34 +1,23 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const JoiObjectId = require("joi-objectid")(Joi);
-const { commentSchema } = require("./comment");
+const { milletItemSchema } = require("./millet_item.js");
 
-const milletItemSchema = new mongoose.Schema({
+const milletOrderSchema = new mongoose.Schema({
+
   listedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+
+  farmerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+        ref: "User",
+        required: true,
   },
-  farmer: {
-    type: String,
-    required: false,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  images: {
-    type: [String],
-    required: true,
-  },
+
   quantityType: {
     type: String,
     required: true,
@@ -44,34 +33,38 @@ const milletItemSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-
+  phoneFarmer: Joi.string().required(),
+  phoneCustomer: Joi.string().required(),
   listedAt: {
     type: Date,
     default: () => {
       return new Date();
     },
   },
-  comments: [commentSchema],
+  item: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MilletItem",
+      required: true,
+    },
 });
 
-const MilletItem = mongoose.model("MilletItem", milletItemSchema);
+const MilletOrder = mongoose.model("MilletOrder", milletOrderSchema);
 
-function validateMilletItem(item) {
+function validateMilletOrder(item) {
   const schema = Joi.object().keys({
     listedBy: JoiObjectId().required(),
-    name: Joi.string().required(),
-    farmer: Joi.string(),
-    category: Joi.string().required(),
-    description: Joi.string().required(),
-    images: Joi.array().items(Joi.string().required()).required(),
-    comments: Joi.array(),
+    farmerId: JoiObjectId().required(),
     quantityType: Joi.string().required(),
+    phoneFarmer: Joi.string().required(),
+    phoneCustomer: Joi.string().required(),
     quantity: Joi.number().required(),
     price: Joi.number().required(),
+    item: JoiObjectId().required(),
+
   });
   return schema.validate(item);
 }
 
-exports.MilletItem = MilletItem;
-exports.validateMilletItem = validateMilletItem;
-exports.milletItemSchema = milletItemSchema;
+exports.MilletOrder = MilletOrder;
+exports.validateMilletOrder = validateMilletOrder;
+exports.milletOrderSchema = milletOrderSchema;

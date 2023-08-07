@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getErrorResponse, getSuccessResponse } = require("../utils/response");
 const { MilletItem, validateMilletItem } = require("../models/millet_item");
+const { MilletOrder, validateMilletOrder } = require("../models/order_item");
 const { Comment, validateComment } = require("../models/comment");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
@@ -60,8 +61,8 @@ router.post("/getRecommendations", async (req, res) => {
       // Query to filter MilletItems based on the list of IDs
       const items = MilletItem.find({ _id: { $in: milletItemIds } })
             .then((filteredItems) => {
-              console.log("Filtered MilletItems:");
-              console.log(filteredItems);
+//              console.log("Filtered MilletItems:");
+//              console.log(filteredItems);
               return res.send(getSuccessResponse("Success!", filteredItems));
 
             })
@@ -156,5 +157,66 @@ router.post("/getUsers", async (req, res) => {
   let items = await User.find({});
   return res.send(getSuccessResponse("Success!", items));
 });
+
+// order
+router.post("/addOrder", async (req, res) => {
+  console.log(req.body);
+  var quantity_to_be_reduced = req.body.quantity;
+  let orderd_item = await MilletItem.findOne({ _id: req.body.item });
+  var final_item_quantity = orderd_item.quantity - quantity_to_be_reduced
+  var itemID = req.body.item;
+
+  const { error } = validateMilletOrder(req.body);
+  if (error) return res.send(getErrorResponse(error.details[0].message));
+
+  if (!mongoose.Types.ObjectId.isValid(req.body.listedBy)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let item = new MilletOrder(req.body);
+  await item.save();
+
+  const filter = { _id: itemID };
+  const update = { $set: { quantity: final_item_quantity } };
+
+  try {
+      await MilletItem.updateOne(filter, update);
+      console.log("Item quantity updated successfully!");
+    } catch (error) {
+      console.error("Error updating item quantity:", error);
+      // Handle the error accordingly
+    }
+
+
+  return res.send(getSuccessResponse("Order is Added", item));
+});
+router.get("/getAllDeliveries/:farmerID", async (req, res) => {
+  var farmerID = req.params.farmerID;
+  if (!mongoose.Types.ObjectId.isValid(farmerID)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let items = await MilletOrder.find({});
+
+  //TODO: Check if this works
+  items = items.filter((item) => item.farmerId.toString() === farmerID);
+
+  return res.send(getSuccessResponse("Success", items));
+});
+router.get("/getAllOrder/:wholesalerID", async (req, res) => {
+  var wholesalerID = req.params.wholesalerID;
+  if (!mongoose.Types.ObjectId.isValid(wholesalerID)) {
+    return res.status(404).send(getErrorResponse("Invalid User ID"));
+  }
+
+  let items = await MilletOrder.find({});
+
+  //TODO: Check if this works
+  items = items.filter((item) => item.listedBy.toString() === wholesalerID);
+
+  return res.send(getSuccessResponse("Success", items));
+});
+
+
 
 module.exports = router;
