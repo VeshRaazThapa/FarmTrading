@@ -3,29 +3,45 @@ import 'package:agro_millets/core/auth/presentation/signup_page.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:pinput/pinput.dart';
 
+import '../../../main.dart';
 import '../../home/presentation/news/constants.dart';
+import '../application/auth.dart';
 
-class MyVerify extends StatefulWidget {
+class MyVerify extends ConsumerStatefulWidget {
   final String verificationId;
   final String phone;
 
-  const MyVerify({Key? key,required this.verificationId,required this.phone,}) : super(key: key);
+  final String name ;
+  final String email ;
+  final String password;
+  final LatLng coordinate;
+  final String userType;
+
+  const MyVerify({Key? key,required this.verificationId,required this.phone, required this.name, required this.password, required this.coordinate, required this.userType, required this.email,}) : super(key: key);
 
   @override
-  State<MyVerify> createState() => _MyVerifyState();
+  ConsumerState<MyVerify> createState() => _MyVerifyState();
 }
 
-class _MyVerifyState extends State<MyVerify> {
+class _MyVerifyState extends ConsumerState<MyVerify> {
   String pinValue ='';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController _pinController = TextEditingController();
   Key _pinputKey = UniqueKey();
+  late AuthManager _authManager;
 
 
-
+  @override
+  void initState() {
+    _authManager = AuthManager(context, ref);
+    // showSuccessToast('Your Phone Number Is Verified');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +146,24 @@ class _MyVerifyState extends State<MyVerify> {
                         var credentials = await _auth.signInWithCredential(credential);
                         bool success = credentials.user != null ? true:false;
                         if (success) {
-                          goToPage(context, SignUpPage(phone:this.widget.phone));
+                          try {
+                            var res = await _authManager.signUpUsingEmailPassword(
+                              email: this.widget.email,
+                              name: this.widget.name.trim(),
+                              password: this.widget.password.trim(),
+                              phone: this.widget.phone.trim(),
+                              coordinate: this.widget.coordinate,
+                              userType: this.widget.userType,
+                            );
+                            if (res == 1 && mounted) {
+                              goToPage(context, RolePage(), clearStack: true);
+                            }
+                          } catch (e){
+                            showFailureToast("${e}");
+                          }
+
+                          // goToPage(context, SignUpPage(phone:this.widget.phone));
+
                         }
                       } catch(e) {
                         _pinController.clear();
