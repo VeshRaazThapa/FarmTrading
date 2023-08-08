@@ -1,32 +1,45 @@
+import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/state_manager.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
 
 import '../../../globals.dart';
 
 class MyPhone extends StatefulWidget {
+  final String email;
+  final String name;
+  final String password;
 
+  // final String phone;
+  final LatLng coordinate;
+  final String userType;
 
-  const MyPhone({
+  MyPhone({
     Key? key,
+    required this.email,
+    required this.name,
+    required this.password,
+    required this.coordinate,
+    required this.userType,
   }) : super(key: key);
 
   @override
   State<MyPhone> createState() => _MyPhoneState();
 }
+
 class VerificationData {
   static String verificationId = '';
 }
+
 class _MyPhoneState extends State<MyPhone> {
   TextEditingController countryController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   var verificationId = ''.obs;
+
   // static String verificationId = '';
 
   @override
@@ -101,11 +114,12 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                     Expanded(
                         child: TextField(
-                          controller: _phoneController,
+                      controller: _phoneController,
                       keyboardType: TextInputType.phone,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
-                          ],
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(10),
+                        // Limit input to 10 characters
+                      ],
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Phone",
@@ -126,11 +140,21 @@ class _MyPhoneState extends State<MyPhone> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      String phone = countryController.text+' '+_phoneController.text;
+                      String phone =
+                          countryController.text + ' ' + _phoneController.text;
                       await phoneAuthentication(phone);
                       // print(phone_number_verified);
                       // print('-----');
-                      goToPage(context,MyVerify(verificationId:this.verificationId.value,phone:phone));
+                      goToPage(
+                          context,
+                          MyVerify(
+                            verificationId: this.verificationId.value,
+                            phone: phone,
+                            name: this.widget.name,
+                            password: this.widget.password,
+                            coordinate: this.widget.coordinate,
+                            userType: this.widget.userType, email: this.widget.email,
+                          ));
                       // Navigator.pushNamed(context, 'verify');
                     },
                     child: Text("Send the code")),
@@ -153,7 +177,8 @@ class _MyPhoneState extends State<MyPhone> {
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         // Handle timeout error if needed
-      }, verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {  },
+      },
+      verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
     );
   }
 
@@ -161,36 +186,30 @@ class _MyPhoneState extends State<MyPhone> {
     //print(phoneNo);
     await _auth.verifyPhoneNumber(
         phoneNumber: '+977 98-61698983',
-        verificationCompleted: (credential
-            ) async {      await _auth.signInWithCredential(credential);
-    },
-    verificationFailed: (e) {
-    if (e.code == 'invalid-phone-number'){
-      print(
-      'the provided no is not valid'
-      );
+        verificationCompleted: (credential) async {
+          await _auth.signInWithCredential(credential);
+        },
+        verificationFailed: (e) {
+          if (e.code == 'invalid-phone-number') {
+            print('the provided no is not valid');
+          } else {
+            print('Something Went Wrong. Try Again');
+          }
+        },
+        codeSent: (verificationId, resendToken) async {
+          print('The Code has been sent.......');
+          this.verificationId.value = verificationId;
+          // await verifyOTP('123456');
+        },
+        codeAutoRetrievalTimeout: (verificationId) {
+          print('The Code retrieval timout.......');
 
-  } else {
-      print('Something Went Wrong. Try Again');
+          this.verificationId.value = verificationId;
+        });
   }
-
-
-  }, codeSent: (verificationId,resendToken) async {
-        print('The Code has been sent.......');
-        this.verificationId.value=verificationId;
-        // await verifyOTP('123456');
-        }, codeAutoRetrievalTimeout: (verificationId){
-      print('The Code retrieval timout.......');
-
-      this.verificationId.value = verificationId;
-        }
-  );
-  }
-  // Future<bool>verifyOTP(String otp) async {
-  //   print(verificationId.value);
-  //   print('------');
-  // var credentials = await _auth.signInWithCredential(PhoneAuthProvider.credential(verificationId: verificationId.value, smsCode: otp));
-  // return credentials.user != null ? true:false;
-  }
-
-
+// Future<bool>verifyOTP(String otp) async {
+//   print(verificationId.value);
+//   print('------');
+// var credentials = await _auth.signInWithCredential(PhoneAuthProvider.credential(verificationId: verificationId.value, smsCode: otp));
+// return credentials.user != null ? true:false;
+}

@@ -95,7 +95,7 @@ class _AgroDrawerState extends State<AgroDrawer> {
           //         );
           //   },
           // ),
-          if (appCache.isFarmer())
+          // if (appCache.isFarmer())
           // ListTile(
           //   title: const Text("Chat"),
           //   leading: const Icon(Icons.chat_bubble_outline),

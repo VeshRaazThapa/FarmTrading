@@ -38,7 +38,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   void initState() {
     _authManager = AuthManager(context, ref);
-    showSuccessToast('Your Phone Number Is Verified');
+    // showSuccessToast('Your Phone Number Is Verified');
     super.initState();
   }
 
@@ -195,54 +195,49 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           ActionButton(
             isFilled: false,
             onPressed: () async {
+              goToPage(
+                context,
+                 MyPhone(email: email, name: username, password: password, coordinate: selectedCoordinates.last, userType: dropdownValue ,),
 
-              var res = await _authManager.signUpUsingEmailPassword(
-                email: email.trim(),
-                name: username.trim(),
-                password: password.trim(),
-                phone: this.widget.phone.trim(),
-                coordinate: selectedCoordinates.last,
-                userType: dropdownValue,
+                clearStack: true,
               );
-              if (res == 1 && mounted) {
-                goToPage(context, RolePage(), clearStack: true);
-              }
+
             },
-            text: "Sign up",
+            text: "Continue",
           ),
-          SizedBox(height: 0.015 * getHeight(context)),
-          GestureDetector(
-            onTap: () async {
-              var res = await _authManager.googleAuth();
-              if (res == 1 && mounted) {
-                goToPage(context, const RolePage(), clearStack: true);
-              }
-            },
-            child: Container(
-              height: 0.06 * getHeight(context),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    MdiIcons.google,
-                    color: Colors.white,
-                  ),
-                  // SizedBox(width: 10),
-                  // Text(
-                  //   "Sign up using Google",
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 16,
-                  //   ),
-                  // )
-                ],
-              ),
-            ),
-          ),
+          // SizedBox(height: 0.015 * getHeight(context)),
+          // GestureDetector(
+          //   onTap: () async {
+          //     var res = await _authManager.googleAuth();
+          //     if (res == 1 && mounted) {
+          //       goToPage(context, const RolePage(), clearStack: true);
+          //     }
+          //   },
+          //   child: Container(
+          //     height: 0.06 * getHeight(context),
+          //     decoration: BoxDecoration(
+          //       color: Theme.of(context).primaryColor,
+          //       borderRadius: BorderRadius.circular(10.0),
+          //     ),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: const [
+          //         Icon(
+          //           MdiIcons.google,
+          //           color: Colors.white,
+          //         ),
+          //         // SizedBox(width: 10),
+          //         // Text(
+          //         //   "Sign up using Google",
+          //         //   style: TextStyle(
+          //         //     color: Colors.white,
+          //         //     fontSize: 16,
+          //         //   ),
+          //         // )
+          //       ],
+          //     ),
+          //   ),
+          // ),
           SizedBox(height: 0.015 * getHeight(context)),
           GestureDetector(
             onTap: () => goToPage(

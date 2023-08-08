@@ -129,11 +129,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
           SizedBox(height: 0.015 * getHeight(context)),
           GestureDetector(
-            onTap: () => goToPage(
-              context,
-              const MyPhone(),
-              clearStack: true,
-            ),
+            onTap: () =>
+              goToPage(context, SignUpPage(phone: '',))
+      ,
             child: RichText(
               text: TextSpan(
                 style: Theme.of(context).textTheme.bodyMedium,

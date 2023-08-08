@@ -47,6 +47,13 @@ router.post("/signup", async (req, res) => {
   // let user = false;
   if (user)
     return res.send(getErrorResponse("User with this email already exists"));
+  let user_phone_test = await User.findOne({ phone: req.body.phone });
+  if (user_phone_test)
+    return res.send(getErrorResponse("User with this phone already exists"));
+
+  let user_name_test = await User.findOne({ name: req.body.name });
+  if (user_name_test)
+    return res.send(getErrorResponse("User with this name already exists"));
 
   let userType = req.body.userType;
   if (!userType || userType === "admin") userType = "wholesaler";
@@ -145,7 +152,7 @@ function validateSignUp(req) {
     name: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-    phone: Joi.string().required(),
+    phone: Joi.string().required().pattern(/^\+(?:[0-9] ?){6,14}[0-9]$/),
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),
     userType: Joi.string().default("wholesaler"),
