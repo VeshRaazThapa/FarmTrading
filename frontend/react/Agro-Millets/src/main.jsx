@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Search from "./pages/Search/presentation/Search";
 import AdminLayout from "./navigations/admin";
 import ShopLayout from "./navigations/shop";
+import UsersLayout from "./navigations/users";
 import OrderLayout from "./navigations/order";
 import LoginLayout from "./navigations/login";
 import ProfileLayout from "./navigations/profile";
@@ -26,6 +27,7 @@ ReactDOM.render(
                     <Switch>
                         <Route path="/" exact component={Login}/>
                         <Route path="/shop" component={ShopLayout}/>
+                        <Route path="/users" component={UsersLayout}/>
                         <Route path="/order" component={OrderLayout}/>
                         <Route path="/login" component={LoginLayout}/>
                         <Route path="/profile" component={ProfileLayout}/>

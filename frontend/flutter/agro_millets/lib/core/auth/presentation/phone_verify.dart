@@ -13,7 +13,8 @@ import '../../home/presentation/news/constants.dart';
 import '../application/auth.dart';
 
 class MyVerify extends ConsumerStatefulWidget {
-  final String verificationId;
+  // final String verificationId;
+  final int verificationPin;
   final String phone;
 
   final String name ;
@@ -22,7 +23,7 @@ class MyVerify extends ConsumerStatefulWidget {
   final LatLng coordinate;
   final String userType;
 
-  const MyVerify({Key? key,required this.verificationId,required this.phone, required this.name, required this.password, required this.coordinate, required this.userType, required this.email,}) : super(key: key);
+  const MyVerify({Key? key,required this.verificationPin,required this.phone, required this.name, required this.password, required this.coordinate, required this.userType, required this.email,}) : super(key: key);
 
   @override
   ConsumerState<MyVerify> createState() => _MyVerifyState();
@@ -138,14 +139,16 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                        verificationId: this.widget.verificationId,
-                        smsCode: pinValue,
-                      );
+                      // PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                      //   verificationId: this.widget.verificationId,
+                      //   smsCode: pinValue,
+                      // );
                       try {
-                        var credentials = await _auth.signInWithCredential(credential);
-                        bool success = credentials.user != null ? true:false;
-                        if (success) {
+                        // var credentials = await _auth.signInWithCredential(credential);
+                        // print(credentials);
+                        // bool success = credentials.user != null ? true:false;
+                        if (this.widget.verificationPin.toString()==pinValue) {
+                          showSuccessToast('Pin Verified Successfully');
                           try {
                             var res = await _authManager.signUpUsingEmailPassword(
                               email: this.widget.email,

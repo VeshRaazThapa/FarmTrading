@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/state_manager.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 import '../../../globals.dart';
 
@@ -142,18 +146,56 @@ class _MyPhoneState extends State<MyPhone> {
                     onPressed: () async {
                       String phone =
                           countryController.text + ' ' + _phoneController.text;
-                      await phoneAuthentication(phone);
+                      // await phoneAuthentication(phone);
                       // print(phone_number_verified);
                       // print('-----');
+
+                      // Note that using a username and password for gmail only works if
+                      // you have two-factor authentication enabled and created an App password.
+                      // Search for "gmail app password 2fa"
+                      // The alternative is to use oauth.
+                      String username = 'thapahimal777@gmail.com';
+                      String password = 'oobkldstlugadrex';
+
+                      final smtpServer = gmail(username, password);
+                      // Use the SmtpServer class to configure an SMTP server:
+                      // final smtpServer = SmtpServer('smtp.domain.com');
+                      // See the named arguments of SmtpServer for further configuration
+                      // options.
+                      Random random = Random();
+                      int min = 100000; // Minimum 6-digit number
+                      int max = 999999; // Maximum 6-digit number
+                      int verificationPin = min + random.nextInt(max - min + 1);
+                      // Create our message.
+                      final message = Message()
+                        ..from = Address(username, 'Farm Trading')
+                        ..recipients.add(this.widget.email)
+                        // ..ccRecipients.addAll([])
+                        // ..bccRecipients.add(Address('bccAddress@example.com'))
+                        ..subject = 'your verification code::${verificationPin}'
+                        ..text = '${verificationPin}'
+                        ..html = "<p>Pin verification</p>\n <h2>${verificationPin}</h2>";
+
+                      try {
+                        final sendReport = await send(message, smtpServer);
+                        print('Message sent: ' + sendReport.toString());
+                      } on MailerException catch (e) {
+                        print('Message not sent.');
+                        for (var p in e.problems) {
+                          print('Problem: ${p.code}: ${p.msg}');
+                        }
+                      }
                       goToPage(
                           context,
                           MyVerify(
-                            verificationId: this.verificationId.value,
+                            // verificationId: this.verificationId.value,
+                            verificationPin: verificationPin,
                             phone: phone,
                             name: this.widget.name,
                             password: this.widget.password,
                             coordinate: this.widget.coordinate,
-                            userType: this.widget.userType, email: this.widget.email,
+                            userType: this.widget.userType,
+                            email: this.widget.email,
                           ));
                       // Navigator.pushNamed(context, 'verify');
                     },
@@ -183,9 +225,9 @@ class _MyPhoneState extends State<MyPhone> {
   }
 
   Future<void> phoneAuthentication(String phoneNo) async {
-    //print(phoneNo);
+    print(phoneNo);
     await _auth.verifyPhoneNumber(
-        phoneNumber: '+977 98-61698983',
+        phoneNumber: '${phoneNo.substring(0, 7) + '-' + phoneNo.substring(7)}',
         verificationCompleted: (credential) async {
           await _auth.signInWithCredential(credential);
         },

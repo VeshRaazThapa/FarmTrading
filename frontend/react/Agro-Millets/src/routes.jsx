@@ -8,6 +8,7 @@ import {
 
 import MainDashboard from "./pages/admin/default";
 import Shop from "./pages/shop/presentation";
+import Users from "./pages/users/presentation";
 import Order from "./pages/order/presentation";
 import Profile from "./pages/profile/detail/index.jsx";
 
@@ -42,7 +43,7 @@ const routes = [
     },
     {
         name: "App Details",
-        layout: "/admin",
+        layout: "/users",
         path: "/default",
         icon: <Icon
             as={MdApps}
@@ -50,7 +51,7 @@ const routes = [
             height='20px'
             color='inherit'
         />,
-        component: MainDashboard,
+        component: Users,
     },
 
     {
