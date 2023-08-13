@@ -53,7 +53,7 @@ function Login() {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              type="text"
+              type="password"
               placeholder="Enter your password"
               className="bg-semiDarkColor bg-opacity-10 w-[50%] py-3 mt-1 border-2 outline-none border-white focus:border-darkColor focus:rounded-lg focus:outline-none px-2 transition-all "
             ></input>

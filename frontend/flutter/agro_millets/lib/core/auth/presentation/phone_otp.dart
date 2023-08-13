@@ -185,7 +185,7 @@ class _MyPhoneState extends State<MyPhone> {
   Future<void> phoneAuthentication(String phoneNo) async {
     //print(phoneNo);
     await _auth.verifyPhoneNumber(
-        phoneNumber: '+977 98-61698983',
+        phoneNumber: '${phoneNo.substring(0, 7) + '-' + phoneNo.substring(7)}',
         verificationCompleted: (credential) async {
           await _auth.signInWithCredential(credential);
         },

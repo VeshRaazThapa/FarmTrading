@@ -144,7 +144,8 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                       );
                       try {
                         var credentials = await _auth.signInWithCredential(credential);
-                        bool success = credentials.user != null ? true:false;
+                        // bool success = credentials.user != null ? true:false;
+                        bool success=true;
                         if (success) {
                           try {
                             var res = await _authManager.signUpUsingEmailPassword(

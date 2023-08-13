@@ -40,18 +40,18 @@ const routes = [
         component: Order,
         secondary: true,
     },
-    {
-        name: "App Details",
-        layout: "/admin",
-        path: "/default",
-        icon: <Icon
-            as={MdApps}
-            width='20px'
-            height='20px'
-            color='inherit'
-        />,
-        component: MainDashboard,
-    },
+    // {
+    //     name: "App Details",
+    //     layout: "/admin",
+    //     path: "/default",
+    //     icon: <Icon
+    //         as={MdApps}
+    //         width='20px'
+    //         height='20px'
+    //         color='inherit'
+    //     />,
+    //     component: MainDashboard,
+    // },
 
     {
         name: "Profile",

@@ -15,12 +15,12 @@ function Profile() {
           <>
             <h1 className="text-3xl font-bold">{user.name}</h1>
             <h1 className="text-slate-700">{user.email}</h1>
-            <h1>{`+91 ${user.phone}`}</h1>
+            <h1>{`${user.phone}`}</h1>
             <p className="mt-5 bg-lightColor font-semibold tracking-  text-white px-5 py-2 rounded-md">{`Access Level: ${
               user.userType ?? "".toUpperCase()
             }`}</p>
 
-            <p
+            <button
               className="mt-5 bg-red-600 font-semibold tracking-  text-white px-5 py-2 rounded-md"
               onClick={() => {
                 appState.logOutUser();
@@ -29,7 +29,7 @@ function Profile() {
             >
               <i className="fa-solid fa-right-from-bracket pr-2"></i>
               Logout
-            </p>
+            </button>
           </>
         ) : (
           <>
