@@ -149,6 +149,8 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                         // bool success = credentials.user != null ? true:false;
                         if (this.widget.verificationPin.toString()==pinValue) {
                           showSuccessToast('Pin Verified Successfully');
+
+
                           try {
                             var res = await _authManager.signUpUsingEmailPassword(
                               email: this.widget.email,
