@@ -125,7 +125,13 @@ export default function CheckTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "PRODUCTS") {
+                  } else if (cell.column.Header === "EMAIL") {
+                    data = (
+                      <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {cell.value}
+                      </Text>
+                    );
+                  }else if (cell.column.Header === "PHONE") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}

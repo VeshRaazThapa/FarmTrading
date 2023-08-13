@@ -12,8 +12,11 @@ export const columnsDataCheck = [
     accessor: "date_joined",
   },
   {
-    Header: "PRODUCTS",
-    accessor: "products",
+    Header: "EMAIL",
+    accessor: "email",
+  },{
+    Header: "PHONE",
+    accessor: "phone",
   },
 ];
 export const columnsDataComplex = [
