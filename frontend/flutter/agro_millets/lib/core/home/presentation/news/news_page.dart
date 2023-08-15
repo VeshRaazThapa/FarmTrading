@@ -61,16 +61,22 @@ class _NewsAppState extends State<NewsApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Argo-News',
-      theme: isSwitched
-          ? ThemeData(
+      title: 'News',
+      theme: ThemeData(
               fontFamily: GoogleFonts.poppins().fontFamily,
               brightness: Brightness.light,
-            )
-          : ThemeData(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              brightness: Brightness.dark,
+appBarTheme: AppBarTheme(
+    backgroundColor: Colors.white,  // Set the app bar background color to white
+    iconTheme: IconThemeData(color: Colors.black),  // Set the app bar icons color to black
+    textTheme: TextTheme(
+      headline6: TextStyle(color: Colors.black),  // Set the app bar title text color to black
+    ),
+  ),
             ),
+          // : ThemeData(
+          //     fontFamily: GoogleFonts.poppins().fontFamily,
+          //     brightness: Brightness.dark,
+          //   ),
       home: Scaffold(
         key: _scaffoldKey,
         drawer: Drawer(
@@ -103,20 +109,20 @@ class _NewsAppState extends State<NewsApp> {
                   icon: const Icon(Icons.search),
                 ),
               ),
-              ExpansionTile(
-                title: const Text('Country'),
-                children: <Widget>[
-                  for (int i = 0; i < listOfCountry.length; i++)
-                    DropDownList(
-                      call: () {
-                        country = listOfCountry[i]['name'];
-                        cName = listOfCountry[i]['name']!.toUpperCase();
-                        getNews();
-                      },
-                      name: listOfCountry[i]['name']!.toUpperCase(),
-                    ),
-                ],
-              ),
+              // ExpansionTile(
+              //   title: const Text('Country'),
+              //   children: <Widget>[
+              //     for (int i = 0; i < listOfCountry.length; i++)
+              //       DropDownList(
+              //         call: () {
+              //           country = listOfCountry[i]['name'];
+              //           cName = listOfCountry[i]['name']!.toUpperCase();
+              //           getNews();
+              //         },
+              //         name: listOfCountry[i]['name']!.toUpperCase(),
+              //       ),
+              //   ],
+              // ),
               // ExpansionTile(
               //   title: const Text('Category'),
               //   children: [
@@ -145,9 +151,12 @@ class _NewsAppState extends State<NewsApp> {
             ],
           ),
         ),
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Agro-News'),
+        appBar:AppBar(
+      title: Text(
+        'News',  // Add the "News" title to the app bar
+        style: TextStyle(color: Colors.black),  // Set the title text color to black
+            ),
+            centerTitle: true,
           actions: [
             IconButton(
               onPressed: () {
@@ -159,12 +168,12 @@ class _NewsAppState extends State<NewsApp> {
               },
               icon: const Icon(Icons.refresh),
             ),
-            Switch(
-              value: isSwitched,
-              onChanged: (bool value) => setState(() => isSwitched = value),
-              activeTrackColor: Colors.white,
-              activeColor: Colors.white,
-            ),
+            // Switch(
+            //   value: isSwitched,
+            //   onChanged: (bool value) => setState(() => isSwitched = value),
+            //   activeTrackColor: Colors.white,
+            //   activeColor: Colors.white,
+            // ),
           ],
         ),
         body: notFound
@@ -338,7 +347,12 @@ class _NewsAppState extends State<NewsApp> {
       pageNum = 1;
     }
     baseApi = 'https://newsapi.org/v2/everything?pageSize=10&page=$pageNum&';
-
+// Construct a list of keywords related to agriculture
+  List<String> agricultureKeywords = ['agriculture', 'farming', 'crops', 'oil seeds', 'lentils', 'fruits', 'vegetables', 'farmers', 'horticulture', 'husbandry', 'aquaculture', 'floriculture'];
+  
+  // Combine the keywords with OR operator in the search query
+  String combinedKeywords = agricultureKeywords.join(' OR ');
+  baseApi += 'q=$combinedKeywords&';
     baseApi += country == null ? 'q=crops&' : 'q=crops $country&';
     baseApi += category == null ? '' : 'category=$category&';
     baseApi += 'apiKey=$apiKey';
