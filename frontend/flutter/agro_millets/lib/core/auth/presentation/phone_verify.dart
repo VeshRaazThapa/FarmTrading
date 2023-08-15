@@ -150,9 +150,10 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                         if (this.widget.verificationPin.toString()==pinValue) {
                           showSuccessToast('Pin Verified Successfully');
 
-
                           try {
+                            
                             var res = await _authManager.signUpUsingEmailPassword(
+
                               email: this.widget.email,
                               name: this.widget.name.trim(),
                               password: this.widget.password.trim(),
@@ -191,10 +192,7 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                           (route) => false,
                         );
                       },
-                      child: Text(
-                        "Edit Phone Number ?",
-                        style: TextStyle(color: Colors.black),
-                      )
+                      child: SizedBox.shrink(),
                       )
                 ],
               )

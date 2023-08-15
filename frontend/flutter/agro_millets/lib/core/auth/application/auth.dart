@@ -100,11 +100,13 @@ class AuthManager {
   }) async {
     ref.read(authProvider).clearUserData();
     isLoading.value = true;
+      print('---before http ---request');
     var response = await http.post(
       Uri.parse("$API_URL/auth/signup"),
       headers: {
         "Content-Type": "application/json",
       },
+
       body: json.encode(
           {
             "name": name,

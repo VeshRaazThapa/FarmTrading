@@ -154,8 +154,8 @@ class _MyPhoneState extends State<MyPhone> {
                       // you have two-factor authentication enabled and created an App password.
                       // Search for "gmail app password 2fa"
                       // The alternative is to use oauth.
-                      String username = 'thapahimal777@gmail.com';
-                      String password = 'oobkldstlugadrex';
+                      String username = 'tardefarm@gmail.com';
+                      String password = 'okzkjbjchdrjmbjm';
 
                       final smtpServer = gmail(username, password);
                       // Use the SmtpServer class to configure an SMTP server:
