@@ -25,18 +25,8 @@ class _UserProfileState extends State<UserProfile> {
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 50,
-              child: ClipOval(
-                child: Image.network(
-                  'https://www.pngarts.com/files/11/Avatar-Transparent-Images.png',
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                ),
-              ),
-            ),
+            padding: const EdgeInsets.all(12.0),
+            
           ),
     CustomTextField(
     value: user == null ? "" : user!.name,

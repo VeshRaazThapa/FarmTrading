@@ -3,7 +3,7 @@ import React from "react";
 import {Icon} from "@chakra-ui/react";
 import {
     MdPerson,
-     MdApps, MdAdd,MdLocalShipping
+     MdApps, MdAdd,MdLocalShipping, MdAgriculture, MdFastfood
 } from "react-icons/md";
 
 import MainDashboard from "./pages/admin/default";
@@ -14,12 +14,24 @@ import Profile from "./pages/profile/detail/index.jsx";
 
 const routes = [
     {
+        name: "App Details",
+        layout: "/users",
+        path: "/default",
+        icon: <Icon
+            as={MdApps}
+            width='20px'
+            height='20px'
+            color='inherit'
+        />,
+        component: Users,
+    },
+    {
         name: "Product",
         layout: "/shop",
         path: "/presentation",
         icon: (
             <Icon
-                as={MdAdd}
+                as={MdFastfood}
                 width='20px'
                 height='20px'
                 color='inherit'/>),
@@ -41,19 +53,6 @@ const routes = [
         component: Order,
         secondary: true,
     },
-    {
-        name: "App Details",
-        layout: "/users",
-        path: "/default",
-        icon: <Icon
-            as={MdApps}
-            width='20px'
-            height='20px'
-            color='inherit'
-        />,
-        component: Users,
-    },
-
 
     {
         name: "Profile",
