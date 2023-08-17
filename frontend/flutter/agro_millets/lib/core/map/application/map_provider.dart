@@ -16,12 +16,12 @@ class MapProvider extends ChangeNotifier {
 
   addItemToMap(User item) {
     _map = [..._map, item];
-    appCache.updateAppCache(AppState(
-      cart:_cart,
-      map: [item, ...?appState.value.map],
-      user: appState.value.user,
-      isLoggedIn: appState.value.isLoggedIn,
-    ));
+    // appCache.updateAppCache(AppState(
+    //   cart:_cart,
+    //   map: [item, ...?appState.value.map],
+    //   user: appState.value.user,
+    //   isLoggedIn: appState.value.isLoggedIn,
+    // ));
     notifyListeners();
   }
 

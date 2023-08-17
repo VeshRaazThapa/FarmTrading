@@ -29,11 +29,11 @@ class CartProvider extends ChangeNotifier {
 
   setCart(List<CartItem> list) {
     _cart = list;
-    appCache.updateAppCache(AppState(
-      cart: list,
-      user: appState.value.user,
-      isLoggedIn: appState.value.isLoggedIn, map: [],
-    ));
+    // appCache.updateAppCache(AppState(
+    //   cart: list,
+    //   user: appState.value.user,
+    //   isLoggedIn: appState.value.isLoggedIn, map: [],
+    // ));
 
     notifyListeners();
   }
