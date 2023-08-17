@@ -22,6 +22,7 @@ class HomeManager {
     attach();
   }
 
+
   dispose() {
     debugPrint("[home_manager] Detaching Listeners...");
     if (timer != null) {
@@ -48,13 +49,13 @@ class HomeManager {
         if (context.mounted) {
           var data = await getAllItems();
           ref.read(homeProvider).updateItems(data);
-          if (appCache.isCustomer()) {
-            var deliveryData = await getAllDeliveries(appState.value.user!);
-            ref.read(homeProvider).updateItemDeliveries(deliveryData);
-          } else {
-            var orderData = await getAllOrders(appState.value.user!);
-            ref.read(homeProvider).updateItemOrder(orderData);
-          }
+          // if (appCache.isCustomer()) {
+          //   var deliveryData = await getAllDeliveries(appState.value.user!);
+          //   ref.read(homeProvider).updateItemDeliveries(deliveryData);
+          // } else {
+          //   var orderData = await getAllOrders(appState.value.user!);
+          //   ref.read(homeProvider).updateItemOrder(orderData);
+          // }
         }
       },
     );
@@ -69,8 +70,8 @@ class HomeManager {
       const Duration(seconds: 10),
       (timer) async {
         if (context.mounted) {
-          var data = await getCategoryAll(category);
-          ref.read(homeProvider).updateItems(data);
+          // var data = await getCategoryAll(category);
+          // ref.read(homeProvider).updateItems(data);
         }
       },
     );
@@ -85,8 +86,8 @@ class HomeManager {
       const Duration(seconds: 10),
       (timer) async {
         if (context.mounted) {
-          var data = await getAllOrders(user);
-          ref.read(homeProvider).updateItemOrder(data);
+          // var data = await getAllOrders(user);
+          // ref.read(homeProvider).updateItemOrder(data);
         }
       },
     );
@@ -255,7 +256,7 @@ Future<List<MilletOrder>> getAllOrders(User user) async {
     for (var e in dataMap) {
       list.add(MilletOrder.fromMap(e));
     }
-    debugPrint("Wholesaler Orders $list");
+    // debugPrint("Wholesaler Orders $list");
 
     return list;
   }

@@ -201,11 +201,12 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                 ],
                               ),
                             if (!isDelivered && appCache.isFarmer())
-                              Row(
+                              Stack(
                                 children: [
+                                  // Other widgets in the Stack
                                   Positioned(
-                                    right: 0,
                                     top: 0,
+                                    right: 0,
                                     child: GestureDetector(
                                       onTap: () async {
                                         deliverOrder(widget.item.id);
@@ -218,19 +219,16 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.05),
+                                              color: Colors.black.withOpacity(0.05),
                                               blurRadius: 5.0,
                                               spreadRadius: 3.0,
                                               offset: const Offset(0.0, 0.0),
                                             )
                                           ],
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
+                                          borderRadius: BorderRadius.circular(10.0),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             const Icon(
                                               Icons.check,
@@ -248,9 +246,10 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                         ),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
+
                             if (!isDelivered && appCache.isCustomer())
                               Positioned(
                                 right: 0,
