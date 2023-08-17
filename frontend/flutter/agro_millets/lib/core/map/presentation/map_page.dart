@@ -137,11 +137,11 @@ class _MapPageState extends ConsumerState<MapPage> {
                               user.phone,
                               style: TextStyle(fontSize: 16),
                             ),
-                            IconButton(
-                              padding: EdgeInsets.only(right: 0.0),
-                              onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
-                              icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
-                            ),
+                            // IconButton(
+                            //   padding: EdgeInsets.only(right: 0.0),
+                            //   onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
+                            //   icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
+                            // ),
                           ],
                         ),
                       ],
@@ -275,9 +275,12 @@ class _MapPageState extends ConsumerState<MapPage> {
                               if (kDebugMode) {
                                 print(url);
                               }
-                              var response = await client.post(Uri.parse(url));
+                              var response = await client.get(Uri.parse(url));
+                              print(utf8.decode(response.bodyBytes));
+                              print('========');
                               var decodedResponse =
                               jsonDecode(utf8.decode(response.bodyBytes))
+
                               as List<dynamic>;
                               if (kDebugMode) {
                                 print(decodedResponse);

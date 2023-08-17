@@ -146,11 +146,11 @@ class _MapPageState extends ConsumerState<MapPage> {
                                 user.phone,
                                 style: TextStyle(fontSize: 16),
                               ),
-                              IconButton(
-                                padding: EdgeInsets.only(right: 0.0),
-                                onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
-                                icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
-                              ),
+                              // IconButton(
+                              //   padding: EdgeInsets.only(right: 0.0),
+                              //   onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
+                              //   icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
+                              // ),
                             ],
                           ),
                         ],

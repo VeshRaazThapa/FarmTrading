@@ -8,7 +8,8 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../application/home_manager.dart';
 
-class AgroItemOrder extends StatefulWidget {
+class AgroItemOrder extends StatelessWidget {
+  /// Index is for sizing
   final int index;
   final MilletItem item;
   final MilletOrder itemOrder;
@@ -25,23 +26,7 @@ class AgroItemOrder extends StatefulWidget {
   });
 
   @override
-  _AgroItemOrderState createState() => _AgroItemOrderState();
-}
-
-class _AgroItemOrderState extends State<AgroItemOrder> {
-  bool isDelivered = false;
-
-  void _deliverOrder(String itemId) async {
-    // Your delivery logic here
-
-    setState(() {
-      isDelivered = true;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    isDelivered = widget.itemOrder.isDelivered;
     return SizedBox(
       width: 0.5 * getWidth(context),
       height: 0.3 * getHeight(context),
@@ -50,26 +35,25 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
           Positioned.fill(
             child: GestureDetector(
               onTap: () {
-                // Handle onTap action
+                // goToPage(context, ItemDetailPage(item: item));
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
                 margin: const EdgeInsets.all(2.0),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
                       blurRadius: 5.0,
                       spreadRadius: 3.0,
-                      offset: const Offset(
-                          0.0, 0.0), // Adjust the offset to avoid overlap
-                    ),
+                      offset: const Offset(5.0, 5.0),
+                    )
                   ],
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                // Container properties...
                 child: LayoutBuilder(builder: (context, constraints) {
+                  //print(item);
                   return Column(
                     children: [
                       Expanded(
@@ -80,7 +64,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                             topLeft: Radius.circular(10.0),
                           ),
                           child: Image.network(
-                            widget.item.images[0].toString(),
+                            item.images[0].toString(),
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
@@ -102,7 +86,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                 SizedBox(
                                   width: 1 * constraints.maxWidth,
                                   child: Text(
-                                    widget.item.name,
+                                    item.name,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: null,
@@ -117,13 +101,13 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                             Row(
                               children: [
                                 Text(
-                                  "${widget.itemOrder.quantity} ${widget.itemOrder.quantityType}",
+                                  "${itemOrder.quantity} ${itemOrder.quantityType}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300),
                                 ),
                                 const Spacer(),
                                 Text(
-                                  "रू ${widget.itemOrder.price}",
+                                  "रू ${itemOrder.price}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300),
                                 ),
@@ -172,14 +156,14 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                               Row(
                                 children: [
                                   Text(
-                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${itemOrder.phoneCustomer.replaceAll('+977','')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${widget.itemOrder.phoneCustomer}'),
+                                        'tel://${itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
                                   ),
                                 ],
@@ -188,55 +172,62 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                               Row(
                                 children: [
                                   Text(
-                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${itemOrder.phoneCustomer.replaceAll('+977','')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${widget.itemOrder.phoneCustomer}'),
+                                        'tel://${itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
                                   ),
                                 ],
                               ),
-                            if (!isDelivered && appCache.isFarmer())
+                            if (appCache.isCustomer())
                               Row(
                                 children: [
+                                  // Text(
+                                  //   "Deliver",
+                                  //   style: const TextStyle(
+                                  //       fontWeight: FontWeight.w100),
+                                  // ),
+                                  // const Spacer(),
                                   Positioned(
                                     right: 0,
                                     top: 0,
-                                    child: GestureDetector(
+                                    child:
+                                    GestureDetector(
                                       onTap: () async {
-                                        deliverOrder(widget.item.id);
-                                        _deliverOrder(widget.item.id);
+                                        deliverOrder(item.id);
+
+                                        // ref.read(cartProvider).removeItemFromCart(item.id);
+                                        // CartManager(context, ref, poll: false)
+                                        //     .removeItemFromCart(itemId: item.id);
                                       },
                                       child: Container(
-                                        width: 150,
-                                        height: 30,
+                                        width: 100,
+                                        height: 40,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.05),
+                                              color: Colors.black.withOpacity(0.05),
                                               blurRadius: 5.0,
                                               spreadRadius: 3.0,
                                               offset: const Offset(0.0, 0.0),
                                             )
                                           ],
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
+                                          borderRadius: BorderRadius.circular(10.0),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             const Icon(
                                               Icons.check,
                                               color: Colors.green,
                                             ),
-                                            const SizedBox(width: 10),
+                                            const SizedBox(width: 5), // Add some spacing between icon and text
                                             Text(
                                               'Deliver',
                                               style: TextStyle(
@@ -250,83 +241,6 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     ),
                                   )
                                 ],
-                              ),
-                            if (!isDelivered && appCache.isCustomer())
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  width: 150,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 5.0,
-                                        spreadRadius: 3.0,
-                                        offset: const Offset(0.0, 0.0),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.schedule,
-                                        color: Colors.red,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        'Not Delivered',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                              if (isDelivered) // Show the delivered icon
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  width: 150,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 5.0,
-                                        spreadRadius: 3.0,
-                                        offset: const Offset(0.0, 0.0),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        'Delivered',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ),
                           ]),
                     ],
