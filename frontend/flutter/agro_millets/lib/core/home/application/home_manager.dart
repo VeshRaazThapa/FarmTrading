@@ -319,6 +319,7 @@ Future<void> addItem({
 
 Future<void> addItemOrder({
   required String listedBy,
+  required bool isDelivered,
   required String farmerId,
   required double quantity,
   required String quantityType,
@@ -333,6 +334,7 @@ Future<void> addItemOrder({
     body: json.encode(
       {
         "listedBy": listedBy,
+        "isDelivered": isDelivered,
         "farmerId": farmerId,
         "phoneCustomer": phoneCustomer,
         "phoneFarmer": phoneFarmer,
@@ -368,6 +370,24 @@ Future<void> deleteItem(String id) async {
     headers: {"content-type": "application/json"},
     body: json.encode(
       {"itemId": id, "adminId": appState.value.user!.id},
+    ),
+  );
+
+  //print(response.body.toString());
+  var data = json.decode(response.body);
+  showToast(data["message"]);
+}
+Future<void> deliverOrder(String id) async {
+  if (!appState.value.isLoggedIn || appState.value.user == null) {
+    showToast("You need to login to perform this action");
+    return;
+  }
+
+  var response = await http.post(
+    Uri.parse("$API_URL/list/orderDelivered"),
+    headers: {"content-type": "application/json"},
+    body: json.encode(
+      {"itemId": id},
     ),
   );
 

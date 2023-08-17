@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 class MilletOrder {
   final String id;
   final String listedBy;
+  final bool isDelivered;
   final String farmerId;
   final String phoneFarmer;
   final String phoneCustomer;
@@ -18,6 +19,7 @@ class MilletOrder {
   MilletOrder({
     required this.id,
     required this.listedBy,
+    required this.isDelivered,
     required this.farmerId,
     required this.price,
     required this.phoneFarmer,
@@ -31,6 +33,7 @@ class MilletOrder {
   MilletOrder copyWith({
     String? id,
     String? listedBy,
+    bool? isDelivered,
     String? farmerId,
     String? phoneFarmer,
     String? phoneCustomer,
@@ -43,6 +46,7 @@ class MilletOrder {
     return MilletOrder(
       id: id ?? this.id,
       listedBy: listedBy ?? this.listedBy,
+      isDelivered: isDelivered ?? this.isDelivered,
       farmerId: farmerId ?? this.farmerId,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
@@ -58,6 +62,7 @@ class MilletOrder {
     return <String, dynamic>{
       '_id': id,
       'listedBy': listedBy,
+      'isDelivered': isDelivered,
       'farmerId': farmerId,
       'phoneFarmer':phoneFarmer,
       'phoneCustomer':phoneCustomer,
@@ -72,6 +77,7 @@ class MilletOrder {
   factory MilletOrder.fromMap(Map<String, dynamic> map) {
     return MilletOrder(
       id: map['_id'] as String,
+      isDelivered:map['isDelivered'] as bool,
       listedBy: map['listedBy'] as String,
       farmerId: map['farmerId']  as String,
       price: map['price'] * 1.0,
@@ -89,7 +95,7 @@ class MilletOrder {
 
   @override
   String toString() {
-    return 'MilletItemOrder(id: $id, listedBy: $listedBy,farmerId:$farmerId, price: $price,quantity:$quantity, listedAt: $listedAt, item: $item)';
+    return 'MilletItemOrder(id: $id, listedBy: $listedBy,isDelivered:$isDelivered,farmerId:$farmerId, price: $price,quantity:$quantity, listedAt: $listedAt, item: $item)';
   }
 
   @override
@@ -98,6 +104,7 @@ class MilletOrder {
 
     return other.id == id &&
         other.listedBy == listedBy &&
+        other.isDelivered == isDelivered &&
         other.farmerId == farmerId &&
         other.price == price &&
         other.quantity == quantity &&
@@ -110,6 +117,7 @@ class MilletOrder {
   int get hashCode {
     return id.hashCode ^
     listedBy.hashCode ^
+    isDelivered.hashCode ^
     farmerId.hashCode ^
     price.hashCode ^
     quantity.hashCode ^

@@ -64,11 +64,11 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          if (appCache.isCustomer())
-            IconButton(
-              onPressed: () => UrlLauncher.launch('tel://9812345668'),
-              icon: const Icon(MdiIcons.phoneDial),
-            ),
+          // if (appCache.isCustomer())
+          //   IconButton(
+          //     onPressed: () => UrlLauncher.launch('tel://9812345668'),
+          //     icon: const Icon(MdiIcons.phoneDial),
+          //   ),
           if (appCache.isCustomer())
             IconButton(
               onPressed: () {
