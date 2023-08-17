@@ -27,11 +27,11 @@ class MapProvider extends ChangeNotifier {
 
   setMap(List<User> list) {
     _map = list;
-    appCache.updateAppCache(AppState(
-      map: list,
-      user: appState.value.user,
-      isLoggedIn: appState.value.isLoggedIn, cart: [],
-    ));
+    // appCache.updateAppCache(AppState(
+    //   map: list,
+    //   user: appState.value.user,
+    //   isLoggedIn: appState.value.isLoggedIn, cart: [],
+    // ));
 
     notifyListeners();
   }
