@@ -11,7 +11,8 @@ def load_data(file_path):
 
 def preprocess_data(df):
     # Combine relevant text fields into a single feature for content-based filtering
-    df['content'] = df['product_name'] + ' ' + df['category']
+    #df['content'] = df['product_name'] + ' ' + df['category']
+    df['content'] = df['product_name']
 
 def get_recommendations(product_id, df):
     # Find the index of the input product_id

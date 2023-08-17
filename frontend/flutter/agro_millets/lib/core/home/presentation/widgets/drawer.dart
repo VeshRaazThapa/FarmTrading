@@ -87,7 +87,7 @@ class _AgroDrawerState extends State<AgroDrawer> {
             },
           ),
           ListTile(
-            title: const Text("Agro-News"),
+            title: const Text("News"),
             leading: const Icon(Icons.newspaper_rounded),
             onTap: () {
               goToPage(context,
