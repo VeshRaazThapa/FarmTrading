@@ -137,11 +137,11 @@ class _MapPageState extends ConsumerState<MapPage> {
                               user.phone,
                               style: TextStyle(fontSize: 16),
                             ),
-                            IconButton(
-                              padding: EdgeInsets.only(right: 0.0),
-                              onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
-                              icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
-                            ),
+                            // IconButton(
+                            //   padding: EdgeInsets.only(right: 0.0),
+                            //   onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
+                            //   icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
+                            // ),
                           ],
                         ),
                       ],
@@ -181,7 +181,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                 ],
               ),
             ),
-              // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
+            // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
 
 
 
@@ -249,78 +249,81 @@ class _MapPageState extends ConsumerState<MapPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:Column(
-              children: [
-                TextFormField(
-                    controller: _searchController,
-                    focusNode: _focusNode,
-                    decoration: InputDecoration(
-                      hintText: 'Search Location',
-                      border: inputBorder,
-                      focusedBorder: inputFocusBorder,
-                    ),
-                    onChanged: (String value) {
-                      if (_debounce?.isActive ?? false) _debounce?.cancel();
+              padding: const EdgeInsets.all(8.0),
+              child:Column(
+                children: [
+                  TextFormField(
+                      controller: _searchController,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        hintText: 'Search Location',
+                        border: inputBorder,
+                        focusedBorder: inputFocusBorder,
+                      ),
+                      onChanged: (String value) {
+                        if (_debounce?.isActive ?? false) _debounce?.cancel();
 
-                      _debounce =
-                          Timer(const Duration(milliseconds: 2000), () async {
-                            if (kDebugMode) {
-                              print(value);
-                            }
-                            var client = http.Client();
-                            try {
-                              String url =
-                                  'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1';
+                        _debounce =
+                            Timer(const Duration(milliseconds: 2000), () async {
                               if (kDebugMode) {
-                                print(url);
+                                print(value);
                               }
-                              var response = await client.post(Uri.parse(url));
-                              var decodedResponse =
-                              jsonDecode(utf8.decode(response.bodyBytes))
-                              as List<dynamic>;
-                              if (kDebugMode) {
-                                print(decodedResponse);
+                              var client = http.Client();
+                              try {
+                                String url =
+                                    'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1';
+                                if (kDebugMode) {
+                                  print(url);
+                                }
+                                var response = await client.get(Uri.parse(url));
+                                print(utf8.decode(response.bodyBytes));
+                                print('========');
+                                var decodedResponse =
+                                jsonDecode(utf8.decode(response.bodyBytes))
+
+                                as List<dynamic>;
+                                if (kDebugMode) {
+                                  print(decodedResponse);
+                                }
+                                _options = decodedResponse
+                                    .map((e) => OSMdata(
+                                    displayname: e['display_name'],
+                                    lat: double.parse(e['lat']),
+                                    lon: double.parse(e['lon'])))
+                                    .toList();
+                                setState(() {});
+                              } finally {
+                                client.close();
                               }
-                              _options = decodedResponse
-                                  .map((e) => OSMdata(
-                                  displayname: e['display_name'],
-                                  lat: double.parse(e['lat']),
-                                  lon: double.parse(e['lon'])))
-                                  .toList();
+
                               setState(() {});
-                            } finally {
-                              client.close();
-                            }
+                            });
+                      }),
+                  StatefulBuilder(builder: ((context, setState) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _options.length > 5 ? 5 : _options.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(_options[index].displayname),
+                            subtitle: Text(
+                                '${_options[index].lat},${_options[index].lon}'),
+                            onTap: () {
+                              mapController.move(
+                                  LatLng(
+                                      _options[index].lat, _options[index].lon),
+                                  9.0);
 
-                            setState(() {});
-                          });
-                    }),
-                StatefulBuilder(builder: ((context, setState) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _options.length > 5 ? 5 : _options.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(_options[index].displayname),
-                          subtitle: Text(
-                              '${_options[index].lat},${_options[index].lon}'),
-                          onTap: () {
-                            mapController.move(
-                                LatLng(
-                                    _options[index].lat, _options[index].lon),
-                                9.0);
-
-                            _focusNode.unfocus();
-                            _options.clear();
-                            setState(() {});
-                          },
-                        );
-                      });
-                })),
-              ],
-            )
+                              _focusNode.unfocus();
+                              _options.clear();
+                              setState(() {});
+                            },
+                          );
+                        });
+                  })),
+                ],
+              )
           ),
           Expanded(
             child: SizedBox(
