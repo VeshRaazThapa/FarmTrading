@@ -89,12 +89,12 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                color: Colors.grey.withOpacity(0.2),
-                              );
-                            },
+                            // loadingBuilder: (context, child, loadingProgress) {
+                            //   // if (loadingProgress == null) return child;
+                            //   return Container(
+                            //     color: Colors.grey.withOpacity(0.2),
+                            //   );
+                            // },
                           ),
                         ),
                       ),

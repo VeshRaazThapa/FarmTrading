@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/core/home/presentation/widgets/loading_widget.dart';
@@ -5,11 +6,12 @@ import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/utils/firebase_storage.dart';
 import 'package:agro_millets/widgets/action_button.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
-
-import '../../../globals.dart';
+import 'package:agro_millets/globals.dart';
 import '../../../models/millet_item.dart';
+import '../../../models/user.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../secrets.dart';
 
 class AddItemOrderPage extends StatefulWidget {
   final HomeManager homeManager;
@@ -78,7 +80,7 @@ class AddItemOrderPageState extends State<AddItemOrderPage> {
   _getFloatingActionButton(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () async {
-
+        User? farmer = await getUser(widget.milletItem.listedBy);
         // String orderId = const Uuid().v1();
 
         // String url = await storageManager.uploadItemImage(itemId, File(imageUrl));
@@ -89,7 +91,7 @@ class AddItemOrderPageState extends State<AddItemOrderPage> {
               listedBy: appState.value.user!.id,
               farmerId: widget.milletItem.listedBy,
               quantity: quantity,
-              phoneFarmer:appState.value.user!.phone,
+              phoneFarmer:farmer!.phone,
               phoneCustomer:appState.value.user!.phone,
               quantityType: widget.milletItem.quantityType,
               price: quantity * widget.milletItem.price,
@@ -116,6 +118,21 @@ class AddItemOrderPageState extends State<AddItemOrderPage> {
       ),
     );
   }
+  Future<User?> getUser(String id) async {
+    var response = await http.post(
+      Uri.parse("$API_URL/auth/getUser"),
+      body: {"id": id},
+    );
+
+    if (response.body.isNotEmpty) {
+      var data = json.decode(response.body);
+      if (data["statusCode"] == 200) {
+        return User.fromMap(data["data"]);
+      }
+    }
+    return null;
+  }
+
 
   _getBody() {
     return SingleChildScrollView(
