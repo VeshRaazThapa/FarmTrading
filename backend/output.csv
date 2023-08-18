@@ -1,6 +1,5 @@
 "id","farmer_id","product_name","category","quantity"
-"64dee5a4e2ebe9afdb7c4ef5","64db56e91eed0d2571f4d11f","Brown Beans","vegetables",100
-"64dee5ece2ebe9afdb7c4f07","64db56e91eed0d2571f4d11f","Basmati Rice","cereals",400
-"64dee64ae2ebe9afdb7c4f1d","64db56e91eed0d2571f4d11f","Kiwi","fruits",500
-"64dee67ce2ebe9afdb7c4f29","64db56e91eed0d2571f4d11f","Tate Simi","vegetables",200
-"64dee6a1e2ebe9afdb7c4f33","64db56e91eed0d2571f4d11f","Simi","vegetables",192
+"64df01d6233b2fe5486caf43","64db56e91eed0d2571f4d11f","Kidney red beans ","vegetables",300
+"64df0209233b2fe5486caf53","64db56e91eed0d2571f4d11f","Green Beans ","vegetables",200
+"64df0247233b2fe5486caf68","64db56e91eed0d2571f4d11f","Watermelon","fruits",300
+"64df027c233b2fe5486caf8c","64db56e91eed0d2571f4d11f","Melon","fruits",200

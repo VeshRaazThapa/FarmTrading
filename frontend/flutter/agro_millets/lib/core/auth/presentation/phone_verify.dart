@@ -191,11 +191,8 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                           (route) => false,
                         );
                       },
-                      child: Text(
-                        "Edit Phone Number ?",
-                        style: TextStyle(color: Colors.black),
-                      )
-                      )
+                      child: SizedBox.shrink(),
+                  )
                 ],
               )
             ],
