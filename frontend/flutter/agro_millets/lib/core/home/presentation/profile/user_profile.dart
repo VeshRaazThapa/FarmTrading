@@ -24,20 +24,20 @@ class _UserProfileState extends State<UserProfile> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 50,
-              child: ClipOval(
-                child: Image.network(
-                  'https://www.pngarts.com/files/11/Avatar-Transparent-Images.png',
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: CircleAvatar(
+          //     radius: 50,
+          //     child: ClipOval(
+          //       child: Image.network(
+          //         'https://www.pngarts.com/files/11/Avatar-Transparent-Images.png',
+          //         fit: BoxFit.cover,
+          //         width: 100,
+          //         height: 100,
+          //       ),
+          //     ),
+          //   ),
+          // ),
     CustomTextField(
     value: user == null ? "" : user!.name,
     isEditable: false,
