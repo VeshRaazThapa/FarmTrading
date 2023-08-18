@@ -84,9 +84,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                             child: Text("Error Occured"),
                           );
                         }
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return Container();
                       },
                     );
                   },

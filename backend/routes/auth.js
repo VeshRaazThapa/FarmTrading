@@ -139,6 +139,21 @@ router.post("/exists", async (req, res) => {
     )
   );
 });
+router.post("/getUser", async (req, res) => {
+  var id = req.body.id;
+  if (!id) return res.send(getErrorResponse("Not a valid id"));
+
+  const user = await User.findOne({ _id: id });
+    // let user = false;
+  if (!user)
+    return res.send(getErrorResponse("No User Exists with this id"));
+  return res.send(
+    getSuccessResponse(
+      "User Found",
+      _.omit(user.toObject(), ["password", "__v"])
+    )
+  );
+});
 router.post("/phoneExists", async (req, res) => {
   var phone = req.body.phone;
   if (!phone) return res.send(getErrorResponse("Enter a valid phone"));
