@@ -86,15 +86,15 @@ class _AgroDrawerState extends State<AgroDrawer> {
                   );
             },
           ),
-          // ListTile(
-          //   title: const Text("Agro-News"),
-          //   leading: const Icon(Icons.newspaper_rounded),
-          //   onTap: () {
-          //     goToPage(context,
-          //         NewsApp()
-          //         );
-          //   },
-          // ),
+          ListTile(
+            title: const Text("News"),
+            leading: const Icon(Icons.newspaper_rounded),
+            onTap: () {
+              goToPage(context,
+                  NewsApp()
+                  );
+            },
+          ),
           // if (appCache.isFarmer())
           // ListTile(
           //   title: const Text("Chat"),
