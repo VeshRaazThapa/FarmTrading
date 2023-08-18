@@ -1,8 +1,7 @@
 "id","farmer_id","product_name","category","quantity"
-"64db57ea1eed0d2571f4d157","64db56e91eed0d2571f4d11f","cow cheese","livestock",16
-"64db58631eed0d2571f4d17c","64db56e91eed0d2571f4d11f","Long Pumpkin","vegetables",46
-"64db58b71eed0d2571f4d18f","64db56e91eed0d2571f4d11f","Tate beans","vegetables",45
-"64db58f41eed0d2571f4d19e","64db56e91eed0d2571f4d11f","Green Beans","vegetables",21
-"64de51070bb57ad0cda917fe","64db56e91eed0d2571f4d11f","kiwi","fruits",20
-"64de5c088547d1537e78ff98","64db56e91eed0d2571f4d11f","Papaya","fruits",100
-"64ded7f1e2ebe9afdb7c4bca","64db56e91eed0d2571f4d11f","kiwi","fruits",25
+"64dee5a4e2ebe9afdb7c4ef5","64db56e91eed0d2571f4d11f","Brown Beans","vegetables",100
+"64dee5ece2ebe9afdb7c4f07","64db56e91eed0d2571f4d11f","Basmati Rice","cereals",400
+"64dee614e2ebe9afdb7c4f11","64db56e91eed0d2571f4d11f","Milk","livestock",300
+"64dee64ae2ebe9afdb7c4f1d","64db56e91eed0d2571f4d11f","Kiwi","fruits",500
+"64dee67ce2ebe9afdb7c4f29","64db56e91eed0d2571f4d11f","Tate Simi","vegetables",200
+"64dee6a1e2ebe9afdb7c4f33","64db56e91eed0d2571f4d11f","Simi","vegetables",192
