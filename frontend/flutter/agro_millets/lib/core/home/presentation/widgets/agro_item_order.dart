@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../application/home_manager.dart';
 
-class AgroItemOrder extends StatelessWidget {
+class AgroItemOrder extends StatefulWidget {
   final int index;
   final MilletItem item;
   final MilletOrder itemOrder;
@@ -16,16 +16,37 @@ class AgroItemOrder extends StatelessWidget {
   final bool showCallIcon;
 
   const AgroItemOrder({
-    Key? key,
+    super.key,
     required this.index,
     required this.item,
     required this.itemOrder,
     this.showAddCartIcon = true,
     this.showCallIcon = false,
-  }) : super(key: key);
+  });
+
+  @override
+  _AgroItemOrderState createState() => _AgroItemOrderState();
+}
+
+class _AgroItemOrderState extends State<AgroItemOrder> {
+  bool isDelivered = true;
+
+  void _deliverOrder(String itemId) async {
+    // Your delivery logic here
+
+    setState(() {
+      isDelivered = true;
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    isDelivered = widget.itemOrder.isDelivered;
+  }
 
   @override
   Widget build(BuildContext context) {
+    // isDelivered = widget.itemOrder.isDelivered;
     return SizedBox(
       width: 0.5 * getWidth(context),
       height: 0.3 * getHeight(context),
@@ -48,9 +69,7 @@ class AgroItemOrder extends StatelessWidget {
                       blurRadius: 5.0,
                       spreadRadius: 3.0,
                       offset: const Offset(
-                        0.0,
-                        0.0,
-                      ), // Adjust the offset to avoid overlap
+                          0.0, 0.0), // Adjust the offset to avoid overlap
                     ),
                   ],
                 ),
@@ -66,12 +85,11 @@ class AgroItemOrder extends StatelessWidget {
                             topLeft: Radius.circular(10.0),
                           ),
                           child: Image.network(
-                            item.images[0].toString(),
+                            widget.item.images[0].toString(),
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
-                            loadingBuilder:
-                                (context, child, loadingProgress) {
+                            loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Container(
                                 color: Colors.grey.withOpacity(0.2),
@@ -89,7 +107,7 @@ class AgroItemOrder extends StatelessWidget {
                                 SizedBox(
                                   width: 1 * constraints.maxWidth,
                                   child: Text(
-                                    item.name,
+                                    widget.item.name,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: null,
@@ -104,13 +122,13 @@ class AgroItemOrder extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  "${itemOrder.quantity} ${itemOrder.quantityType}",
+                                  "${widget.itemOrder.quantity} ${widget.itemOrder.quantityType}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300),
                                 ),
                                 const Spacer(),
                                 Text(
-                                  "रू ${itemOrder.price}",
+                                  "रू ${widget.itemOrder.price}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300),
                                 ),
@@ -159,14 +177,14 @@ class AgroItemOrder extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "${itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${itemOrder.phoneCustomer}'),
+                                        'tel://${widget.itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
                                   ),
                                 ],
@@ -175,20 +193,21 @@ class AgroItemOrder extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "${itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${itemOrder.phoneCustomer}'),
+                                        'tel://${widget.itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
+
                                   ),
                                 ],
                               ),
-                            if (!itemOrder.isDelivered && appCache.isFarmer())
-                              Stack(
+                            if (!isDelivered && appCache.isFarmer())
+                              Row(
                                 children: [
                                   // Other widgets in the Stack
                                   Positioned(
@@ -196,8 +215,8 @@ class AgroItemOrder extends StatelessWidget {
                                     right: 0,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        deliverOrder(item.id);
-                                        // _deliverOrder(item.id);
+                                        _deliverOrder(widget.itemOrder.id);
+                                        deliverOrder(widget.itemOrder.id);
                                       },
                                       child: Container(
                                         width: 150,
@@ -215,8 +234,7 @@ class AgroItemOrder extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(10.0),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             const Icon(
                                               Icons.check,
@@ -238,7 +256,7 @@ class AgroItemOrder extends StatelessWidget {
                                 ],
                               ),
 
-                            if (!itemOrder.isDelivered && appCache.isCustomer())
+                            if (!isDelivered && appCache.isCustomer())
                               Positioned(
                                 right: 0,
                                 top: 0,
@@ -258,8 +276,7 @@ class AgroItemOrder extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Icon(
                                         Icons.schedule,
@@ -278,7 +295,7 @@ class AgroItemOrder extends StatelessWidget {
                                 ),
                               ),
 
-                            if (itemOrder.isDelivered) // Show the delivered icon
+                            if (isDelivered) // Show the delivered icon
                               Positioned(
                                 right: 0,
                                 top: 0,
@@ -298,8 +315,7 @@ class AgroItemOrder extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Icon(
                                         Icons.check_circle,

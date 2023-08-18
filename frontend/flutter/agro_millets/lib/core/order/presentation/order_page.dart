@@ -53,6 +53,8 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                 } else {
                    orders = ref.watch(homeProvider).getAllOrders();
                 }
+                print(orders);
+                print('---------');
 
                 return MasonryGridView.count(
                   shrinkWrap: true,
