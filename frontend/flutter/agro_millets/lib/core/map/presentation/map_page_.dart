@@ -124,26 +124,26 @@ class _MapPageState extends ConsumerState<MapPage> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Icon(Icons.phone_android_outlined),
-                            // Container(
-                            //   // padding: EdgeInsets.only(right: 5.0), // Adjust the left padding as needed
-                            //   child:
-                            // )
-                            // ,
-                            // SizedBox(width: 5),
-                            Text(
-                              user.phone,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            // IconButton(
-                            //   padding: EdgeInsets.only(right: 0.0),
-                            //   onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
-                            //   icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
-                            // ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Icon(Icons.phone_android_outlined),
+                        //     // Container(
+                        //     //   // padding: EdgeInsets.only(right: 5.0), // Adjust the left padding as needed
+                        //     //   child:
+                        //     // )
+                        //     // ,
+                        //     // SizedBox(width: 5),
+                        //     Text(
+                        //       user.phone,
+                        //       style: TextStyle(fontSize: 16),
+                        //     ),
+                        //     // IconButton(
+                        //     //   padding: EdgeInsets.only(right: 0.0),
+                        //     //   onPressed: () => UrlLauncher.launch('tel://${user.phone}'),
+                        //     //   icon: const Icon(MdiIcons.phoneDial,color: Colors.green,),
+                        //     // ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),
@@ -275,7 +275,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                                 if (kDebugMode) {
                                   print(url);
                                 }
-                                var response = await client.get(Uri.parse(url));
+                                var response = await client.post(Uri.parse(url));
                                 print(utf8.decode(response.bodyBytes));
                                 print('========');
                                 var decodedResponse =
