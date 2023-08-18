@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:agro_millets/core/auth/presentation/phone_verify.dart';
@@ -8,8 +9,11 @@ import 'package:get/state_manager.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-
+import '../../home/presentation/news/constants.dart';
+import '../application/auth.dart';
 import '../../../globals.dart';
+import 'package:http/http.dart' as http;
+import "package:agro_millets/secrets.dart";
 
 class MyPhone extends StatefulWidget {
   final String email;
@@ -118,17 +122,17 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                     Expanded(
                         child: TextField(
-                      controller: _phoneController,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        // Limit input to 10 characters
-                      ],
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Phone",
-                      ),
-                    ))
+                          controller: _phoneController,
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                            // Limit input to 10 characters
+                          ],
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Phone",
+                          ),
+                        ))
                   ],
                 ),
               ),
@@ -146,57 +150,64 @@ class _MyPhoneState extends State<MyPhone> {
                     onPressed: () async {
                       String phone =
                           countryController.text + ' ' + _phoneController.text;
-                      // await phoneAuthentication(phone);
-                      // print(phone_number_verified);
-                      // print('-----');
+                      bool? isDuplicatePhone =  await searchForDuplicatePhone(phone);
+                      if (!isDuplicatePhone!) {
+                        // await phoneAuthentication(phone);
+                        // print(phone_number_verified);
+                        // print('-----');
 
-                      // Note that using a username and password for gmail only works if
-                      // you have two-factor authentication enabled and created an App password.
-                      // Search for "gmail app password 2fa"
-                      // The alternative is to use oauth.
-                      String username = 'thapahimal777@gmail.com';
-                      String password = 'oobkldstlugadrex';
+                        // Note that using a username and password for gmail only works if
+                        // you have two-factor authentication enabled and created an App password.
+                        // Search for "gmail app password 2fa"
+                        // The alternative is to use oauth.
+                        String username = 'tardefarm@gmail.com';
+                        String password = 'okzkjbjchdrjmbjm';
 
-                      final smtpServer = gmail(username, password);
-                      // Use the SmtpServer class to configure an SMTP server:
-                      // final smtpServer = SmtpServer('smtp.domain.com');
-                      // See the named arguments of SmtpServer for further configuration
-                      // options.
-                      Random random = Random();
-                      int min = 100000; // Minimum 6-digit number
-                      int max = 999999; // Maximum 6-digit number
-                      int verificationPin = min + random.nextInt(max - min + 1);
-                      // Create our message.
-                      final message = Message()
-                        ..from = Address(username, 'Farm Trading')
-                        ..recipients.add(this.widget.email)
+                        final smtpServer = gmail(username, password);
+                        // Use the SmtpServer class to configure an SMTP server:
+                        // final smtpServer = SmtpServer('smtp.domain.com');
+                        // See the named arguments of SmtpServer for further configuration
+                        // options.
+                        Random random = Random();
+                        int min = 100000; // Minimum 6-digit number
+                        int max = 999999; // Maximum 6-digit number
+                        int verificationPin = min + random.nextInt(max - min + 1);
+                        // Create our message.
+                        final message = Message()
+                          ..from = Address(username, 'Farm Trading')
+                          ..recipients.add(this.widget.email)
                         // ..ccRecipients.addAll([])
                         // ..bccRecipients.add(Address('bccAddress@example.com'))
-                        ..subject = 'your verification code::${verificationPin}'
-                        ..text = '${verificationPin}'
-                        ..html = "<p>Pin verification</p>\n <h2>${verificationPin}</h2>";
+                          ..subject = 'your verification code::${verificationPin}'
+                          ..text = '${verificationPin}'
+                          ..html = "<p>Pin verification</p>\n <h2>${verificationPin}</h2>";
 
-                      try {
-                        final sendReport = await send(message, smtpServer);
-                        print('Message sent: ' + sendReport.toString());
-                      } on MailerException catch (e) {
-                        print('Message not sent.');
-                        for (var p in e.problems) {
-                          print('Problem: ${p.code}: ${p.msg}');
+                        try {
+                          final sendReport = await send(message, smtpServer);
+                          print('Message sent: ' + sendReport.toString());
+                        } on MailerException catch (e) {
+                          print('Message not sent.');
+                          for (var p in e.problems) {
+                            print('Problem: ${p.code}: ${p.msg}');
+                          }
                         }
+                        goToPage(
+                            context,
+                            MyVerify(
+                              // verificationId: this.verificationId.value,
+                              verificationPin: verificationPin,
+                              phone: phone,
+                              name: this.widget.name,
+                              password: this.widget.password,
+                              coordinate: this.widget.coordinate,
+                              userType: this.widget.userType,
+                              email: this.widget.email,
+                            ));
+                      } else {
+                        showFailureToast('Phone Number Already Registered !');
+
                       }
-                      goToPage(
-                          context,
-                          MyVerify(
-                            // verificationId: this.verificationId.value,
-                            verificationPin: verificationPin,
-                            phone: phone,
-                            name: this.widget.name,
-                            password: this.widget.password,
-                            coordinate: this.widget.coordinate,
-                            userType: this.widget.userType,
-                            email: this.widget.email,
-                          ));
+
                       // Navigator.pushNamed(context, 'verify');
                     },
                     child: Text("Send the code")),
@@ -222,6 +233,20 @@ class _MyPhoneState extends State<MyPhone> {
       },
       verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
     );
+  }
+  Future<bool?> searchForDuplicatePhone(String phone) async {
+    var response = await http.post(
+      Uri.parse("$API_URL/auth/phoneExists"),
+      body: {"phone": phone},
+    );
+
+    if (response.body.isNotEmpty) {
+      var data = json.decode(response.body);
+      if (data["statusCode"] == 200) {
+        return false;
+      }
+    }
+    return true;
   }
 
   Future<void> phoneAuthentication(String phoneNo) async {

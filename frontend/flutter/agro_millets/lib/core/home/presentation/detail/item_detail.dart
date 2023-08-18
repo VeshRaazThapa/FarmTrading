@@ -64,11 +64,11 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          if (appCache.isCustomer())
-            IconButton(
-              onPressed: () => UrlLauncher.launch('tel://9812345668'),
-              icon: const Icon(MdiIcons.phoneDial),
-            ),
+          // if (appCache.isCustomer())
+          //   IconButton(
+          //     onPressed: () => UrlLauncher.launch('tel://9812345668'),
+          //     icon: const Icon(MdiIcons.phoneDial),
+          //   ),
           if (appCache.isCustomer())
             IconButton(
               onPressed: () {
@@ -184,9 +184,9 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                     // ref.read(cartProvider).addItemToCart(cartItem);
                     // CartManager(context, ref, poll: false)
                     //     .addItemToCart(item: cartItem);
-                      _homeManager.dispose();
-                      await goToPage(context, AddItemOrderPage(homeManager: _homeManager,milletItem: item,));
-                      _homeManager.attachOrder(appState.value.user);
+                    _homeManager.dispose();
+                    await goToPage(context, AddItemOrderPage(homeManager: _homeManager,milletItem: item,));
+                    _homeManager.attachOrder(appState.value.user);
 
                   },
                   child: Container(

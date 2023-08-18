@@ -82,6 +82,7 @@ router.post("/signup", async (req, res) => {
   );
 });
 
+
 /**
  * Get All Users (For Admin Panel)
  * {adminId: Objectid}
@@ -138,6 +139,22 @@ router.post("/exists", async (req, res) => {
     )
   );
 });
+router.post("/phoneExists", async (req, res) => {
+  var phone = req.body.phone;
+  if (!phone) return res.send(getErrorResponse("Enter a valid phone"));
+
+  const user = await User.findOne({ phone: phone });
+    // let user = false;
+  if (user)
+    return res.send(getErrorResponse("User Already Exists with this Phone"));
+  return res.send(
+    getSuccessResponse(
+      "This is unique",
+      // _.omit(user.toObject(), ["password", "__v"])
+    )
+  );
+});
+
 
 function validateLogin(req) {
   const schema = Joi.object().keys({

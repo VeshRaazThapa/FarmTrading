@@ -28,6 +28,27 @@ router.get("/getAllOrders", async (req, res) => {
   // console.log("--testing--");
   return res.send(getSuccessResponse("Success!", items));
 });
+router.post("/orderDelivered", async (req, res) => {
+   var { itemId } = req.body;
+
+
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(404).send(getErrorResponse("Invalid Item ID"));
+  }
+
+  const filter = { _id: itemId };
+  const update = { IsDelivered: true };
+
+  const result = await MilletOrder.findByIdAndUpdate(filter, update, { new: true });
+
+
+  if (result) {
+        return res.send({ message: "Order updated successfully" });
+      } else {
+        return res.status(404).send({ message: "Order not found" });
+  }
+
+});
 
 router.post("/removeOrder", async (req, res) => {
   var { itemId } = req.body;

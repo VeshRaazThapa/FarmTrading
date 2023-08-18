@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
+import '../../application/home_manager.dart';
+
 class AgroItemOrder extends StatelessWidget {
   /// Index is for sizing
   final int index;
@@ -113,56 +115,52 @@ class AgroItemOrder extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Text(
-                                  "Delivery in",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w100),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  "2 days",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w100),
-                                ),
-
-                              ],
-                            ),
-                            if (appCache.isCustomer())
-                            Row(
-                              children: [
-                                Text(
-                                  "Contact Farmer",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                    color: Colors.green,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                            if (appCache.isFarmer())
-                              Row(
-                              children: [
-                                Text(
-                                  "Contact Wholesaler",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                    color: Colors.green,
-                                  ),
-                                ),
-
+                                // Text(
+                                //   "Delivery in",
+                                //   style: const TextStyle(
+                                //       fontWeight: FontWeight.w100),
+                                // ),
+                                // const Spacer(),
+                                // Text(
+                                //   "2 days",
+                                //   style: const TextStyle(
+                                //       fontWeight: FontWeight.w100),
+                                // ),
                               ],
                             ),
                             if (appCache.isCustomer())
                               Row(
                                 children: [
                                   Text(
-                                    "${itemOrder.phoneCustomer}",
+                                    "Contact Farmer",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            if (appCache.isFarmer())
+                              Row(
+                                children: [
+                                  Text(
+                                    "Contact Wholesaler",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            if (appCache.isCustomer())
+                              Row(
+                                children: [
+                                  Text(
+                                    "${itemOrder.phoneCustomer.replaceAll('+977','')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
-
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
                                         'tel://${itemOrder.phoneCustomer}'),
@@ -174,7 +172,7 @@ class AgroItemOrder extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "${itemOrder.phoneCustomer}",
+                                    "${itemOrder.phoneCustomer.replaceAll('+977','')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
@@ -184,6 +182,64 @@ class AgroItemOrder extends StatelessWidget {
                                         'tel://${itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
                                   ),
+                                ],
+                              ),
+                            if (appCache.isCustomer())
+                              Row(
+                                children: [
+                                  // Text(
+                                  //   "Deliver",
+                                  //   style: const TextStyle(
+                                  //       fontWeight: FontWeight.w100),
+                                  // ),
+                                  // const Spacer(),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child:
+                                    GestureDetector(
+                                      onTap: () async {
+                                        deliverOrder(item.id);
+
+                                        // ref.read(cartProvider).removeItemFromCart(item.id);
+                                        // CartManager(context, ref, poll: false)
+                                        //     .removeItemFromCart(itemId: item.id);
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.05),
+                                              blurRadius: 5.0,
+                                              spreadRadius: 3.0,
+                                              offset: const Offset(0.0, 0.0),
+                                            )
+                                          ],
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.check,
+                                              color: Colors.green,
+                                            ),
+                                            const SizedBox(width: 5), // Add some spacing between icon and text
+                                            Text(
+                                              'Deliver',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                           ]),
@@ -193,75 +249,6 @@ class AgroItemOrder extends StatelessWidget {
               ),
             ),
           ),
-          // if (showAddCartIcon && !appCache.isAdmin() && !appCache.isFarmer())
-          //   Consumer(builder: (context, ref, child) {
-          //     return Positioned(
-          //       right: 0,
-          //       top: 0,
-          //       child: GestureDetector(
-          //         onTap: () async {
-          //           CartItem cartItem = CartItem(item: item.id, count: 1);
-          //           ref.read(cartProvider).addItemToCart(cartItem);
-          //           CartManager(context, ref, poll: false)
-          //               .addItemToCart(item: cartItem);
-          //         },
-          //         child: Container(
-          //           width: 40,
-          //           height: 40,
-          //           decoration: BoxDecoration(
-          //             color: Colors.white,
-          //             boxShadow: [
-          //               BoxShadow(
-          //                 color: Colors.black.withOpacity(0.05),
-          //                 blurRadius: 5.0,
-          //                 spreadRadius: 3.0,
-          //                 offset: const Offset(0.0, 0.0),
-          //               )
-          //             ],
-          //             borderRadius: BorderRadius.circular(10.0),
-          //           ),
-          //           child: const Icon(
-          //             MdiIcons.cartPlus,
-          //             color: Colors.black,
-          //           ),
-          //         ),
-          //       ),
-          //     );
-          //   }),
-          // if (!showAddCartIcon)
-          //   Consumer(builder: (context, ref, child) {
-          //     return Positioned(
-          //       right: 0,
-          //       top: 0,
-          //       child: GestureDetector(
-          //         onTap: () async {
-          //           ref.read(cartProvider).removeItemFromCart(item.id);
-          //           CartManager(context, ref, poll: false)
-          //               .removeItemFromCart(itemId: item.id);
-          //         },
-          //         child: Container(
-          //           width: 40,
-          //           height: 40,
-          //           decoration: BoxDecoration(
-          //             color: Colors.white,
-          //             boxShadow: [
-          //               BoxShadow(
-          //                 color: Colors.black.withOpacity(0.05),
-          //                 blurRadius: 5.0,
-          //                 spreadRadius: 3.0,
-          //                 offset: const Offset(0.0, 0.0),
-          //               )
-          //             ],
-          //             borderRadius: BorderRadius.circular(10.0),
-          //           ),
-          //           // child: const Icon(
-          //           //   MdiIcons.delete,
-          //           //   color: Colors.red,
-          //           // ),
-          //         ),
-          //       ),
-          //     );
-          //   }),
         ],
       ),
     );

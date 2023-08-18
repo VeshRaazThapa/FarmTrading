@@ -93,7 +93,7 @@ class AddItemOrderPageState extends State<AddItemOrderPage> {
               phoneCustomer:appState.value.user!.phone,
               quantityType: widget.milletItem.quantityType,
               price: quantity * widget.milletItem.price,
-              item: widget.milletItem.id
+              item: widget.milletItem.id, isDelivered: false
           );
           isLoading.value = false;
           if (mounted) {
