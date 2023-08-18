@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../application/home_manager.dart';
 
-class AgroItemOrder extends StatefulWidget {
+class AgroItemOrder extends StatelessWidget {
   final int index;
   final MilletItem item;
   final MilletOrder itemOrder;
@@ -16,32 +16,16 @@ class AgroItemOrder extends StatefulWidget {
   final bool showCallIcon;
 
   const AgroItemOrder({
-    super.key,
+    Key? key,
     required this.index,
     required this.item,
     required this.itemOrder,
     this.showAddCartIcon = true,
     this.showCallIcon = false,
-  });
-
-  @override
-  _AgroItemOrderState createState() => _AgroItemOrderState();
-}
-
-class _AgroItemOrderState extends State<AgroItemOrder> {
-  bool isDelivered = false;
-
-  void _deliverOrder(String itemId) async {
-    // Your delivery logic here
-
-    setState(() {
-      isDelivered = true;
-    });
-  }
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    isDelivered = widget.itemOrder.isDelivered;
     return SizedBox(
       width: 0.5 * getWidth(context),
       height: 0.3 * getHeight(context),
@@ -64,7 +48,9 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                       blurRadius: 5.0,
                       spreadRadius: 3.0,
                       offset: const Offset(
-                          0.0, 0.0), // Adjust the offset to avoid overlap
+                        0.0,
+                        0.0,
+                      ), // Adjust the offset to avoid overlap
                     ),
                   ],
                 ),
@@ -80,11 +66,12 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                             topLeft: Radius.circular(10.0),
                           ),
                           child: Image.network(
-                            widget.item.images[0].toString(),
+                            item.images[0].toString(),
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
-                            loadingBuilder: (context, child, loadingProgress) {
+                            loadingBuilder:
+                                (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Container(
                                 color: Colors.grey.withOpacity(0.2),
@@ -102,7 +89,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                 SizedBox(
                                   width: 1 * constraints.maxWidth,
                                   child: Text(
-                                    widget.item.name,
+                                    item.name,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: null,
@@ -117,33 +104,33 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                             Row(
                               children: [
                                 Text(
-                                  "${widget.itemOrder.quantity} ${widget.itemOrder.quantityType}",
+                                  "${itemOrder.quantity} ${itemOrder.quantityType}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300),
                                 ),
                                 const Spacer(),
                                 Text(
-                                  "रू ${widget.itemOrder.price}",
+                                  "रू ${itemOrder.price}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300),
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                // Text(
-                                //   "Delivery in",
-                                //   style: const TextStyle(
-                                //       fontWeight: FontWeight.w100),
-                                // ),
-                                // const Spacer(),
-                                // Text(
-                                //   "2 days",
-                                //   style: const TextStyle(
-                                //       fontWeight: FontWeight.w100),
-                                // ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     // Text(
+                            //     //   "Delivery in",
+                            //     //   style: const TextStyle(
+                            //     //       fontWeight: FontWeight.w100),
+                            //     // ),
+                            //     // const Spacer(),
+                            //     // Text(
+                            //     //   "2 days",
+                            //     //   style: const TextStyle(
+                            //     //       fontWeight: FontWeight.w100),
+                            //     // ),
+                            //   ],
+                            // ),
                             if (appCache.isCustomer())
                               Row(
                                 children: [
@@ -172,14 +159,14 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                               Row(
                                 children: [
                                   Text(
-                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${itemOrder.phoneCustomer.replaceAll('+977', '')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${widget.itemOrder.phoneCustomer}'),
+                                        'tel://${itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
                                   ),
                                 ],
@@ -188,20 +175,19 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                               Row(
                                 children: [
                                   Text(
-                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${itemOrder.phoneCustomer.replaceAll('+977', '')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${widget.itemOrder.phoneCustomer}'),
+                                        'tel://${itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
-
                                   ),
                                 ],
                               ),
-                            if (!isDelivered && appCache.isFarmer())
+                            if (!itemOrder.isDelivered && appCache.isFarmer())
                               Stack(
                                 children: [
                                   // Other widgets in the Stack
@@ -210,8 +196,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     right: 0,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        deliverOrder(widget.item.id);
-                                        _deliverOrder(widget.item.id);
+                                        deliverOrder(item.id);
+                                        // _deliverOrder(item.id);
                                       },
                                       child: Container(
                                         width: 150,
@@ -229,7 +215,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                           borderRadius: BorderRadius.circular(10.0),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                           children: [
                                             const Icon(
                                               Icons.check,
@@ -251,7 +238,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                 ],
                               ),
 
-                            if (!isDelivered && appCache.isCustomer())
+                            if (!itemOrder.isDelivered && appCache.isCustomer())
                               Positioned(
                                 right: 0,
                                 top: 0,
@@ -271,7 +258,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
                                     children: [
                                       const Icon(
                                         Icons.schedule,
@@ -290,7 +278,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                 ),
                               ),
 
-                            if (isDelivered) // Show the delivered icon
+                            if (itemOrder.isDelivered) // Show the delivered icon
                               Positioned(
                                 right: 0,
                                 top: 0,
@@ -310,7 +298,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
                                     children: [
                                       const Icon(
                                         Icons.check_circle,
