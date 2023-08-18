@@ -49,23 +49,6 @@ class _AgroDrawerState extends State<AgroDrawer> {
               goToPage(context, const UserProfile());
             },
           ),
-
-          if (!appCache.isAdmin() && !appCache.isFarmer())
-            ListTile(
-              title: const Text("Cart"),
-              leading: const Icon(Icons.shopping_cart_outlined),
-              onTap: () {
-                goToPage(context, const CartPage());
-              },
-            ),
-          if (!appCache.isAdmin())
-            ListTile(
-            title: const Text("Orders"),
-            leading: const Icon(Icons.local_shipping_outlined),
-            onTap: () {
-              goToPage(context, const OrderPage());
-            },
-          ),
           if (!appCache.isFarmer())
 
             ListTile(
@@ -93,6 +76,22 @@ class _AgroDrawerState extends State<AgroDrawer> {
               goToPage(context,
                   NewsApp()
                   );
+            },
+          ),
+            if (!appCache.isAdmin() && !appCache.isFarmer())
+            ListTile(
+              title: const Text("Cart"),
+              leading: const Icon(Icons.shopping_cart_outlined),
+              onTap: () {
+                goToPage(context, const CartPage());
+              },
+            ),
+             if (!appCache.isAdmin())
+            ListTile(
+            title: const Text("Orders"),
+            leading: const Icon(Icons.local_shipping_outlined),
+            onTap: () {
+              goToPage(context, const OrderPage());
             },
           ),
           // if (appCache.isFarmer())

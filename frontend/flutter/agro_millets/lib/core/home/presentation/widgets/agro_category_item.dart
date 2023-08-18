@@ -55,24 +55,24 @@ class AgroCategoryItem extends StatelessWidget {
                 ),
                 child: LayoutBuilder(builder: (context, constraints) {
                   if (item.keys.toList()[0] == 'fruits' ) {
-                    image_path = 'assets/fruitss.jpg';
+                    image_path = 'assets/fruitss_11zon.jpg';
                   }
                   if (item.keys.toList()[0] == 'vegetables' ) {
-                    image_path = 'assets/vege.jpg';
+                    image_path = 'assets/vege_11zon.jpg';
                   }
                   if (item.keys.toList()[0] == 'cereals' ) {
-                    image_path = 'assets/cere.jpg';
+                    image_path = 'assets/cere_11zon.jpg';
                   }if (item.keys.toList()[0] == 'livestock' ) {
-                    image_path = 'assets/cow.jpg';
+                    image_path = 'assets/cow_11zon.jpg';
                   }
                   if (item.keys.toList()[0] == 'oil' ) {
-                    image_path = 'assets/oil.jpg';
+                    image_path = 'assets/oil_11zon.jpg';
                   }
                   if (item.keys.toList()[0] == 'pulses' ) {
-                    image_path = 'assets/garmss.jpg';
+                    image_path = 'assets/garmss_11zon.jpg';
                   }
                   if (item.keys.toList()[0] == 'cash' ) {
-                    image_path = 'assets/bean.jpg';
+                    image_path = 'assets/beans_11zon.jpg';
                   }
                   return Column(
                     children: [

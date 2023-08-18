@@ -1,15 +1,6 @@
 "id","farmer_id","product_name","category","quantity"
-<<<<<<< HEAD
 "64dee5a4e2ebe9afdb7c4ef5","64db56e91eed0d2571f4d11f","Brown Beans","vegetables",100
-=======
-"64dee5a4e2ebe9afdb7c4ef5","64db56e91eed0d2571f4d11f","Brown Beans","vegetables",300
->>>>>>> d2ace86eccfd5f26b8682a1e152e8cca44ca870b
 "64dee5ece2ebe9afdb7c4f07","64db56e91eed0d2571f4d11f","Basmati Rice","cereals",400
-"64dee614e2ebe9afdb7c4f11","64db56e91eed0d2571f4d11f","Milk","livestock",300
 "64dee64ae2ebe9afdb7c4f1d","64db56e91eed0d2571f4d11f","Kiwi","fruits",500
 "64dee67ce2ebe9afdb7c4f29","64db56e91eed0d2571f4d11f","Tate Simi","vegetables",200
-<<<<<<< HEAD
 "64dee6a1e2ebe9afdb7c4f33","64db56e91eed0d2571f4d11f","Simi","vegetables",192
-=======
-"64dee6a1e2ebe9afdb7c4f33","64db56e91eed0d2571f4d11f","Simi","vegetables",200
->>>>>>> d2ace86eccfd5f26b8682a1e152e8cca44ca870b
