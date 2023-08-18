@@ -31,13 +31,14 @@ router.get("/getAllOrders", async (req, res) => {
 router.post("/orderDelivered", async (req, res) => {
    var { itemId } = req.body;
 
-
+   console.log('insideeeeee');
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(404).send(getErrorResponse("Invalid Item ID"));
   }
 
+
   const filter = { _id: itemId };
-  const update = { IsDelivered: true };
+  const update = { isDelivered: true };
 
   const result = await MilletOrder.findByIdAndUpdate(filter, update, { new: true });
 
@@ -255,7 +256,7 @@ router.get("/getAllDeliveries/:farmerID", async (req, res) => {
   }
 
   let items = await MilletOrder.find({});
-
+  console.log(items);
   //TODO: Check if this works
   items = items.filter((item) => item.farmerId.toString() === farmerID);
 
