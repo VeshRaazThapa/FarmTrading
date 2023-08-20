@@ -179,10 +179,10 @@ router.post("/forgot-password", async (req, res) => {
     const user = await User.findOne({email: req.body.email});
     if (!user) return res.send(getErrorResponse("No User Exists with this email"));
 
-     // Check if the old password matches the user's current password
-    if (!user.isValidPassword(req.body.oldPassword)) {
-        return res.send(getErrorResponse("Old password is incorrect"));
-    }
+    //  // Check if the old password matches the user's current password
+    // if (!user.isValidPassword(req.body.oldPassword)) {
+    //     return res.send(getErrorResponse("Old password is incorrect"));
+    // }
 
     // Generate a random token and set it in the user's document
     const token = generateRandomToken(); // You need to implement this function
@@ -237,7 +237,6 @@ function generateRandomToken(length = 32) {
 function validateForgotPassword(req) {
     const schema = Joi.object().keys({
         email: Joi.string().required().email(),
-        oldPassword: Joi.string().required(),
         newPassword: Joi.string().required(),
     });
     return schema.validate(req);
