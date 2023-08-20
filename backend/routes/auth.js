@@ -257,8 +257,10 @@ router.get("/reset-password/:token", async (req, res) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
-
+//   return res.redirect('/login');
     return res.send(getSuccessResponse("Password reset successful"));
+    
+    
 });
 
 function validateResetPassword(req) {
