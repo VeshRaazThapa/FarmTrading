@@ -73,8 +73,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                           );
                         }
                         return const Center(
-                          // child: CircularProgressIndicator(),
-                        );
+                            // child: CircularProgressIndicator(),
+                            );
                       },
                     );
                   },
@@ -88,15 +88,16 @@ class _CartPageState extends ConsumerState<CartPage> {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => AddAddressPage())),
+                    .push(MaterialPageRoute(builder: (_) => AddAddressPage())),
                 style: ElevatedButton.styleFrom(
-           primary: Color.fromARGB(255, 10, 179, 52), // Customize the button color
-           padding: EdgeInsets.symmetric(vertical: 20.0),
-          shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.0),
-        ),
-        minimumSize: Size(double.infinity, 56.0),
-      ),
+                  primary: Color.fromARGB(
+                      255, 10, 179, 52), // Customize the button color
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
+                  minimumSize: Size(double.infinity, 56.0),
+                ),
                 child: Text(
                   'Order Now',
                   style: TextStyle(
