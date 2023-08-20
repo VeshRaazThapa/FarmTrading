@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'forget_password.dart';
+
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
@@ -69,7 +71,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             onChanged: (v) => email = v,
             label: "Email",
             // value:"adhikariaarati68@gmail.com",
-
           ),
           const SizedBox(height: 10),
           CustomTextField(
@@ -78,7 +79,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             label: "Password",
             // value:"adhikariaarati68",
           ),
-          SizedBox(height: 0.3 * getHeight(context)),
+          SizedBox(height: 0.025 * getHeight(context)),
+          Padding(
+            padding: const EdgeInsets.only(
+                bottom: 200.0), // Add the desired padding value
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ForgotPasswordPage()),
+                  );
+                },
+                child: Text(
+                  "Forget Password?",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
           ActionButton(
             isFilled: false,
             onPressed: () async {
@@ -129,9 +154,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
           SizedBox(height: 0.015 * getHeight(context)),
           GestureDetector(
-            onTap: () =>
-              goToPage(context, SignUpPage(phone: '',))
-      ,
+            onTap: () => goToPage(
+                context,
+                SignUpPage(
+                  phone: '',
+                )),
             child: RichText(
               text: TextSpan(
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -148,6 +175,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
           ),
+
           // SizedBox(height: 0.015 * getHeight(context)),
           // ActionButton(
           //   isFilled: true,
@@ -162,5 +190,4 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
-
 }
