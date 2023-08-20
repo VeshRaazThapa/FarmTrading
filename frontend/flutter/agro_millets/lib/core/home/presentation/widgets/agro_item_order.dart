@@ -177,14 +177,14 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                               Row(
                                 children: [
                                   Text(
-                                    "${widget.itemOrder.phoneCustomer.replaceAll('+977', '')}",
+                                    "${widget.itemOrder.phoneFarmer.replaceAll('+977', '')}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w100),
                                   ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () => UrlLauncher.launch(
-                                        'tel://${widget.itemOrder.phoneCustomer}'),
+                                        'tel://${widget.itemOrder.phoneFarmer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
                                   ),
                                 ],
