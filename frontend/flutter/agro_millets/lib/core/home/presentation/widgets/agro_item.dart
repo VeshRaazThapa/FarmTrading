@@ -28,8 +28,7 @@ class AgroItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 0.5 * getWidth(context),
-      height:
-          0.3 * getHeight(context),
+      height: 0.3 * getHeight(context),
       child: Stack(
         children: [
           Positioned.fill(
@@ -102,10 +101,38 @@ class AgroItem extends StatelessWidget {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),
                                 ),
-
-
+                                const SizedBox(width: 10),
+                                const Spacer(),
+                                Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.remove),
+                                      ),
+                                      Text(
+                                        "${item.quantity}", // Display the item quantity
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.add),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
-                            )
+                            ),
                           ]),
                     ],
                   );
