@@ -1,12 +1,12 @@
-import 'package:agro_millets/core/cart/presentation/unpaid_page.dart';
 import 'package:flutter/material.dart';
 import 'address_form.dart';
+import 'billing_address.dart';
+
 class AddAddressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget finishButton = InkWell(
-      onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
+      onTap: () {},
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -54,7 +54,8 @@ class AddAddressPage extends StatelessWidget {
       body: LayoutBuilder(
         builder: (_, viewportConstraints) => SingleChildScrollView(
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+            constraints:
+                BoxConstraints(minHeight: viewportConstraints.maxHeight),
             child: Container(
               padding: EdgeInsets.zero,
               child: Column(
@@ -73,5 +74,3 @@ class AddAddressPage extends StatelessWidget {
     );
   }
 }
-
-
