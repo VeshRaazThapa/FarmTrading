@@ -1,104 +1,139 @@
 import 'package:flutter/material.dart';
 
-class AddAddressForm extends StatelessWidget {
+class AddAddressForm extends StatefulWidget {
+  @override
+  _AddAddressFormState createState() => _AddAddressFormState();
+}
+
+class _AddAddressFormState extends State<AddAddressForm> {
+  String selectedProvince = 'Province 1';
+  bool isDefaultAddress = false;
+  bool isDefaultBillingAddress = false;
+
+  List<String> provinces = [
+    'Province 1',
+    'Province 2',
+    'Bagmati',
+    'Gandaki',
+    'Lumbini',
+    'Karnali',
+    'Sudurpaschim',
+  ];
+
+  InputDecoration _inputDecoration(String labelText) {
+    return InputDecoration(
+      labelText: labelText,
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 500,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.white,
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none, hintText: 'Flat Number/House Number'),
-            ),
+          SizedBox(height: 20),
+          TextFormField(
+            decoration: _inputDecoration('Full Name'),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.white,
-            ),
-            child: TextField(
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: 'Street'),
-            ),
+          SizedBox(height: 16),
+          TextFormField(
+            decoration: _inputDecoration('Email'),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Area',
-                  style: TextStyle(fontSize: 12, color: Colors.greenAccent),
+          SizedBox(height: 16),
+          TextFormField(
+            decoration: _inputDecoration('Mobile Number'),
+            keyboardType: TextInputType.phone,
+          ),
+          SizedBox(height: 16),
+          TextFormField(
+            decoration: _inputDecoration('City'),
+            keyboardType: TextInputType.phone,
+          ),
+          SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            value: selectedProvince,
+            decoration: _inputDecoration('Province'),
+            items: provinces.map((province) {
+              return DropdownMenuItem<String>(
+                value: province,
+                child: Text(province),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              setState(() {
+                selectedProvince = newValue!;
+              });
+            },
+          ),
+          SizedBox(height: 16),
+          TextFormField(
+            decoration: _inputDecoration('Postal Code'),
+            keyboardType: TextInputType.number,
+          ),
+          SizedBox(height: 13),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Default Address Options',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-              ),
-              ClipRRect(
-  borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-  child: Container(
-    padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-    decoration: BoxDecoration(
-      border: Border(
-          bottom: BorderSide(color: Colors.orange, width: 2)),
-      // Remove color property
-    ),
-    child: TextField(
-      style: TextStyle(fontSize: 16), // Adjust the font size as needed
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: 'Name on card',
-        // Remove hintStyle property
-      ),
-    ),
-  ),
-),
-
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.white,
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none, hintText: 'Name on card'),
-            ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-            child: Container(
-              padding: EdgeInsets.only(left: 16.0, top: 4.0, bottom: 4.0),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.red, width: 1)),
-                color: Colors.white,
-              ),
-              child: TextField(
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: 'Postal code'),
-              ),
+                ClipRect(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Checkbox(
+                              value: isDefaultAddress,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  isDefaultAddress = newValue!;
+                                });
+                              },
+                            ),
+                            Text('Default Shipping Address'),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Checkbox(
+                              value: isDefaultBillingAddress,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  isDefaultBillingAddress = newValue!;
+                                });
+                              },
+                            ),
+                            Text('Default Billing Address'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          Row(
-            children: <Widget>[
-              Checkbox(
-                value: true,
-                onChanged: (_) {},
-              ),
-              Text('Add this to address bookmark')
-            ],
-          )
+          SizedBox(height: 20),
         ],
       ),
     );
