@@ -13,6 +13,7 @@ class AgroItem extends StatelessWidget {
   /// Index is for sizing
   final int index;
   final MilletItem item;
+  final int count; // New variable for quantity
   final bool showAddCartIcon;
   final bool showCallIcon;
 
@@ -20,6 +21,7 @@ class AgroItem extends StatelessWidget {
     super.key,
     required this.index,
     required this.item,
+    this.count = 1,
     this.showAddCartIcon = true,
     this.showCallIcon = false,
   });
@@ -27,7 +29,7 @@ class AgroItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 0.5 * getWidth(context),
+      width: 0.4 * getWidth(context),
       height: 0.3 * getHeight(context),
       child: Stack(
         children: [
@@ -51,92 +53,121 @@ class AgroItem extends StatelessWidget {
                   ],
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: LayoutBuilder(builder: (context, constraints) {
-                  //print(item);
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10.0),
-                            bottomRight: Radius.circular(10.0),
-                            topLeft: Radius.circular(10.0),
-                          ),
-                          child: Image.network(
-                            item.images[0].toString(),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                color: Colors.grey.withOpacity(0.2),
-                              );
-                            },
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0),
+                              topLeft: Radius.circular(10.0),
+                            ),
+                            child: Image.network(
+                              item.images[0].toString(),
+                              fit: BoxFit.cover,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  color: Colors.grey.withOpacity(0.2),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Column(
+                        const SizedBox(height: 10),
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                SizedBox(
-                                  width: 0.5 * constraints.maxWidth,
+                                Expanded(
                                   child: Text(
                                     item.name,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: null,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                // const Spacer(),
-                                const Spacer(),
+                                const SizedBox(width: 8),
                                 Text(
                                   "रू ${item.price}/${item.quantityType}",
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(width: 10),
-                                const Spacer(),
-                                Container(
-                                  width: 32,
-                                  height: 32,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.remove),
-                                      ),
-                                      Text(
-                                        "${item.quantity}", // Display the item quantity
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.add),
-                                      ),
-                                    ],
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
                             ),
-                          ]),
-                    ],
-                  );
-                }),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Items in stock',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "${item.quantity.toStringAsFixed(0)}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
+                            if (!showAddCartIcon)
+                            Consumer(builder: (context, ref, child) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      // Handle the add action
+                                      ref.read(cartProvider).decrementItemCount(item.id);
+                                      CartManager(context, ref, poll: false)
+                                          .decrementItemCountFromCart(itemId: item.id);
+                                    },
+                                    icon: const Icon(Icons.remove),
+                                  ),
+                                  Text(
+                                    "$count", // Display the item quantity
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      // Handle the add action
+                                      ref.read(cartProvider).incrementItemCount(item.id);
+                                      CartManager(context, ref, poll: false)
+                                          .incrementItemCountFromCart(itemId: item.id);
+                                    },
+                                    icon: const Icon(Icons.add),
+                                  ),
+                                ],
+                              ),
+                            );}),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+
               ),
             ),
           ),
