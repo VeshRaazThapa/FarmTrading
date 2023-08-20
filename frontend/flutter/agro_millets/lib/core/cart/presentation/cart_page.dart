@@ -2,6 +2,7 @@ import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/cart/application/cart_manager.dart';
 import 'package:agro_millets/core/cart/application/cart_provider.dart';
 import 'package:agro_millets/core/cart/presentation/add_address_page.dart';
+import 'package:agro_millets/core/cart/presentation/billing_address.dart';
 import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/core/home/presentation/widgets/agro_item.dart';
 import 'package:agro_millets/globals.dart';
@@ -90,7 +91,7 @@ class _CartPageState extends ConsumerState<CartPage> {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => AddAddressPage())),
+                    .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
                 style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(
                       255, 10, 179, 52), // Customize the button color
