@@ -26,7 +26,7 @@ router.post("/deleteItem", async (req, res) => {
   }
 
   var user = await User.findOne({ _id: adminId });
-  console.log(user);
+  // console.log(user);
   if (user.userType !== "farmer" && user.userType !== "admin") {
     return res.status(404).send(getErrorResponse("You don't have permission to delete items."));
   }

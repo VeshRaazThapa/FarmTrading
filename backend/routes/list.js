@@ -31,7 +31,7 @@ router.get("/getAllOrders", async (req, res) => {
 router.post("/orderDelivered", async (req, res) => {
    var { itemId } = req.body;
 
-   console.log('insideeeeee');
+   // console.log('insideeeeee');
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
     return res.status(404).send(getErrorResponse("Invalid Item ID"));
   }
@@ -72,7 +72,7 @@ router.post("/removeOrder", async (req, res) => {
 
 router.post("/getRecommendations", async (req, res) => {
      const { itemID } = req.body;
-     console.log(itemID);
+     // console.log(itemID);
     // Fetch all items from MongoDB
      const items = await MilletItem.find({});
      try {
@@ -256,7 +256,7 @@ router.get("/getAllDeliveries/:farmerID", async (req, res) => {
   }
 
   let items = await MilletOrder.find({});
-  console.log(items);
+  // console.log(items);
   //TODO: Check if this works
   items = items.filter((item) => item.farmerId.toString() === farmerID);
 
