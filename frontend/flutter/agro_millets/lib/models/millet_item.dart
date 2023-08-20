@@ -15,12 +15,14 @@ class MilletItem {
   final String quantityType;
   final List<dynamic> images;
   final DateTime listedAt;
+  bool isSelected;
 
   MilletItem({
     required this.id,
     required this.name,
     required this.listedBy,
     this.farmer,
+    this.isSelected= false,
     required this.description,
     required this.category,
     required this.price,
@@ -41,6 +43,7 @@ class MilletItem {
     double? quantity,
     List<dynamic>? images,
     DateTime? listedAt,
+    bool? isSelected = false
   }) {
     return MilletItem(
       id: id ?? this.id,
@@ -51,6 +54,7 @@ class MilletItem {
       category: category ?? this.category,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
+      isSelected: isSelected ?? this.isSelected,
       quantityType: quantityType,
       images: images ?? this.images,
       listedAt: listedAt ?? this.listedAt,
@@ -62,6 +66,7 @@ class MilletItem {
       '_id': id,
       'name': name,
       'listedBy': listedBy,
+      'isSelected': isSelected,
       'farmer': farmer,
       'description': description,
       'category': category,

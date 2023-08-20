@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../../models/millet_item.dart';
+import '../../home/presentation/widgets/agro_cart_item.dart';
+
 class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key});
 
@@ -20,6 +23,8 @@ class CartPage extends ConsumerStatefulWidget {
 
 class _CartPageState extends ConsumerState<CartPage> {
   late CartManager cartManager;
+  MilletItem? selectedItem; // Add this line
+
 
   @override
   void initState() {
@@ -33,8 +38,25 @@ class _CartPageState extends ConsumerState<CartPage> {
     super.dispose();
   }
 
+  // Add a function to handle item selection
+  void selectItem(MilletItem item) {
+    setState(() {
+      print('-selecet item-- is being called');
+      if (selectedItem == item)
+        {
+          selectedItem = null;
+        }
+      else {
+        selectedItem = item;
+
+      }
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(selectedItem);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Cart"),
@@ -64,11 +86,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                       builder: (context, snapshot) {
                         print(cart[index].count);
                         if (snapshot.hasData && snapshot.data != null) {
-                          return AgroItem(
+                          return AgroCartItem(
                             count:cart[index].count,
                             index: index,
                             item: snapshot.data!,
                             showAddCartIcon: false,
+                            onSelect: () => selectItem(snapshot.data!), highlight: selectedItem != null ? selectedItem==snapshot.data : false , // Add this line
                           );
                         } else if (snapshot.hasError) {
                           return const Center(
@@ -90,8 +113,13 @@ class _CartPageState extends ConsumerState<CartPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
+    onPressed: selectedItem != null
+    ? () => Navigator.of(context).push(MaterialPageRoute(
+    // builder: (_) => AddAddressPage(item: selectedItem!),
+    builder: (_) => UnpaidPage(),
+    ))
+        : null,
+
                 style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(
                       255, 10, 179, 52), // Customize the button color
