@@ -23,7 +23,6 @@ class CartPage extends ConsumerStatefulWidget {
 class _CartPageState extends ConsumerState<CartPage> {
   late CartManager cartManager;
   MilletItem? selectedItem; // Add this line
-  bool isSelected = false; // Add this line
 
 
   @override
@@ -45,11 +44,9 @@ class _CartPageState extends ConsumerState<CartPage> {
       if (selectedItem == item)
         {
           selectedItem = null;
-          isSelected = false;
         }
       else {
         selectedItem = item;
-        isSelected = true;
 
       }
 
@@ -58,6 +55,7 @@ class _CartPageState extends ConsumerState<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(selectedItem);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Cart"),
@@ -87,33 +85,23 @@ class _CartPageState extends ConsumerState<CartPage> {
                       builder: (context, snapshot) {
                         print(cart[index].count);
                         if (snapshot.hasData && snapshot.data != null) {
-                          return GestureDetector(
-                            onTap: () {
-                              print('Tapped');
-                              selectItem(snapshot.data!);
-                              // Handle the onTap action here
-                              // For example, you can navigate to the item detail page
-                            },
-                            child: AgroCartItem(
-                              count: cart[index].count,
-                              index: index,
-                              item: snapshot.data!,
-                              showAddCartIcon: false,
-                                isSelected: isSelected,
-                              // onSelect: () =>
-                            ),
+                          return AgroCartItem(
+                            count:cart[index].count,
+                            index: index,
+                            item: snapshot.data!,
+                            showAddCartIcon: false,
+                            onSelect: () => selectItem(snapshot.data!), highlight: selectedItem != null ? selectedItem==snapshot.data : false , // Add this line
                           );
                         } else if (snapshot.hasError) {
                           return const Center(
-                            child: Text("Error Occurred"),
+                            child: Text("Error Occured"),
                           );
                         }
                         return const Center(
-                          // child: CircularProgressIndicator(),
-                        );
+                            // child: CircularProgressIndicator(),
+                            );
                       },
                     );
-
                   },
                 );
               },
