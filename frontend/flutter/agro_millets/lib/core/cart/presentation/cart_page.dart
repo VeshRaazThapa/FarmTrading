@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../../models/millet_item.dart';
+import '../../home/presentation/widgets/agro_cart_item.dart';
+
 class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key});
 
@@ -19,6 +22,9 @@ class CartPage extends ConsumerStatefulWidget {
 
 class _CartPageState extends ConsumerState<CartPage> {
   late CartManager cartManager;
+  MilletItem? selectedItem; // Add this line
+  bool isSelected = false; // Add this line
+
 
   @override
   void initState() {
@@ -30,6 +36,24 @@ class _CartPageState extends ConsumerState<CartPage> {
   void dispose() {
     cartManager.dispose();
     super.dispose();
+  }
+
+  // Add a function to handle item selection
+  void selectItem(MilletItem item) {
+    setState(() {
+      print('-selecet item-- is being called');
+      if (selectedItem == item)
+        {
+          selectedItem = null;
+          isSelected = false;
+        }
+      else {
+        selectedItem = item;
+        isSelected = true;
+
+      }
+
+    });
   }
 
   @override
@@ -63,22 +87,33 @@ class _CartPageState extends ConsumerState<CartPage> {
                       builder: (context, snapshot) {
                         print(cart[index].count);
                         if (snapshot.hasData && snapshot.data != null) {
-                          return AgroItem(
-                            count:cart[index].count,
-                            index: index,
-                            item: snapshot.data!,
-                            showAddCartIcon: false,
+                          return GestureDetector(
+                            onTap: () {
+                              print('Tapped');
+                              selectItem(snapshot.data!);
+                              // Handle the onTap action here
+                              // For example, you can navigate to the item detail page
+                            },
+                            child: AgroCartItem(
+                              count: cart[index].count,
+                              index: index,
+                              item: snapshot.data!,
+                              showAddCartIcon: false,
+                                isSelected: isSelected,
+                              // onSelect: () =>
+                            ),
                           );
                         } else if (snapshot.hasError) {
                           return const Center(
-                            child: Text("Error Occured"),
+                            child: Text("Error Occurred"),
                           );
                         }
                         return const Center(
-                            // child: CircularProgressIndicator(),
-                            );
+                          // child: CircularProgressIndicator(),
+                        );
                       },
                     );
+
                   },
                 );
               },
@@ -89,8 +124,12 @@ class _CartPageState extends ConsumerState<CartPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => AddAddressPage())),
+    onPressed: selectedItem != null
+    ? () => Navigator.of(context).push(MaterialPageRoute(
+    // builder: (_) => AddAddressPage(item: selectedItem!),
+    builder: (_) => AddAddressPage(),
+    ))
+        : null,
                 style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(
                       255, 10, 179, 52), // Customize the button color

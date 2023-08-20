@@ -13,7 +13,6 @@ class AgroItem extends StatelessWidget {
   /// Index is for sizing
   final int index;
   final MilletItem item;
-  final int count; // New variable for quantity
   final bool showAddCartIcon;
   final bool showCallIcon;
 
@@ -21,7 +20,6 @@ class AgroItem extends StatelessWidget {
     super.key,
     required this.index,
     required this.item,
-    this.count = 1,
     this.showAddCartIcon = true,
     this.showCallIcon = false,
   });
@@ -102,65 +100,13 @@ class AgroItem extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'Items in stock',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "${item.quantity.toStringAsFixed(0)}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                              ],
-                            ),
-                            if (!showAddCartIcon)
-                            Consumer(builder: (context, ref, child) {
-                            return Container(
+
+                            Container(
                               decoration: BoxDecoration(
                                 color: Colors.grey.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      // Handle the add action
-                                      ref.read(cartProvider).decrementItemCount(item.id);
-                                      CartManager(context, ref, poll: false)
-                                          .decrementItemCountFromCart(itemId: item.id);
-                                    },
-                                    icon: const Icon(Icons.remove),
-                                  ),
-                                  Text(
-                                    "$count", // Display the item quantity
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      // Handle the add action
-                                      ref.read(cartProvider).incrementItemCount(item.id);
-                                      CartManager(context, ref, poll: false)
-                                          .incrementItemCountFromCart(itemId: item.id);
-                                    },
-                                    icon: const Icon(Icons.add),
-                                  ),
-                                ],
-                              ),
-                            );}),
+                            )
                           ],
                         ),
                       ],
@@ -201,40 +147,6 @@ class AgroItem extends StatelessWidget {
                     child: const Icon(
                       MdiIcons.cartPlus,
                       color: Colors.black,
-                    ),
-                  ),
-                ),
-              );
-            }),
-          if (!showAddCartIcon)
-            Consumer(builder: (context, ref, child) {
-              return Positioned(
-                right: 0,
-                top: 0,
-                child: GestureDetector(
-                  onTap: () async {
-                    ref.read(cartProvider).removeItemFromCart(item.id);
-                    CartManager(context, ref, poll: false)
-                        .removeItemFromCart(itemId: item.id);
-                  },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 5.0,
-                          spreadRadius: 3.0,
-                          offset: const Offset(0.0, 0.0),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: const Icon(
-                      MdiIcons.delete,
-                      color: Colors.red,
                     ),
                   ),
                 ),
