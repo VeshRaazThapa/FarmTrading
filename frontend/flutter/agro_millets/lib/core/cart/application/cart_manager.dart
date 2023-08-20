@@ -100,4 +100,40 @@ class CartManager {
 
     showToast("Removed Item from Cart");
   }
+  Future<void> incrementItemCountFromCart({
+    required String itemId,
+  }) async {
+    var userId = appState.value.user!.id;
+    var response = await http.post(
+      Uri.parse("$API_URL/cart/increment-count"),
+      headers: {"content-type": "application/json"},
+      body: json.encode(
+        {
+          "userId": userId,
+          "itemId": itemId,
+        },
+      ),
+    );
+    print(response);
+
+    showToast("Item count incremented !");
+  }
+
+  Future<void> decrementItemCountFromCart({
+    required String itemId,
+  }) async {
+    var userId = appState.value.user!.id;
+    var response = await http.post(
+      Uri.parse("$API_URL/cart/decrement-count"),
+      headers: {"content-type": "application/json"},
+      body: json.encode(
+        {
+          "userId": userId,
+          "itemId": itemId,
+        },
+      ),
+    );
+
+    showToast("Item count incremented !");
+  }
 }

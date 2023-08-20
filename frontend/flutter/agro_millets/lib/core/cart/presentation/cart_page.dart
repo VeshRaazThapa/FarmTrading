@@ -61,8 +61,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                     return FutureBuilder(
                       future: getItemById(cart[index].item),
                       builder: (context, snapshot) {
+                        print(cart[index].count);
                         if (snapshot.hasData && snapshot.data != null) {
                           return AgroItem(
+                            count:cart[index].count,
                             index: index,
                             item: snapshot.data!,
                             showAddCartIcon: false,
