@@ -13,6 +13,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  bool _obscurePassword = true;
 
   // Function to send the password reset request
   void _resetPassword() async {
@@ -81,83 +82,151 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Forgot Password"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 100.0),
-                // Add padding here
-                child: Image.asset(
-                  "assets/logo_app.png",
-                  height: 100,
-                  width: 100,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress, // Use email keyboard type
-                  decoration: InputDecoration(
-                    contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10.0),
-                    labelText: "Email", // Label for the email field
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: TextField(
-                  controller: _newPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10.0),
-                    labelText: "New Password",
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: TextField(
-                  controller: _confirmPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10.0),
-                    labelText: "Confirm Password",
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _resetPassword, // Call the reset password function
-                child: Text("Save New Password"),
-              ),
-            ],
-          ),
+        appBar: AppBar(
+          title: Text("Forgot Password"),
         ),
-      ),
-    );
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/logo_app.png",
+                    height: 100,
+                    width: 100,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Farm Trading",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 30.0), // Add bottom padding here
+                    child: Center(
+                      child: Text(
+                        "Cut the middle man between farmers and wholesalers",
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: TextField(
+                      controller: _emailController,
+                      keyboardType:
+                          TextInputType.emailAddress, // Use email keyboard type
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10.0),
+                        labelText: "Email", // Label for the email field
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: TextFormField(
+                      controller: _newPasswordController,
+                      obscureText: !_obscurePassword,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10.0),
+                        labelText: "New Password",
+                        border: InputBorder.none,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: TextField(
+                      controller: _confirmPasswordController,
+                      obscureText: !_obscurePassword,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10.0),
+                        labelText: "Confirm Password",
+                        border: InputBorder.none,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed:
+                        _resetPassword, // Call the reset password function
+                    style: ElevatedButton.styleFrom(
+                     // primary: Colors.green, // Button background color
+                      onPrimary: Colors.green, // Button text color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            20.0), // Set the border radius
+                        side: BorderSide(
+                            color: Colors.green), // Set the border color
+                      ),
+                    ),
+                    child: Container(
+                      width: double
+                          .infinity, // Make the button span the full width
+                      padding: EdgeInsets.symmetric(
+                          vertical: 16.0), // Adjust vertical padding
+                      alignment:
+                          Alignment.center, // Center the text inside the button
+                      child: Text(
+                        "Save New Password",
+                        style: TextStyle(
+                            fontSize: 16.0), // Adjust font size if needed
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
