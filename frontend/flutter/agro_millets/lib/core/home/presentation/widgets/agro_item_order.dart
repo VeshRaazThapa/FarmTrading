@@ -1,3 +1,4 @@
+import 'package:agro_millets/core/home/presentation/widgets/order_details.dart';
 import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/models/millet_item.dart';
@@ -55,7 +56,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
           Positioned.fill(
             child: GestureDetector(
               onTap: () {
-                // Handle onTap action
+              Navigator.of(context).push(MaterialPageRoute(builder: (_)=>OrderDetails()));
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
