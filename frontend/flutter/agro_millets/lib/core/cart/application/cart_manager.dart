@@ -134,6 +134,6 @@ class CartManager {
       ),
     );
 
-    showToast("Item count incremented !");
+    showToast("Item Count Decremented !");
   }
 }
