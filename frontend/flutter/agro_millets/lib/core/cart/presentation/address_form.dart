@@ -133,7 +133,6 @@ class _AddAddressFormState extends State<AddAddressForm> {
               ],
             ),
           ),
-          SizedBox(height: 20),
         ],
       ),
     );
