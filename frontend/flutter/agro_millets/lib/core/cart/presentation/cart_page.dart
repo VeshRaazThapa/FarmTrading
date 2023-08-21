@@ -1,11 +1,7 @@
-import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/cart/application/cart_manager.dart';
 import 'package:agro_millets/core/cart/application/cart_provider.dart';
-import 'package:agro_millets/core/cart/presentation/add_address_page.dart';
 import 'package:agro_millets/core/cart/presentation/billing_address.dart';
 import 'package:agro_millets/core/home/application/home_manager.dart';
-import 'package:agro_millets/core/home/presentation/widgets/agro_item.dart';
-import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/models/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
