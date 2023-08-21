@@ -86,7 +86,6 @@ class _AgroDrawerState extends State<AgroDrawer> {
                 goToPage(context, const CartPage());
               },
             ),
-             if (!appCache.isAdmin())
             ListTile(
             title: const Text("Orders"),
             leading: const Icon(Icons.local_shipping_outlined),

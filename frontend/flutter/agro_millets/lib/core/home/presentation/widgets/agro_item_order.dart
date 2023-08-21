@@ -35,10 +35,9 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
   void _deliverOrder(String itemId) async {
     // Your delivery logic here
 
-    setState(() {
-      isDelivered = true;
-    });
+    setState(() {});
   }
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +55,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
           Positioned.fill(
             child: GestureDetector(
               onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_)=>OrderDetails()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => OrderDetails()));
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
@@ -203,10 +203,10 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     onPressed: () => UrlLauncher.launch(
                                         'tel://${widget.itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
-
                                   ),
                                 ],
                               ),
+
                             if (!isDelivered && appCache.isFarmer())
                               Row(
                                 children: [
@@ -226,16 +226,19 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.05),
+                                              color: Colors.black
+                                                  .withOpacity(0.05),
                                               blurRadius: 5.0,
                                               spreadRadius: 3.0,
                                               offset: const Offset(0.0, 0.0),
                                             )
                                           ],
-                                          borderRadius: BorderRadius.circular(10.0),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Icon(
                                               Icons.check,
