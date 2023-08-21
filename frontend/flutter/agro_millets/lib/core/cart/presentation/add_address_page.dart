@@ -6,7 +6,8 @@ class AddAddressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget finishButton = InkWell(
-      onTap: () {},
+     onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width / 1.5,

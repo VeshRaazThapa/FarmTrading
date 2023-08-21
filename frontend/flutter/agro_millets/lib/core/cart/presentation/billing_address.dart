@@ -1,4 +1,5 @@
 import 'package:agro_millets/core/cart/presentation/add_address_page.dart';
+import 'package:agro_millets/core/cart/presentation/payment_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/millet_item.dart';
@@ -16,26 +17,17 @@ enum PaymentMethod {
 
 class _UnpaidPageState extends State<UnpaidPage> {
   late PaymentMethod selectedPaymentMethod = PaymentMethod.Esewa;
-  bool isCashOnDeliverySelected = false;
   late MilletItem selectedItem; // Declare the selectedItem variable
-
-  // void _toggleCashOnDelivery(newValue) {
-  //   setState(() {
-  //     isCashOnDeliverySelected = newValue;
-  //   });
-  // }
 
   void _togglePaymentMethod(PaymentMethod? newMethod) {
     if (newMethod != null) {
       setState(() {
         selectedPaymentMethod = newMethod;
-        if (selectedPaymentMethod == PaymentMethod.CashOnDelivery ) {
+        if (selectedPaymentMethod == PaymentMethod.CashOnDelivery) {
           showSuccessToast('Cash on Delivery Selected');
         } else {
           showSuccessToast('Esewa Selected');
         }
-
-        // print(selectedPaymentMethod);
       });
     }
   }
@@ -99,34 +91,42 @@ class _UnpaidPageState extends State<UnpaidPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    Widget payButton = InkWell(
+    Widget updateAddressButton = GestureDetector(
       onTap: () => Navigator.of(context)
           .push(MaterialPageRoute(builder: (_) => AddAddressPage())),
       child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width / 1.5,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.16),
-              offset: Offset(0, 5),
-              blurRadius: 10.0,
-            )
-          ],
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Text(
+          "Update Address",
+          style: const TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.w600,
+            fontSize: 15.0,
+          ),
+        ),
+      ),
+    );
+
+    Widget continueButton = ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>PaymentPage()));
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Colors.green,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9.0),
         ),
-        child: Center(
-          child: Text(
-            "Update Address",
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 18.0,
-            ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Text(
+          "Continue",
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 15.0,
           ),
         ),
       ),
@@ -227,7 +227,19 @@ class _UnpaidPageState extends State<UnpaidPage> {
                             ),
                             ListTile(
                               title: Text(
-                                'Address',
+                                'Billing Address',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
+                              ),
+                              subtitle: Text(
+                                'Lubhoo, Bagmati, 4406',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'Shipping Address',
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
@@ -244,8 +256,19 @@ class _UnpaidPageState extends State<UnpaidPage> {
                     ),
                     SizedBox(height: 24),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: payButton,
+                      padding: const EdgeInsets.only(bottom: 20, right: 16.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            updateAddressButton,
+                            SizedBox(height: 10),
+                             continueButton,
+                          ],
+
+                        ),
+                      ),
                     )
                   ],
                 ),
