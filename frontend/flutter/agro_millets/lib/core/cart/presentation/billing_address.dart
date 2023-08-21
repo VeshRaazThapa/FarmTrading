@@ -1,18 +1,51 @@
 import 'package:agro_millets/core/cart/presentation/add_address_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/millet_item.dart';
+import '../../home/presentation/news/constants.dart';
+
 class UnpaidPage extends StatefulWidget {
   @override
   _UnpaidPageState createState() => _UnpaidPageState();
 }
 
-class _UnpaidPageState extends State<UnpaidPage> {
-  bool isCashOnDeliverySelected = false;
+enum PaymentMethod {
+  CashOnDelivery,
+  Esewa,
+}
 
-  void _toggleCashOnDelivery(newValue) {
-    setState(() {
-      isCashOnDeliverySelected = newValue;
-    });
+class _UnpaidPageState extends State<UnpaidPage> {
+  late PaymentMethod selectedPaymentMethod = PaymentMethod.Esewa;
+  bool isCashOnDeliverySelected = false;
+  late MilletItem selectedItem; // Declare the selectedItem variable
+
+  // void _toggleCashOnDelivery(newValue) {
+  //   setState(() {
+  //     isCashOnDeliverySelected = newValue;
+  //   });
+  // }
+
+  void _togglePaymentMethod(PaymentMethod? newMethod) {
+    if (newMethod != null) {
+      setState(() {
+        selectedPaymentMethod = newMethod;
+        if (selectedPaymentMethod == PaymentMethod.CashOnDelivery ) {
+          showSuccessToast('Cash on Delivery Selected');
+        } else {
+          showSuccessToast('Esewa Selected');
+        }
+
+        // print(selectedPaymentMethod);
+      });
+    }
+  }
+
+  void _onPayButtonPressed() {
+    if (selectedPaymentMethod == PaymentMethod.CashOnDelivery) {
+      // Handle Cash on Delivery payment logic
+    } else if (selectedPaymentMethod == PaymentMethod.Esewa) {
+      // Handle Esewa payment logic
+    }
   }
 
   void _showPaymentModePopup() {
@@ -26,22 +59,28 @@ class _UnpaidPageState extends State<UnpaidPage> {
             children: [
               Row(
                 children: <Widget>[
-                  Checkbox(
-                    value: isCashOnDeliverySelected,
-                    onChanged: _toggleCashOnDelivery,
+                  Radio(
+                    value: PaymentMethod.CashOnDelivery,
+                    groupValue: selectedPaymentMethod,
+                    onChanged: (newValue) {
+                      _togglePaymentMethod(newValue);
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
                   ),
                   Text('Cash on Delivery'),
-                  
                 ],
               ),
               Row(
                 children: <Widget>[
-                  Checkbox(
-                    value: isCashOnDeliverySelected,
-                    onChanged: _toggleCashOnDelivery,
+                  Radio(
+                    value: PaymentMethod.Esewa,
+                    groupValue: selectedPaymentMethod,
+                    onChanged: (newValue) {
+                      _togglePaymentMethod(newValue);
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
                   ),
                   Text('Esewa'),
-                  
                 ],
               ),
             ],
@@ -54,19 +93,12 @@ class _UnpaidPageState extends State<UnpaidPage> {
               },
               child: Text('Confirm'),
             ),
-            TextButton(
-              onPressed: () {
-                // Perform actions for selecting Cash on Delivery mode
-                // Close the popup
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
           ],
         );
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
