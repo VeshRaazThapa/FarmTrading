@@ -208,55 +208,56 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                 ],
                               ),
                             if (!isDelivered && appCache.isFarmer())
-                              Row(
-                                children: [
-                                  // Other widgets in the Stack
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        _deliverOrder(widget.itemOrder.id);
-                                        deliverOrder(widget.itemOrder.id);
-                                      },
-                                      child: Container(
-                                        width: 150,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(0.05),
-                                              blurRadius: 5.0,
-                                              spreadRadius: 3.0,
-                                              offset: const Offset(0.0, 0.0),
-                                            )
-                                          ],
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.check,
-                                              color: Colors.green,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              'Deliver',
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  width: 150,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.05),
+                                        blurRadius: 5.0,
+                                        spreadRadius: 3.0,
+                                        offset: const Offset(0.0, 0.0),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.schedule,
+                                        color: Colors.red,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      DropdownButton<String>(
+                                        value: 'Packaging',
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            // selectedStatus = newValue!;
+                                          });
+                                        },
+                                        items: ['Delivering','Packaging'].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          );
+                                        }).toList(),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-
                             if (!isDelivered && appCache.isCustomer())
                               Positioned(
                                 right: 0,
