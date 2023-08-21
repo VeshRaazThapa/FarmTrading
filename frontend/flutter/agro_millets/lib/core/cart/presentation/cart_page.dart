@@ -9,6 +9,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../models/millet_item.dart';
 import '../../home/presentation/widgets/agro_cart_item.dart';
+import 'esewa_pay.dart';
+import 'khalti_pay.dart';
 
 class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key});
@@ -113,6 +115,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     ? () => Navigator.of(context).push(MaterialPageRoute(
     // builder: (_) => AddAddressPage(item: selectedItem!),
     builder: (_) => UnpaidPage(),
+    // builder: (_) => KhaltiExampleApp(),
     ))
         : null,
 

@@ -8,11 +8,16 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:khalti/khalti.dart';
 import 'colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Khalti.init(
+    publicKey: 'test_public_key_0c8c371933c447498a9c3a172c68e344',
+    enabledDebugging: true,
+  );
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     // Set androidProvider to `AndroidProvider.debug`
