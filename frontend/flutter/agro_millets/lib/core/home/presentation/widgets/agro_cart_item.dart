@@ -151,7 +151,7 @@ class _AgroCartItemState extends State<AgroCartItem> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   IconButton(
-                                    onPressed: () {
+                                    onPressed:this.widget.count <= 1 ? null : () {
                                       // Handle the add action
                                       ref.read(cartProvider).decrementItemCount(
                                           this.widget.item.id);
@@ -169,16 +169,15 @@ class _AgroCartItemState extends State<AgroCartItem> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {
+                                    onPressed: this.widget.count >= this.widget.item.quantity ? null : () {
                                       // Handle the add action
-                                      ref.read(cartProvider).incrementItemCount(
-                                          this.widget.item.id);
+                                      ref.read(cartProvider).incrementItemCount(this.widget.item.id);
                                       CartManager(context, ref, poll: false)
-                                          .incrementItemCountFromCart(
-                                              itemId: this.widget.item.id);
+                                          .incrementItemCountFromCart(itemId: this.widget.item.id);
                                     },
                                     icon: const Icon(Icons.add),
                                   ),
+
                                 ],
                               ),
                             );
