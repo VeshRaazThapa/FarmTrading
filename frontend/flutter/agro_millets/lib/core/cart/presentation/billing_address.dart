@@ -7,6 +7,67 @@ class UnpaidPage extends StatefulWidget {
 }
 
 class _UnpaidPageState extends State<UnpaidPage> {
+  bool isCashOnDeliverySelected = false;
+
+  void _toggleCashOnDelivery(newValue) {
+    setState(() {
+      isCashOnDeliverySelected = newValue;
+    });
+  }
+
+  void _showPaymentModePopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Payment Mode'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: <Widget>[
+                  Checkbox(
+                    value: isCashOnDeliverySelected,
+                    onChanged: _toggleCashOnDelivery,
+                  ),
+                  Text('Cash on Delivery'),
+                  
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Checkbox(
+                    value: isCashOnDeliverySelected,
+                    onChanged: _toggleCashOnDelivery,
+                  ),
+                  Text('Esewa'),
+                  
+                ],
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Close the popup
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform actions for selecting Cash on Delivery mode
+                // Close the popup
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget payButton = InkWell(
@@ -66,6 +127,10 @@ class _UnpaidPageState extends State<UnpaidPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          IconButton(
+                            icon: Icon(Icons.account_balance_wallet),
+                            onPressed: _showPaymentModePopup,
+                          ),
                           CloseButton()
                         ],
                       ),
@@ -95,45 +160,52 @@ class _UnpaidPageState extends State<UnpaidPage> {
                             ListTile(
                               title: Text(
                                 'Username',
-                                style: TextStyle(color: Colors.grey, fontSize: 14),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
                                 'Aarati Adhikari',
-                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                             ),
                             ListTile(
                               title: Text(
                                 'Email',
-                                style: TextStyle(color: Colors.grey, fontSize: 14),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
                                 'adhikariaarati68@gmail.com',
-                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                             ),
                             ListTile(
                               title: Text(
                                 'Phone Number',
-                                style: TextStyle(color: Colors.grey, fontSize: 14),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
                                 '+977-9843807439',
-                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                             ),
                             ListTile(
                               title: Text(
                                 'Address',
-                                style: TextStyle(color: Colors.grey, fontSize: 14),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
                                 'Lubhoo, Bagmati, 4406',
-                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
                               ),
                             ),
                             // Add more ListTiles as needed for the payment summary
-
                           ],
                         ),
                       ),
