@@ -30,6 +30,7 @@ class AgroItemOrder extends StatefulWidget {
 }
 
 class _AgroItemOrderState extends State<AgroItemOrder> {
+  String selectedStatus = 'Processing';
   bool isDelivered = true;
 
   void _deliverOrder(String itemId) async {
@@ -39,6 +40,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
       isDelivered = true;
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +58,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
           Positioned.fill(
             child: GestureDetector(
               onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_)=>OrderDetails()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => OrderDetails()));
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
@@ -203,7 +206,6 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     onPressed: () => UrlLauncher.launch(
                                         'tel://${widget.itemOrder.phoneCustomer}'),
                                     icon: const Icon(MdiIcons.phoneDial),
-
                                   ),
                                 ],
                               ),
@@ -235,13 +237,31 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                       ),
                                       const SizedBox(width: 5),
                                       DropdownButton<String>(
-                                        value: 'Packaging',
+                                        value: selectedStatus,
                                         onChanged: (String? newValue) {
                                           setState(() {
-                                            // selectedStatus = newValue!;
+                                            selectedStatus = newValue!;
+                                            if (selectedStatus ==
+                                                'Processing') {
+                                              // Update the isDelivered state based on selected status
+                                              isDelivered =
+                                                  false; // Item is in progress
+                                            } if (selectedStatus ==
+                                                'Packaging') {
+                                              isDelivered =
+                                                  false; // Item is being delivered
+                                            }
+                                            else if (selectedStatus == 'Delivering'){
+                                              isDelivered = true;//Item has been Delivered
+                                            }
                                           });
                                         },
-                                        items: ['Delivering','Packaging'].map<DropdownMenuItem<String>>((String value) {
+                                        items: [
+                                          'Processing',
+                                          'Packaging',
+                                          'Delivering'
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(

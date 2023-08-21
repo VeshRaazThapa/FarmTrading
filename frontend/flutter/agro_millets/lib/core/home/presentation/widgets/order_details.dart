@@ -74,6 +74,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                           SizedBox(height: 16),
                           _buildUserSpecificInfo(),
                           ListTile(
+                            title: Text('Product Name'),
+                            trailing: Text('Item'),
+                          ),
+                          ListTile(
                             title: Text('Order Id'),
                             trailing: Text('-----'),
                           ),
