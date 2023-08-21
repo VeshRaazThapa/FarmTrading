@@ -2,19 +2,21 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const billingAddressSchema = new mongoose.Schema({
-    street: {
+    fullName: {
         type: String,
         required: true,
     },
-    houseNumber: {
+    email: {
+        type: String,
+        required: true,
+    }, phone: {
         type: String,
         required: true,
     },
     city: {
         type: String,
         required: true,
-    },
-    areaName: {
+    }, province: {
         type: String,
         required: true,
     },
@@ -22,6 +24,11 @@ const billingAddressSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    areaName: {
+        type: String,
+        required: true,
+    },
+
 
 });
 
@@ -98,11 +105,14 @@ function validateUser(user) {
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
         billingAddresses: Joi.array().items(Joi.object({
-            street: Joi.string().required(),
             city: Joi.string().required(),
             houseNumber: Joi.string().required(),
             areaName: Joi.string().required(),
             postalCode: Joi.string().required(),
+            fullName: Joi.string().required(),
+            email: Joi.string().required(),
+            phone: Joi.string().required(),
+            province: Joi.string().required(),
         })),
     });
     return schema.validate(user);
