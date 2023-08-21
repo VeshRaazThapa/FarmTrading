@@ -20,6 +20,8 @@ dependencies:
   firebase_auth: ^4.4.0
   flutter:
     sdk: flutter
+  esewa_flutter_sdk:
+    path: ./esewa_flutter_sdk
   webview_flutter: ^3.0.4
   flutter_map: ^3.0.0
   dio: ^5.1.2

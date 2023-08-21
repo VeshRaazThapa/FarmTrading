@@ -1,6 +1,7 @@
 import 'package:agro_millets/core/cart/application/cart_manager.dart';
 import 'package:agro_millets/core/cart/application/cart_provider.dart';
 import 'package:agro_millets/core/cart/presentation/billing_address.dart';
+import 'package:agro_millets/core/cart/presentation/esewa_page.dart';
 import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/models/cart_item.dart';
 import 'package:flutter/material.dart';
@@ -111,8 +112,8 @@ class _CartPageState extends ConsumerState<CartPage> {
               child: ElevatedButton(
     onPressed: selectedItem != null
     ? () => Navigator.of(context).push(MaterialPageRoute(
-    // builder: (_) => AddAddressPage(item: selectedItem!),
-    builder: (_) => UnpaidPage(),
+    // builder: (_) => UnpaidPage(item: selectedItem!),
+    builder: (_) =>  MyEsewaApp(),
     ))
         : null,
 
