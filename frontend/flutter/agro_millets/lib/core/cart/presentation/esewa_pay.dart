@@ -7,6 +7,7 @@ import 'package:agro_millets/core/home/presentation/widgets/agro_item_order.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../models/order_item.dart';
 import '../../../secrets.dart';
@@ -61,17 +62,21 @@ class _TestPageState extends State<EsewaEpay> {
     String scd = "EPAYTEST";
     String su = "$API_URL/auth/esewa-success-payment/${itemOrder?.id}";
     String fu = "$API_URL/auth/esewa-failure-payment";
+
+    Future<void> fetchData(String url) async {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // Request was successful, and the response is stored in 'response.body'
+        print('Response data: ${response.body}');
+      } else {
+        // Request failed or returned a non-200 status code
+        print('Request failed with status: ${response.statusCode}');
+      }
+    }
+
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       String pid = UniqueKey().toString();
-      //       _webViewController.evaluateJavascript(
-      //           'requestPayment(tAmt = $tAmt, amt = $amt, txAmt = $txAmt, psc = $psc, pdc = $pdc, scd = "$scd", pid = "$pid", su = "$su", fu = "$fu")');
-      //     });
-      //   },
-      //   child: Icon(Icons.add),
-      // ),
+
       appBar: AppBar(
         leading: SizedBox.shrink(),
       ),
@@ -91,29 +96,20 @@ class _TestPageState extends State<EsewaEpay> {
             _webViewController.runJavascript(
                 'requestPayment(tAmt = $tAmt, amt = $amt, txAmt = $txAmt, psc = $psc, pdc = $pdc, scd = "$scd", pid = "$pid", su = "$su", fu = "$fu")');
           });
-          // print('------data----');
-          // await Future.delayed(Duration(milliseconds: 2000));
-          // if (onPageFinishedCount > 2) {
-          //   print(onPageFinishedCount);
-          //   // Redirect after onPageFinished is reached two times
-          //   await Future.delayed(Duration(milliseconds: 1000));
-          //
-          //   Navigator.pushReplacement(
-          //     context,
-          //     MaterialPageRoute(builder: (context) => OrderPage()),
-          //   );
-          // }
         },
         onWebViewCreated: (webViewController) {
           // _controller.complete(webViewController);
           _webViewController = webViewController;
           _loadHTMLfromAsset();
         },
-        navigationDelegate: (NavigationRequest request) {
+        navigationDelegate: (NavigationRequest request) async {
           print('---URL---');
           print(request.url);
           if (request.url.contains("esewa-success-payment")) {
+
+            var a = await fetchData(request.url);
             showSuccessToast('Payment Success !');
+
             // Redirect after receiving response from speci fic URL
             Navigator.pushReplacement(
               context,

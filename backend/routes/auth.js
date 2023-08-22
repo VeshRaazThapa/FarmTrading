@@ -327,7 +327,7 @@ router.get('/esewa-success-payment/:orderItemId', async (req, res) => {
     const orderItemId = req.params.orderItemId;
     const oid = req.query.oid;
     const refId = req.query.refId;
-
+    console.log(orderItemId);
     // Update the 'isPaid' status of the order
     try {
         const updatedOrder = await MilletOrder.findByIdAndUpdate(
@@ -336,10 +336,14 @@ router.get('/esewa-success-payment/:orderItemId', async (req, res) => {
             { new: true }
         );
 
+
         if (!updatedOrder) {
             // Handle if the order is not found
             return res.status(404).send('Order not found');
         }
+        updatedOrder.save();
+
+        console.log(updatedOrder);
 
         const successHTML = `
             <!DOCTYPE html>
