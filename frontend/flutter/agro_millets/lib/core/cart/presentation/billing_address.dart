@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/cache/app_cache.dart';
+import '../../../models/cart_item.dart';
 import '../../../models/millet_item.dart';
 import '../../home/presentation/news/constants.dart';
 import 'add_billing_address_page.dart'; // Import the BillingAddress model
 
 class UnpaidPage extends ConsumerStatefulWidget {
-  late final MilletItem? selectedItem;
+  late final CartItem? selectedItem;
 
   UnpaidPage({required this.selectedItem});
   @override
@@ -26,7 +27,7 @@ enum PaymentMethod {
 
 class _UnpaidPageState extends ConsumerState<UnpaidPage> {
   late PaymentMethod selectedPaymentMethod = PaymentMethod.Khalti;
-  late MilletItem selectedItem; // Declare the selectedItem variable
+  late CartItem selectedItem; // Declare the selectedItem variable
 
   // Add a user variable to store the user information
   User? user;
@@ -195,7 +196,7 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
     Widget continueButton = ElevatedButton(
       onPressed: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => PaymentPage()));
+            .push(MaterialPageRoute(builder: (_) => PaymentPage(selectedItem:selectedItem)));
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.green,

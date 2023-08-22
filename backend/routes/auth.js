@@ -7,6 +7,7 @@ const _ = require("lodash");
 const {default: mongoose} = require("mongoose");
 const {MilletItem} = require("../models/millet_item");
 const nodemailer = require("nodemailer");
+const {MilletOrder} = require("../models/order_item");
 /**
  * Login as a user using {email} {password}
  * body: {email:"email",password:"password"}
@@ -322,50 +323,50 @@ router.get("/reset-password/:token", async (req, res) => {
 
 
 });
-router.get('/esewa-success-payment', async (req, res) => {
+router.get('/esewa-success-payment/:orderItemId', async (req, res) => {
+    const orderItemId = req.params.orderItemId;
     const oid = req.query.oid;
     const refId = req.query.refId;
 
-    const successHTML = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Payment Successful</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f0f0f0;
-                    text-align: center;
-                }
-                .container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: #fff;
-                    border-radius: 8px;
-                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                }
-                h1 {
-                    color: #27ae60;
-                }
-                p {
-                    color: #333;
-                    margin-bottom: 20px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Payment Successful!</h1>
-                <p>Your payment has been successfully processed.</p>
-                <p>Order ID: ${oid}</p>
-                <p>Reference ID: ${refId}</p>
-            </div>
-        </body>
-        </html>
-    `;
+    // Update the 'isPaid' status of the order
+    try {
+        const updatedOrder = await MilletOrder.findByIdAndUpdate(
+            orderItemId,
+            { isPaid: true },
+            { new: true }
+        );
 
-    res.send(successHTML);
+        if (!updatedOrder) {
+            // Handle if the order is not found
+            return res.status(404).send('Order not found');
+        }
+
+        const successHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Payment Successful</title>
+                <style>
+                    /* ... (CSS styles) ... */
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Payment Successful!</h1>
+                    <p>Your payment has been successfully processed.</p>
+                    <p>Order ID: ${oid}</p>
+                    <p>Reference ID: ${refId}</p>
+                </div>
+            </body>
+            </html>
+        `;
+
+        res.send(successHTML);
+    } catch (error) {
+        // Handle any error that occurred during the update
+        console.error('Error updating order status:', error);
+        res.status(500).send('Internal server error');
+    }
 });
 router.get('/esewa-failure-payment', async (req, res) => {
 
@@ -378,7 +379,7 @@ router.get('/esewa-failure-payment', async (req, res) => {
         </head>
         <body>
             <h1>Payment Failed!</h1>
-            <p>Your payment has been successfully processed.</p>
+            <p>Your payment has been failed. Please process again</p>
         </body>
         </html>
     `;

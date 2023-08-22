@@ -21,7 +21,7 @@ class CartPage extends ConsumerStatefulWidget {
 
 class _CartPageState extends ConsumerState<CartPage> {
   late CartManager cartManager;
-  MilletItem? selectedItem; // Add this line
+  CartItem? selectedItem; // Add this line
 
 
   @override
@@ -37,7 +37,7 @@ class _CartPageState extends ConsumerState<CartPage> {
   }
 
   // Add a function to handle item selection
-  void selectItem(MilletItem item) {
+  void selectItem(CartItem item) {
     setState(() {
       print('-selecet item-- is being called');
       if (selectedItem == item)
@@ -89,7 +89,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                             index: index,
                             item: snapshot.data!,
                             showAddCartIcon: false,
-                            onSelect: () => selectItem(snapshot.data!), highlight: selectedItem != null ? selectedItem==snapshot.data : false , // Add this line
+                            onSelect: () => selectItem(cart[index]), highlight: selectedItem != null ? selectedItem==cart[index] : false , // Add this line
                           );
                         } else if (snapshot.hasError) {
                           return const Center(

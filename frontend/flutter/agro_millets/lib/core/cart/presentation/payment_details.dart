@@ -1,14 +1,33 @@
+import 'dart:convert';
+
 import 'package:agro_millets/core/cart/presentation/esewa_pay.dart';
 import 'package:agro_millets/core/cart/presentation/khalti_pay.dart';
+import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../data/cache/app_cache.dart';
+import '../../../globals.dart';
+import '../../../models/cart_item.dart';
+import '../../../models/millet_item.dart';
+import '../../../models/order_item.dart';
+import '../../../models/user.dart';
+import '../../../secrets.dart';
+import '../../order/presentation/order_page.dart';
 
 class PaymentPage extends StatefulWidget {
+  late final CartItem? selectedItem;
+
+  PaymentPage({required this.selectedItem});
+
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  int selectedPaymentOption = 0; // 0: Cash on Delivery, 1: eSewa, 2: Khalti
+  late CartItem selectedItem; // Declare the selectedItem variable
+  MilletItem? selectedMilletItem; // Declare the selectedItem variable
+  late int selectedPaymentOption;
 
   void _showPaymentDialog() {
     showDialog(
@@ -16,44 +35,49 @@ class _PaymentPageState extends State<PaymentPage> {
       builder: (context) {
         return AlertDialog(
           title: Text('Select Payment Option'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CheckboxListTile(
-                title: Text('Cash on Delivery'),
-                value: selectedPaymentOption == 0,
-                onChanged: (value) {
-                  setState(() {
-                    if (value!) {
-                      selectedPaymentOption = 0;
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: Text('eSewa'),
-                value: selectedPaymentOption == 1,
-                onChanged: (value) {
-                  setState(() {
-                    if (value!) {
-                      selectedPaymentOption = 1;
-                      
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: Text('Khalti'),
-                value: selectedPaymentOption == 2,
-                onChanged: (value) {
-                  setState(() {
-                    if (value!) {
-                      selectedPaymentOption = 2;
-                    }
-                  });
-                },
-              ),
-            ],
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CheckboxListTile(
+                    title: Text('Cash on Delivery'),
+                    value: selectedPaymentOption == 0,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) {
+                          selectedPaymentOption = 0;
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text('eSewa'),
+                    value: selectedPaymentOption == 1,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) {
+                          selectedPaymentOption = 1;
+                          print(selectedPaymentOption);
+                          print('---esewa clicked---');
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text('Khalti'),
+                    value: selectedPaymentOption == 2,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) {
+                          selectedPaymentOption = 2;
+                        }
+                      });
+                    },
+                  ),
+                ],
+              );
+            },
           ),
           actions: <Widget>[
             TextButton(
@@ -63,31 +87,93 @@ class _PaymentPageState extends State<PaymentPage> {
               },
             ),
             TextButton(
-            child: Text('Pay'),
-            onPressed: () {
-              // Perform the payment based on the selected option
-              // For now, let's just print the selected option
-              print('Selected Payment Option: $selectedPaymentOption');
-              
-              if (selectedPaymentOption == 1) {
-                // Navigate to eSewa payment page
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EsewaEpay()));
-              } else if (selectedPaymentOption == 2) {
-                // Navigate to Khalti payment page
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => KhaltiPay()));
-              } else {
-                // Perform other payment logic for Cash on Delivery
-                Navigator.of(context).pop(); // Close the dialog
-              }
-            },
-          ),
+              child: Text('Pay'),
+              onPressed: () async {
+                User? farmer =
+                    await getUser(selectedMilletItem?.listedBy ?? '');
+                MilletOrder? order = await addItemOrder(
+                  listedBy: appState.value.user!.id,
+                  farmerId: selectedMilletItem?.listedBy ?? '',
+                  quantity: selectedItem.count,
+                  phoneFarmer: farmer!.phone,
+                  phoneCustomer: appState.value.user!.phone,
+                  quantityType: selectedMilletItem?.quantityType ?? '',
+                  price: selectedItem.count * (selectedMilletItem?.price ?? 0),
+                  item: selectedMilletItem?.id ?? '',
+                  isPaid: false,
+                  status: 'Processing', modeOfPayment: getPaymentMode(selectedPaymentOption),
+                ).then((value) {
+                  print('--------');
+                  print(selectedPaymentOption);
+                  if (selectedPaymentOption == 0) {
+                    // cash on delivery
+                    goToPage(context, const OrderPage());
+                  }
+                  if (selectedPaymentOption == 1) {
+                    // esewa
+                    goToPage(context, EsewaEpay(itemOrder: value,));
+                  }
+                  if (selectedPaymentOption == 2) {
+                    // khaltipay
+                    goToPage(context, KhaltiPay());
+                  }
+                });
+                // Payment logic here
+
+                // Navigator.of(context).pop();
+              },
+            ),
           ],
         );
       },
     );
   }
+  String getPaymentMode(int paymentOption) {
+    switch (paymentOption) {
+      case 0:
+        return 'cash_on_delivery';
+      case 1:
+        return 'esewa';
+      case 2:
+        return 'khalti';
+      default:
+        return '';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve the user information from the app state
+    // user = appState.value.user;
+    selectedItem = widget.selectedItem!;
+    selectedPaymentOption = 0; // 0: Cash on Delivery, 1: eSewa, 2: Khalti
+    getMilletItemById();
+  }
+
+  getMilletItemById() async {
+    selectedMilletItem = await getItemById(selectedItem.item) as MilletItem;
+
+    setState(()  {
+      selectedMilletItem = selectedMilletItem;
+    });
+  }
+
+  Future<User?> getUser(String id) async {
+    var response = await http.post(
+      Uri.parse("$API_URL/auth/getUser"),
+      body: {"id": id},
+    );
+
+    if (response.body.isNotEmpty) {
+      var data = json.decode(response.body);
+      if (data["statusCode"] == 200) {
+        return User.fromMap(data["data"]);
+      }
+    }
+    return null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -170,19 +256,19 @@ class _PaymentPageState extends State<PaymentPage> {
                         children: <Widget>[
                           ListTile(
                             title: Text('Product Name'),
-                            trailing: Text('Beans'),
+                            trailing: Text('${selectedMilletItem?.name}'),
                           ),
                           ListTile(
                             title: Text('Farmer Name'),
-                            trailing: Text('Aarati'),
+                            trailing: Text('${selectedMilletItem?.farmer}'),
                           ),
                           ListTile(
                             title: Text('Quantity'),
-                            trailing: Text('20'),
+                            trailing: Text('${selectedItem.count}'),
                           ),
                           ListTile(
                             title: Text('Price/item'),
-                            trailing: Text('200'),
+                            trailing: Text('${selectedMilletItem?.price}'),
                           ),
                           ListTile(
                             title: Text('Mode of payment'),
@@ -198,7 +284,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               ),
                             ),
                             trailing: Text(
-                              'रू 20000',
+                              'रू ${selectedItem.count * (selectedMilletItem?.price ?? 0)}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

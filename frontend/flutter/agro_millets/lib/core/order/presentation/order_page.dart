@@ -1,11 +1,5 @@
-import 'package:agro_millets/colors.dart';
-import 'package:agro_millets/core/cart/application/cart_manager.dart';
-import 'package:agro_millets/core/cart/application/cart_provider.dart';
 import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/core/home/application/home_provider.dart';
-import 'package:agro_millets/core/home/presentation/widgets/agro_item.dart';
-import 'package:agro_millets/globals.dart';
-import 'package:agro_millets/models/cart_item.dart';
 import 'package:agro_millets/models/order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,8 +44,12 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                 List<MilletOrder> orders;
                 if (appCache.isFarmer()){
                    orders = ref.watch(homeProvider).getAllDeliveries();
+                   ref.read(homeProvider).updateItemDeliveries(orders);
+
                 } else {
                    orders = ref.watch(homeProvider).getAllOrders();
+                   ref.read(homeProvider).updateItemOrder(orders);
+
                 }
                 print(orders);
                 print('---------');
