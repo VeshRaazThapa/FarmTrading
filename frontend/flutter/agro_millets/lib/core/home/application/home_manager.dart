@@ -48,7 +48,7 @@ class HomeManager {
         if (context.mounted) {
           var data = await getAllItems();
           ref.read(homeProvider).updateItems(data);
-          if (appCache.isCustomer()) {
+          if (appCache.isFarmer()) {
             var deliveryData = await getAllDeliveries(appState.value.user!);
             ref.read(homeProvider).updateItemDeliveries(deliveryData);
           } else {

@@ -306,11 +306,13 @@ router.get("/getAllOrder/:wholesalerID", async (req, res) => {
         return res.status(404).send(getErrorResponse("Invalid User ID"));
     }
 
-    let user = User.findOne({_id: wholesalerID});
+    let user = await User.findOne({_id: wholesalerID});
+    console.log(user);
     let items = await MilletOrder.find({});
-
-    if (user.userType === "admin") {
-                return res.send(getSuccessResponse("Success", items));
+    console.log(user.userType);
+    if (user.userType == "admin") {
+        console.log(items);
+        return res.send(getSuccessResponse("Success", items));
 
     } else {
         //TODO: Check if this works
@@ -318,7 +320,7 @@ router.get("/getAllOrder/:wholesalerID", async (req, res) => {
 
     }
 
-        return res.send(getSuccessResponse("Success", items));
+    return res.send(getSuccessResponse("Success", items));
 });
 
 module.exports = router;
