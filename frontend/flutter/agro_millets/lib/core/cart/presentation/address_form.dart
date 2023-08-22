@@ -29,7 +29,7 @@ class _AddAddressFormState extends ConsumerState<AddAddressForm> {
   TextEditingController postalCodeController = TextEditingController();
   TextEditingController areaNameController = TextEditingController();
   int billingItemIndex = 0;
-  String selectedProvince = 'Province 1';
+  late String selectedProvince;
   bool isDefaultAddress = false;
   bool isDefaultBillingAddress = false;
 
@@ -194,7 +194,7 @@ class _AddAddressFormState extends ConsumerState<AddAddressForm> {
           ),
           SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: selectedProvince == null ? selectedProvince : 'Province 1',
+            value: selectedProvince != null ? selectedProvince : 'Province 1',
             decoration: _inputDecoration('Province'),
             items: provinces.map((province) {
               return DropdownMenuItem<String>(
