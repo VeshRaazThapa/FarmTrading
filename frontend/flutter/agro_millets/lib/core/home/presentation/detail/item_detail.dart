@@ -179,6 +179,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
               ),
             ),
             SizedBox(height: 0.015 * getHeight(context)),
+            if (!appCache.isAdmin())
             Row(
               children: [
                 Expanded(
