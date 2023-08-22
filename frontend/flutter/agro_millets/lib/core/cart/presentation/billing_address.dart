@@ -240,10 +240,10 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          IconButton(
-                            icon: Icon(Icons.account_balance_wallet),
-                            onPressed: _showPaymentModePopup,
-                          ),
+                          // IconButton(
+                          //   icon: Icon(Icons.account_balance_wallet),
+                          //   onPressed: _showPaymentModePopup,
+                          // ),
                           CloseButton()
                         ],
                       ),

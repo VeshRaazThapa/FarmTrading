@@ -1,7 +1,6 @@
+import 'package:agro_millets/core/cart/presentation/esewa_pay.dart';
 import 'package:agro_millets/core/cart/presentation/khalti_pay.dart';
 import 'package:flutter/material.dart';
-
-import '../../home/presentation/news/constants.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -9,33 +8,48 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  bool _cashOnDelivery = false;
-  bool _khalti = false;
+  int selectedPaymentOption = 0; // 0: Cash on Delivery, 1: eSewa, 2: Khalti
 
-  void _showPaymentOptionsDialog() {
+  void _showPaymentDialog() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
-          title: Text('Payment Options'),
+          title: Text('Select Payment Option'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
+            children: [
               CheckboxListTile(
                 title: Text('Cash on Delivery'),
-                value: _cashOnDelivery,
+                value: selectedPaymentOption == 0,
                 onChanged: (value) {
                   setState(() {
-                    _cashOnDelivery = value!;
+                    if (value!) {
+                      selectedPaymentOption = 0;
+                    }
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: Text('eSewa'),
+                value: selectedPaymentOption == 1,
+                onChanged: (value) {
+                  setState(() {
+                    if (value!) {
+                      selectedPaymentOption = 1;
+                      
+                    }
                   });
                 },
               ),
               CheckboxListTile(
                 title: Text('Khalti'),
-                value: _khalti,
+                value: selectedPaymentOption == 2,
                 onChanged: (value) {
                   setState(() {
-                    _khalti = value!;
+                    if (value!) {
+                      selectedPaymentOption = 2;
+                    }
                   });
                 },
               ),
@@ -43,24 +57,32 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
               child: Text('Cancel'),
-            ),
-            ElevatedButton(
               onPressed: () {
-                // Process selected payment options
-                if (_cashOnDelivery) {
-                  showSuccessToast('Cash on Delivery Selected');
-                }
-                if (_khalti) {
-                 Navigator.of(context).push(MaterialPageRoute(builder: (_)=>KhaltiPay()));
-                }
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
-              child: Text('Pay'),
             ),
+            TextButton(
+            child: Text('Pay'),
+            onPressed: () {
+              // Perform the payment based on the selected option
+              // For now, let's just print the selected option
+              print('Selected Payment Option: $selectedPaymentOption');
+              
+              if (selectedPaymentOption == 1) {
+                // Navigate to eSewa payment page
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EsewaEpay()));
+              } else if (selectedPaymentOption == 2) {
+                // Navigate to Khalti payment page
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => KhaltiPay()));
+              } else {
+                // Perform other payment logic for Cash on Delivery
+                Navigator.of(context).pop(); // Close the dialog
+              }
+            },
+          ),
           ],
         );
       },
@@ -70,7 +92,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     Widget payNow = InkWell(
-     onTap: _showPaymentOptionsDialog, 
+      onTap: _showPaymentDialog, // Show the payment dialog
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width / 1.5,
