@@ -105,11 +105,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             title: Text('Status'),
                             trailing: Text('${this.widget.itemOrder?.status}'),
                           ),
-<<<<<<< HEAD
                           if (!appCache.isCustomer())
-=======
-                          if (appCache.isFarmer())
->>>>>>> acd1d618f5dd9068af6989b56f9497ad4931d6e3
                             ListTile(
                               title: Text('Status'),
                               trailing: DropdownButton<String>(

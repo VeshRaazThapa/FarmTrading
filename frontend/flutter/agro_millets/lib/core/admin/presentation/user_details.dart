@@ -4,15 +4,14 @@ import '../../../models/user.dart';
 import 'package:geocoding/geocoding.dart';
 
 class UserDetails extends StatefulWidget {
-<<<<<<< HEAD
+
   
-  const UserDetails({Key? key}) : super(key: key);
-=======
-  final User user;
-  const UserDetails({super.key, required this.user});
->>>>>>> acd1d618f5dd9068af6989b56f9497ad4931d6e3
+  const UserDetails({Key? key, required this.user}) : super(key: key);
+
 
   @override
+  final User user;
+ 
   State<UserDetails> createState() => _UserDetailsState();
 }
 var locationName;
