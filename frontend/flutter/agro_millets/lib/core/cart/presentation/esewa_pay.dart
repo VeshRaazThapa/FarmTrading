@@ -92,7 +92,7 @@ class _TestPageState extends State<EsewaEpay> {
                 'requestPayment(tAmt = $tAmt, amt = $amt, txAmt = $txAmt, psc = $psc, pdc = $pdc, scd = "$scd", pid = "$pid", su = "$su", fu = "$fu")');
           });
           // print('------data----');
-          await Future.delayed(Duration(milliseconds: 2000));
+          // await Future.delayed(Duration(milliseconds: 2000));
           // if (onPageFinishedCount > 2) {
           //   print(onPageFinishedCount);
           //   // Redirect after onPageFinished is reached two times
@@ -110,7 +110,9 @@ class _TestPageState extends State<EsewaEpay> {
           _loadHTMLfromAsset();
         },
         navigationDelegate: (NavigationRequest request) {
-          if (request.url == su) {
+          print('---URL---');
+          print(request.url);
+          if (request.url.contains("esewa-success-payment")) {
             showSuccessToast('Payment Success !');
             // Redirect after receiving response from speci fic URL
             Navigator.pushReplacement(
@@ -120,7 +122,8 @@ class _TestPageState extends State<EsewaEpay> {
 
             // Return NavigationDecision.prevent to prevent loading the URL
             return NavigationDecision.prevent;
-          }if (request.url == fu) {
+          }
+          if (request.url == fu) {
             showFailureToast('Payment Failure. Try again !');
             // Redirect after receiving response from specific URL
             Navigator.pushReplacement(
