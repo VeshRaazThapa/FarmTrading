@@ -206,8 +206,9 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                   ),
                                 ],
                               ),
-                            if (!appCache.isFarmer())
-                              Positioned(
+
+                            if (widget.itemOrder.isPaid)
+                            Positioned(
                                 right: 0,
                                 top: 0,
                                 child: Container(
@@ -229,44 +230,23 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Icon(
-                                        Icons.airport_shuttle_outlined,
+                                        Icons.money_outlined,
                                         color: Colors.green,
                                       ),
                                       const SizedBox(width: 5),
-                                      DropdownButton<String>(
-                                        value: selectedStatus,
-                                        onChanged: (String? newValue) async {
-                                          await updateOrderStatus(
-                                              widget.itemOrder.id, newValue!);
-                                          setState(() {
-                                            selectedStatus = newValue;
-                                          });
-                                        },
-                                        items: [
-                                          'Processing',
-                                          'Packaging',
-                                          'Delivering'
-                                        ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(
-                                                value,
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ).toList(),
+                                      Text(
+                                        'Paid',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
-                            if (!appCache.isCustomer())
-                              Positioned(
+                            if (!widget.itemOrder.isPaid)
+                            Positioned(
                                 right: 0,
                                 top: 0,
                                 child: Container(
@@ -288,12 +268,12 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Icon(
-                                        Icons.airport_shuttle_outlined,
-                                        color: Colors.green,
+                                        Icons.money_outlined,
+                                        color: Colors.red,
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        '${widget.itemOrder.status}',
+                                        'Unpaid',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
