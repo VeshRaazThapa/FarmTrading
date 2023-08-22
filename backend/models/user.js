@@ -1,28 +1,47 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const {boolean} = require("joi");
 
 const billingAddressSchema = new mongoose.Schema({
-    street: {
+    fullName: {
         type: String,
-        required: true,
+        required: false,
     },
-    houseNumber: {
+    email: {
         type: String,
-        required: true,
+        required: false,
+    },
+    phone: {
+        type: String,
+        required: false,
     },
     city: {
         type: String,
-        required: true,
+        required: false,
     },
-    areaName: {
+    province: {
         type: String,
-        required: true,
+        required: false,
     },
     postalCode: {
         type: String,
-        required: true,
+        required: false,
     },
-
+    areaName: {
+        type: String,
+        required: false,
+    }, category: {
+        type: String,
+        required: false,
+    },
+    isDefaultBilling: {
+        type: Boolean,
+        default: false,
+    },
+    isDefaultShipping: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const userSchema = new mongoose.Schema({
@@ -30,32 +49,27 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        // match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     },
     phone: {
         type: String,
         required: true,
         unique: true,
-        // match: /^\+(?:[0-9] ?){6,14}[0-9]$/,
     },
     name: {
         type: String,
         required: true,
-        // match: /^[A-Za-z0-9]{5,50}$/,
     },
     password: {
         type: String,
         required: true,
         min: 5,
         max: 1024,
-        // match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,1024}$/,
     },
     newPassword: {
         type: String,
         required: false,
         min: 5,
         max: 1024,
-        // match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,1024}$/,
     },
     userType: {
         type: String,
@@ -98,11 +112,16 @@ function validateUser(user) {
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
         billingAddresses: Joi.array().items(Joi.object({
-            street: Joi.string().required(),
-            city: Joi.string().required(),
-            houseNumber: Joi.string().required(),
-            areaName: Joi.string().required(),
-            postalCode: Joi.string().required(),
+            city: Joi.string().allow(''),
+            areaName: Joi.string().allow(''),
+            postalCode: Joi.string().allow(''),
+            fullName: Joi.string().allow(''),
+            email: Joi.string().allow(''),
+            phone: Joi.string().allow(''),
+            province: Joi.string().allow(''),
+            category: Joi.string().allow(''),
+            isDefaultShipping: Joi.boolean().default(false),
+            isDefaultBilling: Joi.boolean().default(false)
         })),
     });
     return schema.validate(user);

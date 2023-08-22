@@ -1,23 +1,62 @@
-import 'package:agro_millets/core/cart/presentation/add_address_page.dart';
+import 'package:agro_millets/core/cart/presentation/add_shipping_address_page.dart';
 import 'package:agro_millets/core/cart/presentation/payment_details.dart';
+import 'package:agro_millets/models/billing_address.dart';
+import 'package:agro_millets/models/user.dart'; // Import the User model
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/cache/app_cache.dart';
 import '../../../models/millet_item.dart';
 import '../../home/presentation/news/constants.dart';
+import 'add_billing_address_page.dart'; // Import the BillingAddress model
 
-class UnpaidPage extends StatefulWidget {
+class UnpaidPage extends ConsumerStatefulWidget {
   @override
-  _UnpaidPageState createState() => _UnpaidPageState();
+  ConsumerState<UnpaidPage> createState() => _UnpaidPageState();
 }
 
 enum PaymentMethod {
   CashOnDelivery,
-  Esewa,
+  // Esewa,
+  Khalti
 }
 
-class _UnpaidPageState extends State<UnpaidPage> {
-  late PaymentMethod selectedPaymentMethod = PaymentMethod.Esewa;
+class _UnpaidPageState extends ConsumerState<UnpaidPage> {
+  late PaymentMethod selectedPaymentMethod = PaymentMethod.Khalti;
   late MilletItem selectedItem; // Declare the selectedItem variable
+
+  // Add a user variable to store the user information
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve the user information from the app state
+    user = appState.value.user;
+  }
+
+  BillingAddress? getFirstBillingAddress() {
+    if (user != null && user!.billingAddresses.isNotEmpty) {
+      return user!.billingAddresses[0];
+    }
+    return null;
+  }
+
+  BillingAddress? getFirstShippingAddress() {
+    try {
+      if (user != null && user!.billingAddresses.isNotEmpty) {
+        print('----shipping address new fetch----');
+        print(user!.billingAddresses[1]);
+        return user!.billingAddresses[1];
+      }
+    } catch (e) {
+      if (user != null && user!.billingAddresses.isNotEmpty) {
+        return user!.billingAddresses[0];
+      }
+    }
+
+    return null;
+  }
 
   void _togglePaymentMethod(PaymentMethod? newMethod) {
     if (newMethod != null) {
@@ -26,7 +65,7 @@ class _UnpaidPageState extends State<UnpaidPage> {
         if (selectedPaymentMethod == PaymentMethod.CashOnDelivery) {
           showSuccessToast('Cash on Delivery Selected');
         } else {
-          showSuccessToast('Esewa Selected');
+          showSuccessToast('Khalti Selected');
         }
       });
     }
@@ -35,8 +74,8 @@ class _UnpaidPageState extends State<UnpaidPage> {
   void _onPayButtonPressed() {
     if (selectedPaymentMethod == PaymentMethod.CashOnDelivery) {
       // Handle Cash on Delivery payment logic
-    } else if (selectedPaymentMethod == PaymentMethod.Esewa) {
-      // Handle Esewa payment logic
+    } else if (selectedPaymentMethod == PaymentMethod.Khalti) {
+      // Handle Khalti payment logic
     }
   }
 
@@ -65,14 +104,14 @@ class _UnpaidPageState extends State<UnpaidPage> {
               Row(
                 children: <Widget>[
                   Radio(
-                    value: PaymentMethod.Esewa,
+                    value: PaymentMethod.Khalti,
                     groupValue: selectedPaymentMethod,
                     onChanged: (newValue) {
                       _togglePaymentMethod(newValue);
                       Navigator.of(context).pop(); // Close the dialog
                     },
                   ),
-                  Text('Esewa'),
+                  Text('Khalti'),
                 ],
               ),
             ],
@@ -93,13 +132,53 @@ class _UnpaidPageState extends State<UnpaidPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget updateAddressButton = GestureDetector(
-      onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => AddAddressPage())),
+    Widget updateBillingAddressButton = GestureDetector(
+      onTap: () async {
+        final shouldRefreshBilling = await Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (_) =>
+                  AddBillingAddressPage()), // Adjust the route accordingly
+        );
+        if (shouldRefreshBilling == true) {
+          final updatedUser = await appState
+              .value.user; // Assuming you have a method to refresh user data
+          setState(() {
+            user = updatedUser;
+          });
+        }
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         child: Text(
-          "Update Address",
+          "Edit Billing Address",
+          style: const TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.w600,
+            fontSize: 15.0,
+          ),
+        ),
+      ),
+    );
+    Widget updateShippingAddressButton = GestureDetector(
+      onTap: () async {
+        final shouldRefreshShipping = await Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (_) =>
+                  AddShippingAddressPage()), // Adjust the route accordingly
+        );
+
+        if (shouldRefreshShipping == true) {
+          final updatedUser = await appState
+              .value.user; // Assuming you have a method to refresh user data
+          setState(() {
+            user = updatedUser;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Text(
+          "Edit Shipping Address",
           style: const TextStyle(
             color: Colors.green,
             fontWeight: FontWeight.w600,
@@ -111,7 +190,8 @@ class _UnpaidPageState extends State<UnpaidPage> {
 
     Widget continueButton = ElevatedButton(
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>PaymentPage()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => PaymentPage()));
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.green,
@@ -131,7 +211,8 @@ class _UnpaidPageState extends State<UnpaidPage> {
         ),
       ),
     );
-
+    final billingAddress = getFirstBillingAddress();
+    final shippingAddress = getFirstShippingAddress();
     return Material(
       color: Colors.white,
       child: SafeArea(
@@ -196,7 +277,7 @@ class _UnpaidPageState extends State<UnpaidPage> {
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
-                                'Aarati Adhikari',
+                                '${billingAddress?.fullName}',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -208,7 +289,7 @@ class _UnpaidPageState extends State<UnpaidPage> {
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
-                                'adhikariaarati68@gmail.com',
+                                '${billingAddress?.email}',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -220,7 +301,7 @@ class _UnpaidPageState extends State<UnpaidPage> {
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
-                                '+977-9843807439',
+                                '${billingAddress?.phone}',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -232,7 +313,7 @@ class _UnpaidPageState extends State<UnpaidPage> {
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
-                                'Lubhoo, Bagmati, 4406',
+                                '${billingAddress?.areaName},${billingAddress?.province} ,${billingAddress?.postalCode} ',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -244,7 +325,7 @@ class _UnpaidPageState extends State<UnpaidPage> {
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
-                                'Lubhoo, Bagmati, 4406',
+                                '${shippingAddress?.areaName},${shippingAddress?.province} ,${shippingAddress?.postalCode} ',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
@@ -262,11 +343,16 @@ class _UnpaidPageState extends State<UnpaidPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            updateAddressButton,
+                            Row(
+                              children: [
+                                updateBillingAddressButton,
+                                Spacer(),
+                                updateShippingAddressButton,
+                              ],
+                            ),
                             SizedBox(height: 10),
-                             continueButton,
+                            continueButton,
                           ],
-
                         ),
                       ),
                     )

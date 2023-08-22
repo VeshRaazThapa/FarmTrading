@@ -1,14 +1,12 @@
-import 'package:agro_millets/core/auth/presentation/phone_otp.dart';
-import 'package:agro_millets/core/auth/presentation/signup_page.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../main.dart';
+import '../../../models/billing_address.dart';
 import '../../home/presentation/news/constants.dart';
 import '../application/auth.dart';
 
@@ -17,25 +15,35 @@ class MyVerify extends ConsumerStatefulWidget {
   final int verificationPin;
   final String phone;
 
-  final String name ;
-  final String email ;
+  final String name;
+
+  final String email;
+
   final String password;
   final LatLng coordinate;
   final String userType;
 
-  const MyVerify({Key? key,required this.verificationPin,required this.phone, required this.name, required this.password, required this.coordinate, required this.userType, required this.email,}) : super(key: key);
+  const MyVerify({
+    Key? key,
+    required this.verificationPin,
+    required this.phone,
+    required this.name,
+    required this.password,
+    required this.coordinate,
+    required this.userType,
+    required this.email,
+  }) : super(key: key);
 
   @override
   ConsumerState<MyVerify> createState() => _MyVerifyState();
 }
 
 class _MyVerifyState extends ConsumerState<MyVerify> {
-  String pinValue ='';
+  String pinValue = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController _pinController = TextEditingController();
   Key _pinputKey = UniqueKey();
   late AuthManager _authManager;
-
 
   @override
   void initState() {
@@ -125,7 +133,7 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                 key: _pinputKey,
                 controller: _pinController,
                 showCursor: true,
-                onCompleted: (pin) =>pinValue = pin,
+                onCompleted: (pin) => pinValue = pin,
               ),
               SizedBox(
                 height: 20,
@@ -147,51 +155,64 @@ class _MyVerifyState extends ConsumerState<MyVerify> {
                         // var credentials = await _auth.signInWithCredential(credential);
                         // print(credentials);
                         // bool success = credentials.user != null ? true:false;
-                        if (this.widget.verificationPin.toString()==pinValue) {
+                        if (this.widget.verificationPin.toString() ==
+                            pinValue) {
                           showSuccessToast('Pin Verified Successfully');
 
-
                           try {
-                            var res = await _authManager.signUpUsingEmailPassword(
+                            final billingAddress = BillingAddress(
+                              province: '',
+                              city: '',
+                              areaName: '',
+                              fullName: this.widget.name.trim(),
+                              email: this.widget.email,
+                              postalCode: '',
+                              phone: this.widget.phone,
+                              category: 'billing',
+                              isDefaultBilling: true,
+                              isDefaultShipping: true,
+                            );
+                            var res =
+                                await _authManager.signUpUsingEmailPassword(
                               email: this.widget.email,
                               name: this.widget.name.trim(),
                               password: this.widget.password.trim(),
                               phone: this.widget.phone.trim(),
                               coordinate: this.widget.coordinate,
                               userType: this.widget.userType,
+                              billingAddress:
+                                  billingAddress, // Include the billing address object
                             );
                             if (res == 1 && mounted) {
                               goToPage(context, RolePage(), clearStack: true);
                             }
-                          } catch (e){
+                          } catch (e) {
                             showFailureToast("${e}");
                           }
 
                           // goToPage(context, SignUpPage(phone:this.widget.phone));
-
                         }
-                      } catch(e) {
+                      } catch (e) {
                         _pinController.clear();
                         _pinputKey = UniqueKey();
                         showFailureToast('Invalid Verification Pin');
                       }
                       // print('Finally Pin verified');
                       // print(value);
-
                     },
                     child: Text("Verify Phone Number")),
               ),
               Row(
                 children: [
                   TextButton(
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          'phone',
-                          (route) => false,
-                        );
-                      },
-                      child: SizedBox.shrink(),
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        'phone',
+                        (route) => false,
+                      );
+                    },
+                    child: SizedBox.shrink(),
                   )
                 ],
               )

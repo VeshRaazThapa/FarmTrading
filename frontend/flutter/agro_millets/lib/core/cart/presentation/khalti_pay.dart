@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:khalti/khalti.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-class KhaltiExampleApp extends StatelessWidget {
-  const KhaltiExampleApp({Key? key}) : super(key: key);
+class KhaltiPay extends StatelessWidget {
+  const KhaltiPay({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
