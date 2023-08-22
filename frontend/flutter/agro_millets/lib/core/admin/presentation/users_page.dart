@@ -24,7 +24,11 @@ class _UsersPageState extends State<UsersPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error fetching data'));
           } else if (snapshot.hasData) {
-            List<User> list = snapshot.data ?? [];
+            // List<User> list = snapshot.data ?? [];
+            List<User> list = (snapshot.data as List<User>?)
+                ?.where((user) => user.userType.toLowerCase() != 'admin')
+                .toList() ?? [];
+
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0), // Adjust padding here
@@ -38,7 +42,7 @@ class _UsersPageState extends State<UsersPage> {
                   physics: NeverScrollableScrollPhysics(), // Disable GridView's scrolling
                   itemCount: list.length,
                   itemBuilder: (context, index) {
-                    return UserListItem(user: list[index]);
+                      return UserListItem(user: list[index]);
                   },
                 ),
               ),
@@ -61,39 +65,46 @@ class UserListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: Theme.of(context).primaryColor,
-            radius: 15, // Adjust avatar size here
-            child: Text(
-              user.userType[0].toUpperCase(),
-              style: TextStyle(color: Colors.white),
-            ),
+    // if (user.userType.toLowerCase() != 'admin')
+    //   {
+        return Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
-          const SizedBox(height: 8),
-          Text(
-            user.name,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColor,
+                radius: 15, // Adjust avatar size here
+                child: Text(
+                  user.userType[0].toUpperCase(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                user.name,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle user tap
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>UserDetails(user:user)));
+                },
+                child: Text("View Details"),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {
-              // Handle user tap
-              Navigator.of(context).push(MaterialPageRoute(builder: (_)=>UserDetails()));
-            },
-            child: Text("View Details"),
-          ),
-        ],
-      ),
-    );
+        );
+
+    //   } else {
+    //   return SizedBox.shrink();
+    // }
+
   }
 }
 

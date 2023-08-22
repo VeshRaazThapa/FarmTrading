@@ -1,20 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:math';
 
 import 'package:agro_millets/core/map/application/map_manager.dart';
 import 'package:agro_millets/core/map/application/map_provider.dart';
+import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
-import 'dart:math';
+
 import '../../../models/user.dart';
-import 'package:agro_millets/data/cache/app_cache.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
@@ -28,12 +27,12 @@ class _MapPageState extends ConsumerState<MapPage> {
   MapController mapController = MapController();
   List<LatLng> farmerCoordinates = [];
   var logged_in_user = appState.value.user;
-  late LatLng map_latlng_view= LatLng(logged_in_user!.latitude, logged_in_user!.longitude);
+  late LatLng map_latlng_view =
+      LatLng(logged_in_user!.latitude, logged_in_user!.longitude);
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   Timer? _debounce;
   List<OSMdata> _options = <OSMdata>[];
-
 
   @override
   void initState() {
@@ -49,7 +48,6 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-
     OutlineInputBorder inputBorder = OutlineInputBorder(
       borderSide: BorderSide(color: Colors.blue),
     );
@@ -60,28 +58,46 @@ class _MapPageState extends ConsumerState<MapPage> {
     List<Marker> buildMarkers() {
       List<User> map = ref.watch(mapProvider).getMap();
       if (map.isEmpty) {
-        return [Marker(point:LatLng(27.694549317783395, 85.32055500746131),builder: (BuildContext context) {
-          return Icon(Icons.location_on, color: Colors.red);
-        },)];
+        return [
+          Marker(
+            point: LatLng(27.694549317783395, 85.32055500746131),
+            builder: (BuildContext context) {
+              return Icon(Icons.location_on, color: Colors.red);
+            },
+          )
+        ];
       }
 
-      var markers = map.map((User user) {
-        Coordinate coord1 = Coordinate(user.latitude,user.longitude); // Berlin coordinates
-        Coordinate coord2 = Coordinate(logged_in_user?.latitude , logged_in_user?.longitude); // Paris coordinates
+      // Define geographic boundaries for your target area
+      double? minLatitude = logged_in_user?.latitude;
+      double maxLatitude = minLatitude! + 0.5;
+      double? minLongitude = logged_in_user?.longitude;
+      double maxLongitude = minLongitude! + 0.5;
+
+      var markers =
+          map.where((user) =>
+          user.userType == 'farmer' &&
+              user.latitude >= minLatitude &&
+              user.latitude <= maxLatitude &&
+              user.longitude >= minLongitude &&
+              user.longitude <= maxLongitude
+          ).map((User user) {
+        Coordinate coord1 =
+            Coordinate(user.latitude, user.longitude); // Berlin coordinates
+        Coordinate coord2 = Coordinate(logged_in_user?.latitude,
+            logged_in_user?.longitude); // Paris coordinates
 
         double distance = distanceBetweenCoordinates(coord1, coord2);
 
         return Marker(
-          point: LatLng(user.latitude,user.longitude),
+          point: LatLng(user.latitude, user.longitude),
           builder: (ctx) => GestureDetector(
-
             onTap: () {
-
               showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   // contentPadding: EdgeInsets.zero, // Remove default padding
-                  title:  Row(
+                  title: Row(
                     // Remove default padding
                     children: [
                       Icon(
@@ -97,8 +113,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                         ),
                       ),
                     ],
-                  )
-                  ,
+                  ),
                   content: IntrinsicHeight(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +172,6 @@ class _MapPageState extends ConsumerState<MapPage> {
                   ],
                 ),
               );
-
             },
             child: OverflowBox(
               minWidth: 0,
@@ -182,67 +196,47 @@ class _MapPageState extends ConsumerState<MapPage> {
               ),
             ),
             // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
-
-
-
-
-
-
-
           ),
           // builder: (BuildContext context) {
           //   return Icon(Icons.location_on, color: Colors.red);
           // },
-
         );
       }).toList();
-      markers.add(
-          Marker(
-            point: LatLng(logged_in_user!.latitude,logged_in_user!.longitude),
-            builder: (ctx) => GestureDetector(
-
-              child: OverflowBox(
-                minWidth: 0,
-                maxWidth: double.infinity,
-                maxHeight: double.infinity,
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors.white, // Background color
-                      child: Text(
-                        'Your Location',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.blue, // Font color
-                        ),
-                      ),
+      markers.add(Marker(
+        point: LatLng(logged_in_user!.latitude, logged_in_user!.longitude),
+        builder: (ctx) => GestureDetector(
+          child: OverflowBox(
+            minWidth: 0,
+            maxWidth: double.infinity,
+            maxHeight: double.infinity,
+            child: Column(
+              children: [
+                Container(
+                  color: Colors.white, // Background color
+                  child: Text(
+                    'Your Location',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.blue, // Font color
                     ),
-                    Icon(Icons.location_on, color: Colors.green),
-                    // SizedBox(width: 8),
-                  ],
+                  ),
                 ),
-              ),
-              // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
-
-
-
-
-
-
-
+                Icon(Icons.location_on, color: Colors.green),
+                // SizedBox(width: 8),
+              ],
             ),
-            // builder: (BuildContext context) {
-            //   return Icon(Icons.location_on, color: Colors.red);
-            // },
-
-          )
-      );
+          ),
+          // By wrapping the Row with Expanded, it will take up the available space horizontally and prevent overflow issues.
+        ),
+        // builder: (BuildContext context) {
+        //   return Icon(Icons.location_on, color: Colors.red);
+        // },
+      ));
       return markers;
     }
 
     return Scaffold(
-
       appBar: AppBar(
         title: const Text("Farmers Near You"),
       ),
@@ -250,7 +244,7 @@ class _MapPageState extends ConsumerState<MapPage> {
         children: [
           Padding(
               padding: const EdgeInsets.all(8.0),
-              child:Column(
+              child: Column(
                 children: [
                   TextFormField(
                       controller: _searchController,
@@ -265,39 +259,38 @@ class _MapPageState extends ConsumerState<MapPage> {
 
                         _debounce =
                             Timer(const Duration(milliseconds: 2000), () async {
-                              if (kDebugMode) {
-                                print(value);
-                              }
-                              var client = http.Client();
-                              try {
-                                String url =
-                                    'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1';
-                                if (kDebugMode) {
-                                  print(url);
-                                }
-                                var response = await client.get(Uri.parse(url));
-                                print(utf8.decode(response.bodyBytes));
-                                print('========');
-                                var decodedResponse =
+                          if (kDebugMode) {
+                            print(value);
+                          }
+                          var client = http.Client();
+                          try {
+                            String url =
+                                'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1';
+                            if (kDebugMode) {
+                              print(url);
+                            }
+                            var response = await client.get(Uri.parse(url));
+                            print(utf8.decode(response.bodyBytes));
+                            print('========');
+                            var decodedResponse =
                                 jsonDecode(utf8.decode(response.bodyBytes))
-
-                                as List<dynamic>;
-                                if (kDebugMode) {
-                                  print(decodedResponse);
-                                }
-                                _options = decodedResponse
-                                    .map((e) => OSMdata(
+                                    as List<dynamic>;
+                            if (kDebugMode) {
+                              print(decodedResponse);
+                            }
+                            _options = decodedResponse
+                                .map((e) => OSMdata(
                                     displayname: e['display_name'],
                                     lat: double.parse(e['lat']),
                                     lon: double.parse(e['lon'])))
-                                    .toList();
-                                setState(() {});
-                              } finally {
-                                client.close();
-                              }
+                                .toList();
+                            setState(() {});
+                          } finally {
+                            client.close();
+                          }
 
-                              setState(() {});
-                            });
+                          setState(() {});
+                        });
                       }),
                   StatefulBuilder(builder: ((context, setState) {
                     return ListView.builder(
@@ -323,15 +316,13 @@ class _MapPageState extends ConsumerState<MapPage> {
                         });
                   })),
                 ],
-              )
-          ),
+              )),
           Expanded(
             child: SizedBox(
               child: Stack(
                 children: [
                   FlutterMap(
                     mapController: mapController,
-
                     options: MapOptions(
                       center: map_latlng_view,
                       zoom: 9,
@@ -344,19 +335,16 @@ class _MapPageState extends ConsumerState<MapPage> {
                       // },
                       // Set the maximum zoom level
                     ),
-
                     children: [
                       TileLayer(
-                        urlTemplate: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidmVzaGciLCJhIjoiY2xobHo4OXlpMTcwMDNzcGhzZ2wxZmtzZSJ9.fV25khQviUGZ14rLQC__tw',
+                        urlTemplate:
+                            'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidmVzaGciLCJhIjoiY2xobHo4OXlpMTcwMDNzcGhzZ2wxZmtzZSJ9.fV25khQviUGZ14rLQC__tw',
                         userAgentPackageName: 'com.example.agro_millets',
                       ),
-
                       MarkerLayer(
                         markers: buildMarkers(),
                       ),
-
                     ],
-
                   ),
                   Positioned(
                     top: 10,
@@ -385,11 +373,9 @@ class _MapPageState extends ConsumerState<MapPage> {
           ),
         ],
       ),
-
     );
   }
 }
-
 
 class Coordinate {
   final double? latitude;
@@ -413,8 +399,8 @@ double distanceBetweenCoordinates(Coordinate coord1, Coordinate coord2) {
   double dlat = lat2 - lat1;
   double dlon = lon2 - lon1;
 
-  double a = pow(sin(dlat / 2), 2) +
-      cos(lat1) * cos(lat2) * pow(sin(dlon / 2), 2);
+  double a =
+      pow(sin(dlat / 2), 2) + cos(lat1) * cos(lat2) * pow(sin(dlon / 2), 2);
   double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
   double distance = earthRadius * c;
