@@ -150,7 +150,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 0.01 * getHeight(context)),
+            //SizedBox(height: 0.01 * getHeight(context)),
             Text(
               'Farmer : ${item.farmer}',
               style: const TextStyle(
@@ -159,7 +159,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
               ),
             ),
             Text(
-              item.description,
+              'Description : ${item.description}',
               style: const TextStyle(
                 fontSize: 15,
                 color: Colors.grey,
@@ -172,58 +172,6 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             ),
             SizedBox(height: 0.025 * getHeight(context)),
             const Divider(height: 10),
-            SizedBox(height: 0.015 * getHeight(context)),
-            // if (appCache.isCustomer())
-            //   Positioned(
-            //     bottom: 0,
-            //     left: 0,
-            //     right: 0,
-            //     child: InkWell(
-            //       onTap: () async {
-            //         // CartItem cartItem = MilletOrder(listedBy: item.listedBy,farmerId: item.listedBy,price: (item.price * ));
-            //         // ref.read(cartProvider).addItemToCart(cartItem);
-            //         // CartManager(context, ref, poll: false)
-            //         //     .addItemToCart(item: cartItem);
-            //         _homeManager.dispose();
-            //         await goToPage(context, AddItemOrderPage(homeManager: _homeManager,milletItem: item,));
-            //         _homeManager.attachOrder(appState.value.user);
-
-            //       },
-            //       child: Container(
-            //         decoration: BoxDecoration(
-            //           color: Theme.of(context).cardColor,
-            //           boxShadow: [
-            //             BoxShadow(
-            //               color: Colors.black.withOpacity(0.05),
-            //               spreadRadius: 1.0,
-            //               blurRadius: 5.0,
-            //               offset: const Offset(0.0, -2),
-            //             ),
-            //           ],
-            //         ),
-            //         child: Container(
-            //           margin: const EdgeInsets.symmetric(
-            //               horizontal: 15.0, vertical: 15.0),
-            //           height: 0.075 * getHeight(context),
-            //           decoration: BoxDecoration(
-            //             color: lightColor,
-            //             borderRadius: BorderRadius.circular(15.0),
-            //           ),
-            //           child: const Center(
-            //             child: Text(
-            //               "Order Now!",
-            //               style: TextStyle(
-            //                 color: Colors.white,
-            //                 fontWeight: FontWeight.w600,
-            //                 fontSize: 15,
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            const SizedBox(height: 20),
             const Text(
               "Comments",
               style: TextStyle(
@@ -288,15 +236,19 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 }
               },
             ),
-            const SizedBox(height: 40),
+            // const SizedBox(height: 40),
+            SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer())
+              //
               const Text(
-                "Recommended Products",
+                "You May Like This",
                 style: TextStyle(
                   fontSize: 20,
                 ),
               ),
+            SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer()) _getRecommendedProducts(context),
+            //const SizedBox(height: 40),
           ],
         ),
       ),
@@ -358,59 +310,42 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 itemCount: list.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    // onDismissed: (direction) {
-                    // if (direction == DismissDirection.endToStart) {
-                    //   deleteItem(list[index].id);
-                    //   list.removeWhere((element) =>
-                    //   element.id == list[index].id);
-                    // }
-                    // },
-                    // key: ValueKey(list[index].id),
-                    // background: Container(
-                    //   decoration: const BoxDecoration(
-                    //     gradient: LinearGradient(
-                    //       begin: Alignment.centerLeft,
-                    //       end: Alignment.centerRight,
-                    //       colors: [
-                    //         Colors.white,
-                    //         Colors.red,
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   child: Row(
-                    //     children: const [
-                    //       Spacer(),
-                    //       Icon(
-                    //         Icons.delete,
-                    //         color: Colors.white,
-                    //       ),
-                    //       SizedBox(width: 20),
-                    //     ],
-                    //   ),
-                    // ),
-                    child: ListTile(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    width: 150, // Set the width of each product container
+                    child: GestureDetector(
                       onTap: () {
                         goToPage(context, ItemDetailPage(item: list[index]));
                       },
-                      leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(
-                          list[index].images[0],
-                        ),
-                      ),
-                      title: Text(
-                        list[index].name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      subtitle: Text(timeago.format(list[index].listedAt)),
-                      trailing: Text(
-                        "रू ${list[index].price}/${list[index].quantityType} ",
-                        style: const TextStyle(
-                          color: semiDarkColor,
-                          fontWeight: FontWeight.w700,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.network(
+                              list[index].images[0],
+                              height: 100,
+                              width: 150,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              list[index].name,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "रू ${list[index].price}/${list[index].quantityType}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: semiDarkColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -418,77 +353,6 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                 },
               ),
             );
-            // return ListView.separated(
-            //   separatorBuilder: (context, index) {
-            //     return Padding(
-            //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //       child: Divider(
-            //         color: Colors.grey.withOpacity(0.2),
-            //       ),
-            //     );
-            //   },
-            //   itemCount: list.length,
-            //   itemBuilder: (context, index) {
-            //     return Dismissible(
-            //       onDismissed: (direction) {
-            //         if (direction == DismissDirection.endToStart) {
-            //           deleteItem(list[index].id);
-            //           list.removeWhere((element) =>
-            //           element.id == list[index].id);
-            //         }
-            //       },
-            //       key: ValueKey(list[index].id),
-            //       background: Container(
-            //         decoration: const BoxDecoration(
-            //           gradient: LinearGradient(
-            //             begin: Alignment.centerLeft,
-            //             end: Alignment.centerRight,
-            //             colors: [
-            //               Colors.white,
-            //               Colors.red,
-            //             ],
-            //           ),
-            //         ),
-            //         child: Row(
-            //           children: const [
-            //             Spacer(),
-            //             Icon(
-            //               Icons.delete,
-            //               color: Colors.white,
-            //             ),
-            //             SizedBox(width: 20),
-            //           ],
-            //         ),
-            //       ),
-            //       child: ListTile(
-            //         onTap: () {
-            //           goToPage(context, ItemDetailPage(item: list[index]));
-            //         },
-            //         leading: CircleAvatar(
-            //           radius: 30,
-            //           backgroundImage: NetworkImage(
-            //             list[index].images[0],
-            //           ),
-            //         ),
-            //         title: Text(
-            //           list[index].name,
-            //           style: const TextStyle(
-            //             fontSize: 16,
-            //             fontWeight: FontWeight.w500,
-            //           ),
-            //         ),
-            //         subtitle: Text(timeago.format(list[index].listedAt)),
-            //         trailing: Text(
-            //           "₹ ${list[index].price}",
-            //           style: const TextStyle(
-            //             color: semiDarkColor,
-            //             fontWeight: FontWeight.w700,
-            //           ),
-            //         ),
-            //       ),
-            //     );
-            //   },
-            // );
           }
 
           return const Center(
