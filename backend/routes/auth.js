@@ -261,7 +261,6 @@ router.post("/forgot-password", async (req, res) => {
         }
     });
 
-
     const mailOptions = {
         from: "tardefarm@gmail.com",
         to: user.email,
