@@ -38,6 +38,8 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
     // Retrieve the user information from the app state
     user = appState.value.user;
     selectedItem = widget.selectedItem!;
+    getLocation();
+
   }
 
   BillingAddress? getFirstBillingAddress() {
@@ -135,8 +137,19 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
     );
   }
 
+  var locationName;
+
+  Future<void> getLocation() async {
+    String? name = await user?.getLocationName();
+    setState(() {
+      locationName = name;
+    });
+  }
   @override
   Widget build(BuildContext context) {
+
+
+
     Widget updateBillingAddressButton = GestureDetector(
       onTap: () async {
         final shouldRefreshBilling = await Navigator.of(context).push(
@@ -318,7 +331,7 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
                                     TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                               subtitle: Text(
-                                '${billingAddress?.areaName},${billingAddress?.province} ,${billingAddress?.postalCode} ',
+                                '${billingAddress?.areaName},${billingAddress?.province} ,${locationName} ',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
