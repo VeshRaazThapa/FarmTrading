@@ -40,18 +40,12 @@ class _AdminPageState extends ConsumerState<AdminPage> {
         title: const Text("Admin Page"),
         centerTitle: true,
       ),
-      body: ListView(
+      body: ClipRect(
+      child:ListView(
         children: [
           Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.lightGreen,
-                  Colors.green,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+             
             ),
             child: Column(
               children: [
@@ -72,8 +66,8 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                         "Recently addded ",
                         style: TextStyle(
                           fontSize: 23,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.black,
                         ),
                       ),
                       Spacer(),
@@ -109,6 +103,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
             );
           }),
         ],
+      ),
       ),
     );
   }
