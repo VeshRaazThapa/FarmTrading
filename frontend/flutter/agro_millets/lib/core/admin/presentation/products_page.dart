@@ -20,86 +20,102 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       appBar: AppBar(title: const Text("All Products")),
       body: FutureBuilder(
-          future: AdminAPIs.getAllItems(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data != null) {
-              List<MilletItem> list = snapshot.data ?? [];
-              return ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Divider(
-                      color: Colors.grey.withOpacity(0.2),
-                    ),
-                  );
-                },
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    onDismissed: (direction) {
-                      if (direction == DismissDirection.endToStart) {
-                        deleteItem(list[index].id);
-                        list.removeWhere((element) => element.id == list[index].id);
-                      }
-                    },
-                    key: ValueKey(list[index].id),
-                    background: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Colors.white,
-                            Colors.red,
-                          ],
-                        ),
-                      ),
-                      child: Row(
-                        children: const [
-                          Spacer(),
-                          Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 20),
-                        ],
-                      ),
-                    ),
-                    child: ListTile(
-                      onTap: () {
-                        goToPage(context, ItemDetailPage(item: list[index]));
-                      },
-                      leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(
-                          list[index].images[0],
-                        ),
-                      ),
-                      title: Text(
-                        list[index].name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      subtitle: Text(timeago.format(list[index].listedAt)),
-                      trailing: Text(
-                        "₹ ${list[index].price}",
-                        style: const TextStyle(
-                          color: semiDarkColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            }
+        future: AdminAPIs.getAllItems(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error fetching data'));
+          } else if (snapshot.hasData) {
+            List<MilletItem> list = snapshot.data ?? [];
+            return ClipRect(
+              child: ListView.builder(
+                itemCount: (list.length / 2).ceil(),
+                itemBuilder: (context, rowIndex) {
+                  final index1 = rowIndex * 2;
+                  final index2 = index1 + 1;
 
-            return const Center(
-              child: CircularProgressIndicator(),
+                  return Row(
+                    children: [
+                      if (index1 < list.length)
+                        _buildProductCard(context, list[index1]),
+                      if (index2 < list.length)
+                        _buildProductCard(context, list[index2]),
+                        if (index2 >= list.length && list.length % 2 != 0)
+                        Spacer(),
+                    ],
+                  );
+                },
+              ),
             );
-          }),
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductCard(BuildContext context, MilletItem item) {
+    return Expanded(
+      child: Card(
+        color: Colors.white,
+        elevation: 2,
+        margin: const EdgeInsets.all(8.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: InkWell(
+          onTap: () {
+            goToPage(context, ItemDetailPage(item: item));
+          },
+          child: Row(
+            children: [
+              Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(item.images[0]),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      timeago.format(item.listedAt),
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "₹ ${item.price}",
+                      style: TextStyle(
+                        color: semiDarkColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

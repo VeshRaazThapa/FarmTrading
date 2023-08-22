@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+
+class UserDetails extends StatefulWidget {
+  const UserDetails({Key? key}) : super(key: key);
+
+  @override
+  State<UserDetails> createState() => _UserDetailsState();
+}
+
+class _UserDetailsState extends State<UserDetails> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: SafeArea(
+        child: LayoutBuilder(
+          builder: (_, constraints) => SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: kToolbarHeight),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 50.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'User Details',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          CloseButton()
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.16),
+                            offset: Offset(0, 5),
+                            blurRadius: 10.0,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            title: Text('User Name'),
+                            trailing: Text(''),
+                          ),
+                          ListTile(
+                            title: Text('Email'),
+                            trailing: Text(''),
+                          ),
+                          ListTile(
+                            title: Text('Phone'),
+                            trailing: Text(''),
+                          ),
+                          ListTile(
+                            title: Text('Address'),
+                            trailing: Text(''),
+                          ),
+                        ],
+                      ),
+                    ),
+                   
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
