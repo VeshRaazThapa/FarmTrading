@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/user.dart';
+
 class UserDetails extends StatefulWidget {
-  const UserDetails({Key? key}) : super(key: key);
+  final User user;
+  const UserDetails({super.key, required this.user});
 
   @override
   State<UserDetails> createState() => _UserDetailsState();
@@ -61,19 +64,19 @@ class _UserDetailsState extends State<UserDetails> {
                         children: <Widget>[
                           ListTile(
                             title: Text('User Name'),
-                            trailing: Text(''),
+                            trailing: Text('${this.widget.user.name}'),
                           ),
                           ListTile(
                             title: Text('Email'),
-                            trailing: Text(''),
+                            trailing: Text('${this.widget.user.email}'),
                           ),
                           ListTile(
                             title: Text('Phone'),
-                            trailing: Text(''),
+                            trailing: Text('${this.widget.user.phone}'),
                           ),
                           ListTile(
                             title: Text('Address'),
-                            trailing: Text(''),
+                            trailing: Text('${this.widget.user}'),
                           ),
                         ],
                       ),
