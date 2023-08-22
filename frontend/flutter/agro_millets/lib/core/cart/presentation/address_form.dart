@@ -194,7 +194,7 @@ class _AddAddressFormState extends ConsumerState<AddAddressForm> {
           ),
           SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: selectedProvince,
+            value: selectedProvince == null ? selectedProvince : 'Province 1',
             decoration: _inputDecoration('Province'),
             items: provinces.map((province) {
               return DropdownMenuItem<String>(

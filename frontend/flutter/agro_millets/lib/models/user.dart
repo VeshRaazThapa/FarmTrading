@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:geocoding/geocoding.dart';
+
 import 'billing_address.dart';
 
 class User {
@@ -81,6 +83,22 @@ class User {
 
   factory User.fromJson(String source) =>
       User.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  Future<String> getLocationName() async {
+    try {
+      print(latitude);
+      print(longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(this.latitude, this.longitude);
+      if (placemarks.isNotEmpty) {
+        Placemark placemark = placemarks.first;
+        return placemark.name ?? '';
+      }
+      return '';
+    } catch (e) {
+      print('Error getting location name: $e');
+      return '';
+    }
+  }
 
   @override
   bool get stringify => true;

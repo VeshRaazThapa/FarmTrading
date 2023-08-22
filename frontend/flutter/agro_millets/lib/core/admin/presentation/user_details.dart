@@ -13,24 +13,6 @@ class UserDetails extends StatefulWidget {
 var locationName;
 
 
-Future<String> getLocationName(double latitude, double longitude) async {
-  try {
-    print(latitude);
-    print(longitude);
-    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
-    if (placemarks.isNotEmpty) {
-      Placemark placemark = placemarks.first;
-      return placemark.name ?? '';
-    }
-    return '';
-  } catch (e) {
-    print('Error getting location name: $e');
-    return '';
-  }
-}
-
-
-
 class _UserDetailsState extends State<UserDetails> {
   @override
 
@@ -39,7 +21,7 @@ class _UserDetailsState extends State<UserDetails> {
     super.initState();
   }
   Future<void> getLocation() async {
-    String name = await getLocationName(this.widget.user.latitude,this.widget.user.longitude);
+    String name = await this.widget.user.getLocationName();
     setState(() {
       locationName = name;
     });
