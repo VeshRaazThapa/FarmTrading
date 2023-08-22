@@ -1,4 +1,7 @@
+import 'package:agro_millets/core/cart/presentation/khalti_pay.dart';
 import 'package:flutter/material.dart';
+
+import '../../home/presentation/news/constants.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -6,11 +9,68 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  bool _cashOnDelivery = false;
+  bool _khalti = false;
+
+  void _showPaymentOptionsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment Options'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CheckboxListTile(
+                title: Text('Cash on Delivery'),
+                value: _cashOnDelivery,
+                onChanged: (value) {
+                  setState(() {
+                    _cashOnDelivery = value!;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: Text('Khalti'),
+                value: _khalti,
+                onChanged: (value) {
+                  setState(() {
+                    _khalti = value!;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Process selected payment options
+                if (_cashOnDelivery) {
+                  showSuccessToast('Cash on Delivery Selected');
+                }
+                if (_khalti) {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (_)=>KhaltiPay()));
+                }
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Pay'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget payNow = InkWell(
-      // onTap: () => Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (_) => ViewProductPage())),
+     onTap: _showPaymentOptionsDialog, 
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -47,7 +107,7 @@ class _PaymentPageState extends State<PaymentPage> {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: constraints.maxHeight,
-              ),      
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(top: kToolbarHeight),
                 child: Column(
@@ -65,7 +125,6 @@ class _PaymentPageState extends State<PaymentPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           CloseButton()
                         ],
                       ),
