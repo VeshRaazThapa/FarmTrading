@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/user.dart';
+import 'package:geocoding/geocoding.dart';
 
 class UserDetails extends StatefulWidget {
   final User user;
@@ -9,11 +10,44 @@ class UserDetails extends StatefulWidget {
   @override
   State<UserDetails> createState() => _UserDetailsState();
 }
+var locationName;
+
+
+Future<String> getLocationName(double latitude, double longitude) async {
+  try {
+    print(latitude);
+    print(longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+    if (placemarks.isNotEmpty) {
+      Placemark placemark = placemarks.first;
+      return placemark.name ?? '';
+    }
+    return '';
+  } catch (e) {
+    print('Error getting location name: $e');
+    return '';
+  }
+}
+
+
 
 class _UserDetailsState extends State<UserDetails> {
+  @override
+
+  void initState() {
+    getLocation();
+    super.initState();
+  }
+  Future<void> getLocation() async {
+    String name = await getLocationName(this.widget.user.latitude,this.widget.user.longitude);
+    setState(() {
+      locationName = name;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Material(
       color: Colors.white,
       child: SafeArea(
@@ -76,7 +110,7 @@ class _UserDetailsState extends State<UserDetails> {
                           ),
                           ListTile(
                             title: Text('Address'),
-                            trailing: Text('${this.widget.user}'),
+                            trailing: Text('${locationName}'),
                           ),
                         ],
                       ),
