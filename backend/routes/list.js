@@ -307,9 +307,7 @@ router.get("/getAllOrder/:wholesalerID", async (req, res) => {
     }
 
     let user = await User.findOne({_id: wholesalerID});
-    console.log(user);
     let items = await MilletOrder.find({});
-    console.log(user.userType);
     if (user.userType == "admin") {
         console.log(items);
         return res.send(getSuccessResponse("Success", items));
