@@ -32,6 +32,21 @@ router.post("/login", async (req, res) => {
         )
     );
 });
+router.post("/get-user-data", async (req, res) => {
+    console.log("Request Body: ", req.body);
+
+    let user = await User.findOne({email: req.body.email});
+    // let user = false;
+    if (!user)
+        return res.send(getErrorResponse("No User Exists with this email"));
+
+    return res.send(
+        getSuccessResponse(
+            " Success",
+            _.omit(user.toObject(), ["password", "__v"])
+        )
+    );
+});
 
 /**
  * SignUp a new user
@@ -61,6 +76,19 @@ router.post("/signup", async (req, res) => {
     /// NOTE: asterjoules@gmail.com is an admin email
     if (req.body.email === "asterjoules@gmail.com") userType = "admin";
 
+    const billingAddress = {
+        city: req.body.billingAddresses[0].city,
+        areaName: req.body.billingAddresses[0].areaName || '',
+        postalCode: req.body.billingAddresses[0].postalCode || '',
+        fullName: req.body.billingAddresses[0].fullName || '',
+        email: req.body.billingAddresses[0].email || '',
+        phone: req.body.billingAddresses[0].phone || '',
+        province: req.body.billingAddresses[0].province || '',
+        category: req.body.billingAddresses[0].category || '',
+        isDefaultBilling: req.body.billingAddresses[0].isDefaultBilling || false,
+        isDefaultShipping: req.body.billingAddresses[0].isDefaultShipping || false,
+    };
+
     user = new User({
         email: req.body.email,
         name: req.body.name,
@@ -69,6 +97,10 @@ router.post("/signup", async (req, res) => {
         phone: req.body.phone,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
+        billingAddresses: [
+            billingAddress
+        ]
+
     });
     console.log("Before saving: ", user);
 
@@ -82,6 +114,35 @@ router.post("/signup", async (req, res) => {
     );
 });
 
+// Update user's billing address by ID
+// Define a route to update the billing address of a user
+router.put("/update-billing-address/:userId/:billingAddressIndex", async (req, res) => {
+    console.log('-------');
+    const userId = req.params.userId;
+    const billingAddressIndex = req.params.billingAddressIndex;
+    const updatedBillingAddress = req.body; // Assuming the request body contains the updated billing address fields
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).send(getErrorResponse("User not found"));
+        }
+
+        if (billingAddressIndex < 0 || billingAddressIndex >= user.billingAddresses.length) {
+            // Add the new billing address if the index is out of range
+            user.billingAddresses.push(updatedBillingAddress);
+        } else {
+            user.billingAddresses[billingAddressIndex] = updatedBillingAddress;
+
+        }
+
+        await user.save();
+
+        return res.send(getSuccessResponse("Billing address updated successfully"));
+    } catch (error) {
+        return res.status(500).send(getErrorResponse("An error occurred while updating billing address"));
+    }
+});
 
 /**
  * Get All Users (For Admin Panel)
@@ -223,15 +284,15 @@ router.post("/forgot-password", async (req, res) => {
 });
 
 function generateRandomToken(length = 32) {
-  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let token = '';
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let token = '';
 
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    token += characters.charAt(randomIndex);
-  }
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        token += characters.charAt(randomIndex);
+    }
 
-  return token;
+    return token;
 }
 
 function validateForgotPassword(req) {
@@ -259,8 +320,8 @@ router.get("/reset-password/:token", async (req, res) => {
     await user.save();
 //   return res.redirect('/login');
     return res.send(getSuccessResponse("Password reset successful"));
-    
-    
+
+
 });
 
 function validateResetPassword(req) {
@@ -288,6 +349,18 @@ function validateSignUp(req) {
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
         userType: Joi.string().default("wholesaler"),
+        billingAddresses: Joi.array().items(Joi.object({
+            city: Joi.string().allow(''),
+            areaName: Joi.string().allow(''),
+            postalCode: Joi.string().allow(''),
+            fullName: Joi.string().allow(''),
+            email: Joi.string().allow(''),
+            phone: Joi.string().allow(''),
+            province: Joi.string().allow(''),
+            category: Joi.string().allow(''),
+            isDefaultShipping: Joi.boolean().default(false),
+            isDefaultBilling: Joi.boolean().default(false)
+        })),
     });
     return schema.validate(req);
 }

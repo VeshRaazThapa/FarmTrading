@@ -1,40 +1,41 @@
+import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:flutter/material.dart';
+import '../../../models/billing_address.dart';
+import '../../../models/user.dart';
+import '../../auth/application/auth.dart';
 import 'address_form.dart';
 import 'billing_address.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddAddressPage extends StatelessWidget {
+class AddBillingAddressPage extends ConsumerStatefulWidget {
+  const AddBillingAddressPage({super.key});
+
+  @override
+  ConsumerState<AddBillingAddressPage> createState() => _AddBillingAddressPageState();
+}
+
+class _AddBillingAddressPageState extends ConsumerState<AddBillingAddressPage> {
+  late AuthManager _authManager;
+  String email = "", password = "";
+  User? user;
+
+  @override
+  void initState() {
+    _authManager = AuthManager(context, ref);
+    super.initState();
+    user = appState.value.user;
+  }
+
+  BillingAddress? getFirstBillingAddress() {
+    if (user != null && user!.billingAddresses.isNotEmpty) {
+      return user!.billingAddresses[0];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget finishButton = InkWell(
-     onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => UnpaidPage())),
-      child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width / 1.5,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.16),
-              offset: Offset(0, 5),
-              blurRadius: 10.0,
-            )
-          ],
-          borderRadius: BorderRadius.circular(9.0),
-        ),
-        child: Center(
-          child: Text(
-            "Finish",
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 20.0,
-            ),
-          ),
-        ),
-      ),
-    );
+    final billingAddress = getFirstBillingAddress();
+    print(billingAddress?.toJson());
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -63,9 +64,10 @@ class AddAddressPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  AddAddressForm(),
+                  AddAddressForm(billingAddress: billingAddress!, category: 'billing',)
+                  ,
                   SizedBox(height: 10), // Add a small space
-                  Center(child: finishButton),
+                  // Center(child: finishButton),
                 ],
               ),
             ),

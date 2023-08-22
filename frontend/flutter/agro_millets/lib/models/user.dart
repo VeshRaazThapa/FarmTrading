@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'billing_address.dart';
+
 class User {
   final String id;
   final String name;
@@ -9,6 +11,7 @@ class User {
   final String userType;
   final double latitude;
   final double longitude;
+  final List<BillingAddress> billingAddresses; // Add this field
 
   const User({
     required this.id,
@@ -18,6 +21,7 @@ class User {
     required this.userType,
     required this.latitude,
     required this.longitude,
+    required this.billingAddresses, // Initialize this field
   });
 
   @override
@@ -30,7 +34,7 @@ class User {
       String? userType,
       String? id,
       double? latitude,
-      double? longitude,
+      double? longitude, List<BillingAddress>? billingAddresses,
 
       }) {
     return User(
@@ -41,6 +45,7 @@ class User {
       id: id ?? this.id,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      billingAddresses: billingAddresses ?? this.billingAddresses,
     );
   }
 
@@ -52,6 +57,7 @@ class User {
       'userType': userType,
       'latitude': latitude,
       'longitude': longitude,
+      'billingAddresses': billingAddresses.map((address) => address.toJson()).toList(),
       "_id": id,
     };
   }
@@ -65,6 +71,9 @@ class User {
       latitude: map['latitude'] as double,
       longitude: map['longitude'] as double,
       id: map['_id'] as String,
+      billingAddresses: (map['billingAddresses'] as List<dynamic>)
+          .map((json) => BillingAddress.fromJson(json as Map<String, dynamic>))
+          .toList(),
     );
   }
 

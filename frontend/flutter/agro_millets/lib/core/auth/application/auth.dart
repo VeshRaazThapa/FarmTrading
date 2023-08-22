@@ -10,6 +10,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
+import '../../../models/billing_address.dart';
+
 
 class AuthManager {
   final BuildContext context;
@@ -48,43 +50,32 @@ class AuthManager {
       return -1;
     }
   }
-
-  Future<int> googleAuth() async {
-    GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: [
-        'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-      ],
+  Future<int> updateUserData({
+    required String? email,
+  }) async {
+    ref.read(authProvider).clearUserData();
+    isLoading.value = true;
+    var response = await http.post(
+      Uri.parse("$API_URL/auth/get-user-data"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode({
+        "email": email,
+      }),
     );
+    isLoading.value = false;
+    Map<String, dynamic> data = json.decode(response.body);
 
-    try {
-      isLoading.value = true;
-      await googleSignIn.signOut();
-      var data = await googleSignIn.signIn();
-      if (data != null) {
-        User? user = await searchForUser(data.email);
-        if (user == null) {
-          return await signUpUsingEmailPassword(
-              name: data.displayName ?? data.email,
-              email: data.email,
-              // TODO: Take these properties after google sign in success
-              password: "~",
-              phone: "000",
-              coordinate:LatLng(27.0, 85.0),
-              userType: "wholesaler");
-        } else {
-          return await loginUsingEmailPassword(
-            email: user.email,
-            password: "~",
-          );
-        }
-      }
-      isLoading.value = false;
-      return 0;
-    } catch (e) {
-      debugPrint("An Exception Occurred: $e");
-      isLoading.value = false;
-      return 0;
+    if (data["statusCode"] == 200) {
+      ref.read(authProvider).updateUserData(
+        User.fromMap(data["data"]),
+      );
+
+      return 1;
+    } else {
+      showToast(data["message"]);
+      return -1;
     }
   }
 
@@ -95,6 +86,7 @@ class AuthManager {
     required String phone,
     required String userType,
     required LatLng coordinate,
+    required BillingAddress billingAddress, // Add this parameter
 
 
   }) async {
@@ -114,6 +106,7 @@ class AuthManager {
             "longitude":coordinate.longitude,
             "phone": phone,
             "userType": userType,
+            "billingAddresses": [billingAddress.toJson()], // Include billing address
           }
       ),
     );
