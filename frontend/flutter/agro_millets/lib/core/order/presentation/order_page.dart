@@ -35,6 +35,14 @@ class _OrderPageState extends ConsumerState<OrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Orders"),
+      actions: [
+          IconButton(
+            icon: Icon(Icons.home), // Add the home icon
+            onPressed: () {
+              Navigator.of(context).pop(); // Navigate back to the home screen
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Consumer(
