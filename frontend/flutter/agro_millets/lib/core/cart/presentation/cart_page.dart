@@ -114,7 +114,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     onPressed: selectedItem != null
     ? () => Navigator.of(context).push(MaterialPageRoute(
     // builder: (_) => AddAddressPage(item: selectedItem!),
-    builder: (_) => UnpaidPage(),
+    builder: (_) => UnpaidPage(selectedItem:selectedItem),
     // builder: (_) => KhaltiExampleApp(),
     ))
         : null,

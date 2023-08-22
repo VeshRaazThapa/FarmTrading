@@ -11,6 +11,9 @@ import '../../home/presentation/news/constants.dart';
 import 'add_billing_address_page.dart'; // Import the BillingAddress model
 
 class UnpaidPage extends ConsumerStatefulWidget {
+  late final MilletItem? selectedItem;
+
+  UnpaidPage({required this.selectedItem});
   @override
   ConsumerState<UnpaidPage> createState() => _UnpaidPageState();
 }
@@ -33,6 +36,7 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
     super.initState();
     // Retrieve the user information from the app state
     user = appState.value.user;
+    selectedItem = widget.selectedItem!;
   }
 
   BillingAddress? getFirstBillingAddress() {
