@@ -93,6 +93,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                             title: Text('Mode of payment'),
                             trailing: Text('Cash on Delivery'),
                           ),
+                           ListTile(
+                            title: Text('Date/Time of Order'),
+                            trailing: Text('____'),
+                          ),
                           Divider(),
                           ListTile(
                             title: Text(
