@@ -251,7 +251,7 @@ router.post("/addOrder", async (req, res) => {
     // After successfully adding the order, delete the corresponding cart item
     let cart = await Cart.findOne({userId: req.body.listedBy});
     if (cart) {
-        cart.items = cart.items.filter((e) => e.item != req.body.item);
+        cart.items = cart.items.filter((e) => e.item !== req.body.item);
         await cart.save();
         console.log("Cart item deleted successfully!");
     }
@@ -309,8 +309,9 @@ router.get("/getAllOrder/:wholesalerID", async (req, res) => {
     let user = User.findOne({_id: wholesalerID});
     let items = await MilletOrder.find({});
 
-    if (user.userType == "admin") {
-        return res.send(getSuccessResponse("Success", items));
+    if (user.userType === "admin") {
+                return res.send(getSuccessResponse("Success", items));
+
     } else {
         //TODO: Check if this works
         items = items.filter((item) => item.listedBy.toString() === wholesalerID);

@@ -75,12 +75,20 @@ class _MapPageState extends ConsumerState<MapPage> {
       double maxLongitude = minLongitude! + 0.5;
 
       var markers =
-          map.where((user) =>
-          user.userType == 'farmer' &&
-              user.latitude >= minLatitude &&
-              user.latitude <= maxLatitude &&
-              user.longitude >= minLongitude &&
-              user.longitude <= maxLongitude
+          map.where((user) {
+            if (!appCache.isAdmin())
+              {
+                return user.userType == 'farmer' &&
+                    user.latitude >= minLatitude &&
+                    user.latitude <= maxLatitude &&
+                    user.longitude >= minLongitude &&
+                    user.longitude <= maxLongitude;
+              }
+            else {
+              return true;
+            }
+          }
+
           ).map((User user) {
         Coordinate coord1 =
             Coordinate(user.latitude, user.longitude); // Berlin coordinates
