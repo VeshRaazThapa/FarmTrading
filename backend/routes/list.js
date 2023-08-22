@@ -4,6 +4,7 @@ const { getErrorResponse, getSuccessResponse } = require("../utils/response");
 const { MilletItem, validateMilletItem } = require("../models/millet_item");
 const { MilletOrder, validateMilletOrder } = require("../models/order_item");
 const { Comment, validateComment } = require("../models/comment");
+const { Cart } = require("../models/cart");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
 const json2csv = require('json2csv').parse;
@@ -28,7 +29,7 @@ router.get("/getAllOrders", async (req, res) => {
   // console.log("--testing--");
   return res.send(getSuccessResponse("Success!", items));
 });
-router.post("/orderDelivered", async (req, res) => {
+router.post("/orderPaid", async (req, res) => {
    var { itemId } = req.body;
 
    // console.log('insideeeeee');
@@ -38,7 +39,7 @@ router.post("/orderDelivered", async (req, res) => {
 
 
   const filter = { _id: itemId };
-  const update = { isDelivered: true };
+  const update = { isPaid: true };
 
   const result = await MilletOrder.findByIdAndUpdate(filter, update, { new: true });
 
@@ -246,9 +247,45 @@ router.post("/addOrder", async (req, res) => {
       // Handle the error accordingly
     }
 
+     // After successfully adding the order, delete the corresponding cart item
+    let cart = await Cart.findOne({ userId: req.body.listedBy });
+    if (cart) {
+      cart.items = cart.items.filter((e) => e.item != req.body.item);
+      await cart.save();
+      console.log("Cart item deleted successfully!");
+    }
+
 
   return res.send(getSuccessResponse("Order is Added", item));
 });
+
+// Define an endpoint to update order status
+router.post('/updateOrderStatus', async (req, res) => {
+  try {
+    const { orderId, newStatus } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+      return res.status(404).send(getErrorResponse('Invalid Order ID'));
+    }
+
+    const updatedOrder = await MilletOrder.findByIdAndUpdate(
+      orderId,
+      { $set: { status: newStatus } },
+      { new: true }
+    );
+    console.log('------');
+    console.log(updatedOrder);
+    if (!updatedOrder) {
+      return res.status(404).send(getErrorResponse('Order not found'));
+    }
+
+    return res.send(getSuccessResponse('Order status updated', updatedOrder));
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    return res.status(500).send(getErrorResponse('An error occurred'));
+  }
+});
+
 router.get("/getAllDeliveries/:farmerID", async (req, res) => {
   var farmerID = req.params.farmerID;
   if (!mongoose.Types.ObjectId.isValid(farmerID)) {

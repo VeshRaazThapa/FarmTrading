@@ -30,26 +30,20 @@ class AgroItemOrder extends StatefulWidget {
 }
 
 class _AgroItemOrderState extends State<AgroItemOrder> {
-  String selectedStatus = 'Processing';
-  bool isDelivered = true;
+   String selectedStatus='Processing';
 
-  void _deliverOrder(String itemId) async {
-    // Your delivery logic here
-
-    setState(() {
-      isDelivered = true;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    isDelivered = widget.itemOrder.isDelivered;
+    selectedStatus = widget.itemOrder.status;
+
   }
 
   @override
   Widget build(BuildContext context) {
     // isDelivered = widget.itemOrder.isDelivered;
+    // selectedStatus=widget.itemOrder.status;
     return SizedBox(
       width: 0.5 * getWidth(context),
       height: 0.3 * getHeight(context),
@@ -79,6 +73,9 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                 ),
                 // Container properties...
                 child: LayoutBuilder(builder: (context, constraints) {
+                  print('-----price-----');
+                  print(widget.itemOrder.price);
+                  print(selectedStatus);
                   return Column(
                     children: [
                       Expanded(
@@ -209,8 +206,9 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                   ),
                                 ],
                               ),
-                            if (!isDelivered && appCache.isFarmer())
-                              Positioned(
+
+                            if (widget.itemOrder.isPaid)
+                            Positioned(
                                 right: 0,
                                 top: 0,
                                 child: Container(
@@ -232,81 +230,12 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Icon(
-                                        Icons.schedule,
-                                        color: Colors.red,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      DropdownButton<String>(
-                                        value: selectedStatus,
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            selectedStatus = newValue!;
-                                            if (selectedStatus ==
-                                                'Processing') {
-                                              // Update the isDelivered state based on selected status
-                                              isDelivered =
-                                                  false; // Item is in progress
-                                            } if (selectedStatus ==
-                                                'Packaging') {
-                                              isDelivered =
-                                                  false; // Item is being delivered
-                                            }
-                                            else if (selectedStatus == 'Delivering'){
-                                              isDelivered = true;//Item has been Delivered
-                                            }
-                                          });
-                                        },
-                                        items: [
-                                          'Processing',
-                                          'Packaging',
-                                          'Delivering'
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(
-                                              value,
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            if (!isDelivered && appCache.isCustomer())
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  width: 150,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 5.0,
-                                        spreadRadius: 3.0,
-                                        offset: const Offset(0.0, 0.0),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.schedule,
-                                        color: Colors.red,
+                                        Icons.money_outlined,
+                                        color: Colors.green,
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        'Not Delivered',
+                                        'Paid',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -316,9 +245,8 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                   ),
                                 ),
                               ),
-
-                            if (isDelivered) // Show the delivered icon
-                              Positioned(
+                            if (!widget.itemOrder.isPaid)
+                            Positioned(
                                 right: 0,
                                 top: 0,
                                 child: Container(
@@ -340,12 +268,12 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
+                                        Icons.money_outlined,
+                                        color: Colors.red,
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        'Delivered',
+                                        'Unpaid',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,

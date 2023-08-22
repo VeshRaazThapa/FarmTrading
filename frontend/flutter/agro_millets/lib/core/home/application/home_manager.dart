@@ -317,16 +317,18 @@ Future<void> addItem({
   showToast("Your item has been added");
 }
 
-Future<void> addItemOrder({
+Future<MilletOrder?> addItemOrder({
   required String listedBy,
-  required bool isDelivered,
+  required bool isPaid,
   required String farmerId,
-  required double quantity,
+  required int quantity,
   required String quantityType,
   required String phoneCustomer,
   required String phoneFarmer,
   required double price,
   required String item,
+  required String status,
+  required String modeOfPayment,
 }) async {
   var response = await http.post(
     Uri.parse("$API_URL/list/addOrder"),
@@ -334,7 +336,7 @@ Future<void> addItemOrder({
     body: json.encode(
       {
         "listedBy": listedBy,
-        "isDelivered": isDelivered,
+        "isPaid": isPaid,
         "farmerId": farmerId,
         "phoneCustomer": phoneCustomer,
         "phoneFarmer": phoneFarmer,
@@ -342,10 +344,18 @@ Future<void> addItemOrder({
         "quantity": quantity,
         "price": price,
         "item": item,
+        "status": status,
+        "modeOfPayment": modeOfPayment,
       },
     ),
   );
+  Map data = json.decode(response.body);
+  if (data["statusCode"] == 200) {
+    MilletOrder item = MilletOrder.fromMap(data["data"]);
+    return item;
+  }
   showToast("Your order has been added");
+  return null;
 }
 
 Future<MilletItem?> getItemById(String id) async {
@@ -377,17 +387,20 @@ Future<void> deleteItem(String id) async {
   var data = json.decode(response.body);
   showToast(data["message"]);
 }
-Future<void> deliverOrder(String id) async {
+Future<void> updateOrderStatus(String id,String status) async {
   if (!appState.value.isLoggedIn || appState.value.user == null) {
     showToast("You need to login to perform this action");
     return;
   }
 
   var response = await http.post(
-    Uri.parse("$API_URL/list/orderDelivered"),
+    Uri.parse("$API_URL/list/updateOrderStatus"),
     headers: {"content-type": "application/json"},
     body: json.encode(
-      {"itemId": id},
+      {
+        "orderId": id,
+        "newStatus": status
+      },
     ),
   );
 

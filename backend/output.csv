@@ -1,4 +1,5 @@
 "id","farmer_id","product_name","category","quantity"
+
 "64e467a456a2a168ce8ff7ff","64e4671f56a2a168ce8ff7cf","Asparagus","vegetables",35
 "64e467e456a2a168ce8ff813","64e4671f56a2a168ce8ff7cf","Spinach","vegetables",500
 "64e4681356a2a168ce8ff820","64e4671f56a2a168ce8ff7cf","Rayo Spinach","vegetables",400
@@ -12,3 +13,4 @@
 "64e46cb0241f1b64d6a04152","64e46bf5241f1b64d6a04121","Wheat","pulses",300
 "64e46cd4241f1b64d6a0415c","64e46bf5241f1b64d6a04121","Cheese","livestock",28
 "64e46d1b241f1b64d6a0416c","64e46bf5241f1b64d6a04121","coffee-beans","cash",290
+

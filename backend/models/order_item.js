@@ -21,10 +21,15 @@ const milletOrderSchema = new mongoose.Schema({
   quantityType: {
     type: String,
     required: true,
-    min: 0,
+  }, modeOfPayment: {
+    type: String,
+    required: true,
   },
-  isDelivered: {
+  isPaid: {
     type: Boolean,
+    required: true,
+  },status: {
+    type: String,
     required: true,
   },
   quantity: {
@@ -61,7 +66,9 @@ function validateMilletOrder(item) {
     quantityType: Joi.string().required(),
     phoneFarmer: Joi.string().required(),
     phoneCustomer: Joi.string().required(),
-    isDelivered:Joi.boolean().required(),
+    status: Joi.string().required(),
+    modeOfPayment: Joi.string().required(),
+    isPaid:Joi.boolean().required(),
     quantity: Joi.number().required(),
     price: Joi.number().required(),
     item: JoiObjectId().required(),
