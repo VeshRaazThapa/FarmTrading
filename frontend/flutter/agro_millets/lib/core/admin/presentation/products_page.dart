@@ -103,7 +103,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "₹ ${item.price}",
+                      "रू ${item.price}",
                       style: TextStyle(
                         color: semiDarkColor,
                         fontWeight: FontWeight.w700,
