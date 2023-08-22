@@ -2,7 +2,7 @@
 // const String API_URL = "http://agromillets.adaptable.app/api";
 //* For Wireless Debugging
 
-const String API_URL = "http://192.168.1.72:3000/api";
+const String API_URL = "http://192.168.1.69:3000/api";
 
 
 // for wired debugging
