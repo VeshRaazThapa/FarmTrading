@@ -53,7 +53,7 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => OrderDetails()));
+                    .push(MaterialPageRoute(builder: (_) => OrderDetails(item:widget.item,itemOrder:widget.itemOrder)));
               },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
