@@ -100,12 +100,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                             title: Text('Name'),
                             trailing: Text('${this.widget.item?.name}'),
                           ),
-                          if (!appCache.isFarmer())
+                          if (appCache.isCustomer())
                             ListTile(
                             title: Text('Status'),
                             trailing: Text('${this.widget.itemOrder?.status}'),
                           ),
-                          if (!appCache.isCustomer())
+                          if (appCache.isFarmer())
                             ListTile(
                               title: Text('Status'),
                               trailing: DropdownButton<String>(
