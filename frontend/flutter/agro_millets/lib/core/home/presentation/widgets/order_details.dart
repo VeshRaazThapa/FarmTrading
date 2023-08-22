@@ -19,7 +19,7 @@ class OrderDetails extends StatefulWidget {
 
 
 class _OrderDetailsState extends State<OrderDetails> {
-  String? selectedStatus="Processing";
+  String? selectedStatus;
 
   @override
   void initState() {
@@ -105,7 +105,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             title: Text('Status'),
                             trailing: Text('${this.widget.itemOrder?.status}'),
                           ),
-                          if (!appCache.isFarmer())
+                          if (!appCache.isCustomer())
                             ListTile(
                               title: Text('Status'),
                               trailing: DropdownButton<String>(
