@@ -323,6 +323,70 @@ router.get("/reset-password/:token", async (req, res) => {
 
 
 });
+router.get('/esewa-success-payment', async (req, res) => {
+    const oid = req.query.oid;
+    const refId = req.query.refId;
+
+    const successHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Payment Successful</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f0f0f0;
+                    text-align: center;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                }
+                h1 {
+                    color: #27ae60;
+                }
+                p {
+                    color: #333;
+                    margin-bottom: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Payment Successful!</h1>
+                <p>Your payment has been successfully processed.</p>
+                <p>Order ID: ${oid}</p>
+                <p>Reference ID: ${refId}</p>
+            </div>
+        </body>
+        </html>
+    `;
+
+    res.send(successHTML);
+});
+router.get('/esewa-failure-payment', async (req, res) => {
+
+    console.log(req.body);
+    const successHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Payment Failed</title>
+        </head>
+        <body>
+            <h1>Payment Failed!</h1>
+            <p>Your payment has been successfully processed.</p>
+        </body>
+        </html>
+    `;
+
+    res.send(successHTML);
+});
+
 
 function validateResetPassword(req) {
     const schema = Joi.object().keys({

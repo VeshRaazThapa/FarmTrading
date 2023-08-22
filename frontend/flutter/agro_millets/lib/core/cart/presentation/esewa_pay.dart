@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../secrets.dart';
+
 class EsewaEpay extends StatefulWidget {
   @override
   _TestPageState createState() => _TestPageState();
@@ -33,8 +35,8 @@ class _TestPageState extends State<EsewaEpay> {
   double psc = 50;
   double pdc = 50;
   String scd = "EPAYTEST";
-  String su = "https://github.com/kaledai";
-  String fu = "https://refactoring.guru/design-patterns/factory-method";
+  String su = "$API_URL/auth/esewa-success-payment";
+  String fu = "$API_URL/auth/esewa-failure-payment";
 
   @override
   void initState() {
@@ -71,7 +73,7 @@ class _TestPageState extends State<EsewaEpay> {
         onPageFinished: (data) {
           setState(() {
             String pid = UniqueKey().toString();
-            _webViewController.evaluateJavascript(
+            _webViewController.runJavascript(
                 'requestPayment(tAmt = $tAmt, amt = $amt, txAmt = $txAmt, psc = $psc, pdc = $pdc, scd = "$scd", pid = "$pid", su = "$su", fu = "$fu")');
           });
           print(pid);
