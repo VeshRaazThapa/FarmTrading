@@ -1,6 +1,5 @@
 import 'package:agro_millets/colors.dart';
 import 'package:agro_millets/core/admin/application/admin_apis.dart';
-import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/core/home/presentation/detail/item_detail.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/models/millet_item.dart';
@@ -18,7 +17,9 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(title: const Text("All Products")),
+      backgroundColor: Colors.white,
       body: FutureBuilder(
         future: AdminAPIs.getAllItems(),
         builder: (context, snapshot) {
@@ -28,8 +29,13 @@ class _ProductsPageState extends State<ProductsPage> {
             return Center(child: Text('Error fetching data'));
           } else if (snapshot.hasData) {
             List<MilletItem> list = snapshot.data ?? [];
-            return ClipRect(
+            
+            return Container(
+              color: Colors.white,
+            child: ClipRect(
+              
               child: ListView.builder(
+                
                 itemCount: (list.length / 2).ceil(),
                 itemBuilder: (context, rowIndex) {
                   final index1 = rowIndex * 2;
@@ -47,6 +53,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   );
                 },
               ),
+            ),
             );
           }
 
