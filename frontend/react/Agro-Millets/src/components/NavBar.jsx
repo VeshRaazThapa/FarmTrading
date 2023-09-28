@@ -20,10 +20,10 @@ function NavBar() {
         <img className="h-20  py-2 object-contain" src={logo} alt="" />
         <div className="flex flex-1"></div>
 
-        <NavBarItem text="Home" route="/home" />
-        <NavBarItem text="About" route="/about" />
-        <NavBarItem text="Shop" route="/shop" />
-        <NavBarItem text="Order" route="/order" />
+        <NavBarItem text="Product" route="/shop" />
+        <NavBarItem text="App Details" route="/users" />
+        <NavBarItem text="Profile" route="/profile" />
+        {/*<NavBarItem text="Order" route="/order" />*/}
 
         {/* Desktop Icons */}
         <div className="hidden md:flex">
