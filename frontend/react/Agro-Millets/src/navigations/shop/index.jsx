@@ -127,7 +127,6 @@ export default function UserReports(props) {
 						transitionTimingFunction='linear, linear, ease'>
 						<Portal>
 							<Box>
-								<SearchBar mb={ {base: '10px', md: 'unset'}} me="10px" borderRadius="30px"/>
 
 								<Navbar
 									onOpen={onOpen}
@@ -155,6 +154,7 @@ export default function UserReports(props) {
 							<Footer />
 						</Box>
 					</Box>
+
 				</SidebarContext.Provider>
 			</Box>
 		</Box>

@@ -35,10 +35,8 @@ function Shop() {
 
   return (
     <>
-      {/*<NavBar />*/}
-      <br></br>
-      <br></br>
-      <br></br>
+      <SearchBar mb={ {base: '10px', md: 'unset'}} me="10px" borderRadius="30px"/>
+
       <section className="w-[100%] bg-white min-h-screen">
         <div className=" w-[100%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-8 lg:p-10 ">
           {list.map((e, i) => {

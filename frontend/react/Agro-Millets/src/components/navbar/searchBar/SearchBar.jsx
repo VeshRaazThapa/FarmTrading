@@ -27,8 +27,8 @@ export function SearchBar(props) {
   return (
     <>
       {/*<NavBar title="Search" />*/}
-      <div className="fixed top-0 left-80 right-7 bg-white shadow-md z-10">
-      <section className="mt-[2vh] ">
+      <div className="">
+      <section className="mt-[10vh] ">
         <div className="flex flex-row lg:mx-16 p-5">
           <input
             onChange={(e) => {
