@@ -42,7 +42,7 @@ function Users() {
     }
   }, []);
 
-  const formattedUsers = list.map((e) => ({
+  const formattedUsers = list.filter(e => e.userType !== "admin").map((e) => ({
     name: [e.name, false],
     access: e.userType,
     date_joined: new Date(e.createdAt).toLocaleString(),

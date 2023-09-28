@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import routes from '../../routes';
 import { RiDashboardLine, RiSettings2Line } from 'react-icons/ri';
+import {SearchBar} from "../../components/navbar/searchBar/SearchBar.jsx";
 
 // Custom Chakra theme
 export default function UserReports(props) {
@@ -126,6 +127,8 @@ export default function UserReports(props) {
 						transitionTimingFunction='linear, linear, ease'>
 						<Portal>
 							<Box>
+								<SearchBar mb={ {base: '10px', md: 'unset'}} me="10px" borderRadius="30px"/>
+
 								<Navbar
 									onOpen={onOpen}
 									logoText={'Horizon UI Dashboard PRO'}

@@ -18,6 +18,7 @@ import {ChakraProvider} from "@chakra-ui/react";
 import theme from "./theme/theme";
 import {ThemeEditorProvider} from "@hypertheme-editor/chakra-ui";
 import ReactDOM from 'react-dom';
+import ItemDetail from "./pages/shop/presentation/ItemDetail.jsx";
 
 ReactDOM.render(
     <ChakraProvider theme={theme}>
@@ -33,6 +34,7 @@ ReactDOM.render(
                         <Route path="/profile" component={ProfileLayout}/>
                         <Route path="/search" component={Search}/>
                         <Route path="/admin" component={AdminLayout}/>
+                        <Route path="/item/:id" component={ItemDetail} />
                     </Switch>
                 </HashRouter>
             </ThemeEditorProvider>
