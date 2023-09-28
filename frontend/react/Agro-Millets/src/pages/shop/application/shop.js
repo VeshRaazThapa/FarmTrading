@@ -14,7 +14,6 @@ export default async function getAll() {
 export async function getItem(id) {
   try {
     var res = await axios.get(API_URL + "/list/getItem/" + id);
-    console.log(res);
     return res.data.data;
   } catch (e) {
     return undefined;

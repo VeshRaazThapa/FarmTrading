@@ -3,6 +3,7 @@ import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, Text, useC
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import AdminNavbarLinks from './NavbarLinksAdmin';
+import {SearchBar} from "./searchBar/SearchBar.jsx";
 
 export default function AdminNavbar(props) {
 	const [ scrolled, setScrolled ] = useState(false);
@@ -121,6 +122,7 @@ export default function AdminNavbar(props) {
 						{brandText}
 					</Link>
 				</Box>
+
 				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
 					<AdminNavbarLinks
 						onOpen={props.onOpen}
@@ -130,6 +132,7 @@ export default function AdminNavbar(props) {
 						scrolled={scrolled}
 					/>
 				</Box>
+
 			</Flex>
 			{secondary ? <Text color='white'>{message}</Text> : null}
 		</Box>

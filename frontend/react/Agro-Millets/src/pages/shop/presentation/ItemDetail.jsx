@@ -17,6 +17,8 @@ function ItemDetail() {
     setLoading(true);
     getItem(id).then((item) => {
       setLoading(false);
+      console.log(item);
+      console.log('------------');
       setItem(item);
     });
 
@@ -27,7 +29,7 @@ function ItemDetail() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       {loading ? <Loading /> : <LoadedPage item={item} />}
     </>
   );
@@ -35,13 +37,10 @@ function ItemDetail() {
 
 function LoadedPage({ item }) {
   const [comment, setComment] = useState("");
-    const history = useHistory();
-
-
-
-
+  const history = useHistory();
 
   return (
+
     <>
       <section className="mt-[8vh] min-h-[52vh] w-[100%] p-6 lg:p-12 ">
         <div className="flex flex-col lg:flex-row">
