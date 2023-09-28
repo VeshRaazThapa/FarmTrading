@@ -108,6 +108,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   if (selectedPaymentOption == 0) {
                     // cash on delivery
                     goToPage(context, const OrderPage());
+                    Navigator.of(context).pop();
                   }
                   if (selectedPaymentOption == 1) {
                     // esewa

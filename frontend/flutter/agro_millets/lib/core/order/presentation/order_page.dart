@@ -1,5 +1,7 @@
 import 'package:agro_millets/core/home/application/home_manager.dart';
 import 'package:agro_millets/core/home/application/home_provider.dart';
+import 'package:agro_millets/globals.dart';
+import 'package:agro_millets/main.dart';
 import 'package:agro_millets/models/order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,6 +41,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
           IconButton(
             icon: Icon(Icons.home), // Add the home icon
             onPressed: () {
+              goToPage(context, const RolePage(), clearStack: true);
               Navigator.of(context).pop(); // Navigate back to the home screen
             },
           ),

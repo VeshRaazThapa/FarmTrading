@@ -7,6 +7,7 @@ function Profile() {
   console.log(user);
   const history = useHistory();
 
+
   return (
     <>
       {/*<NavBar />*/}
