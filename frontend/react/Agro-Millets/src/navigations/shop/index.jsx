@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Text, Button, Link } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure} from '@chakra-ui/react';
 import Footer from './../../components/footer/FooterAdmin';
 // Layout components
 import Navbar from './../../components/navbar/NavbarAdmin';
@@ -8,6 +8,7 @@ import { SidebarContext } from './../../contexts/SidebarContext';
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import routes from '../../routes';
+import { RiDashboardLine, RiSettings2Line } from 'react-icons/ri';
 
 // Custom Chakra theme
 export default function UserReports(props) {
