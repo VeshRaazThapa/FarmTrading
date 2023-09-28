@@ -35,13 +35,13 @@ function Shop() {
   return (
     <>
       {/*<NavBar />*/}
-            <SearchBar mb={ {base: '10px', md: 'unset'}} me="10px" borderRadius="30px"/>
+      {/*      <SearchBar mb={ {base: '10px', md: 'unset'}} me="10px" borderRadius="30px"/>*/}
 
       <section className="w-[100%] mt-[8vh] bg-white min-h-screen">
         <div className=" w-[100%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-8 lg:p-10 ">
 
           {list.map((e, i) => {
-            console.log(list);
+            // console.log(list);
             return <OrderItem key={i} itemId={e._id} isCart={false} />;
           })}
         </div>

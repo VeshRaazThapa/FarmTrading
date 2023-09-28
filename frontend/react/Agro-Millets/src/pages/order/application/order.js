@@ -14,7 +14,7 @@ export default async function getAll() {
 export async function getOrderItem(id) {
   try {
     var res = await axios.get(API_URL + "/list/getOrderItem/" + id);
-    console.log(res);
+    console.log(res,'----------');
     return res.data.data;
   } catch (e) {
     return undefined;

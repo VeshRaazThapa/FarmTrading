@@ -26,21 +26,21 @@ const routes = [
         component: Shop,
         secondary: true,
     },
-    //  {
-    //     name: "Orders",
-    //     layout: "/order",
-    //     path: "/items",
-    //     icon: (
-    //         <Icon
-    //             as={MdLocalShipping}
-    //             width='20px'
-    //             height='20px'
-    //             color='inherit'
-    //        />
-    //     ),
-    //     component: Order,
-    //     secondary: true,
-    // },
+     {
+        name: "Orders",
+        layout: "/order",
+        path: "/items",
+        icon: (
+            <Icon
+                as={MdLocalShipping}
+                width='20px'
+                height='20px'
+                color='inherit'
+           />
+        ),
+        component: Order,
+        secondary: true,
+    },
     {
         name: "App Details",
         layout: "/users",

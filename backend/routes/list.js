@@ -168,7 +168,6 @@ router.get("/getOrderItem/:id", async (req, res) => {
         return res.status(404).send(getErrorResponse("Invalid Product ID"));
     }
     let item = await MilletOrder.findOne({_id: req.params.id});
-    print('----------');
     console.log(item);
     if (!item) {
         return res.status(404).send(getErrorResponse("No Product Found"));
