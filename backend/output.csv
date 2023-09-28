@@ -1,13 +1,13 @@
 "id","farmer_id","product_name","category","quantity"
-"64e467a456a2a168ce8ff7ff","64e4671f56a2a168ce8ff7cf","Asparagus","vegetables",30
-"64e467e456a2a168ce8ff813","64e4671f56a2a168ce8ff7cf","Spinach","vegetables",495
+"64e467a456a2a168ce8ff7ff","64e4671f56a2a168ce8ff7cf","Asparagus","vegetables",-26
+"64e467e456a2a168ce8ff813","64e4671f56a2a168ce8ff7cf","Spinach","vegetables",476
 "64e4681356a2a168ce8ff820","64e4671f56a2a168ce8ff7cf","Rayo Spinach","vegetables",400
 "64e46982241f1b64d6a040af","64e4671f56a2a168ce8ff7cf","Pears","fruits",185
 "64e4699e241f1b64d6a040b7","64e4671f56a2a168ce8ff7cf","Green Apple","fruits",200
 "64e469ea241f1b64d6a040c7","64e4671f56a2a168ce8ff7cf","Wheat","cereals",500
 "64e46a12241f1b64d6a040d1","64e4671f56a2a168ce8ff7cf","Walnut ","cash",200
 "64e46a4a241f1b64d6a040f3","64e4671f56a2a168ce8ff7cf","olive ","oil",200
-"64e46c22241f1b64d6a04132","64e46bf5241f1b64d6a04121","Cabbage","vegetables",152
+"64e46c22241f1b64d6a04132","64e46bf5241f1b64d6a04121","Cabbage","vegetables",145
 "64e46c72241f1b64d6a04144","64e46bf5241f1b64d6a04121","Alphonso mango ","fruits",393
 "64e46cb0241f1b64d6a04152","64e46bf5241f1b64d6a04121","Wheat","pulses",300
 "64e46cd4241f1b64d6a0415c","64e46bf5241f1b64d6a04121","Cheese","livestock",27
