@@ -23,7 +23,7 @@ function ShopItem({ itemId, isCart = false }) {
     });
   }, []);
 
-    const history = useHistory();
+  const history = useHistory();
 
 
   console.log(loading, item);
@@ -38,98 +38,43 @@ function ShopItem({ itemId, isCart = false }) {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.25, duration: 0.25 }}
           viewport={{ once: true }}
-          className="border border-slate-300 relative transition duration-500 rounded-lg hover:shadow-m d bg-white "
+          className="border border-slate-300 relative transition duration-500 rounded-lg hover:shadow-lg d bg-white "
         >
           <div className="h-40 w-[100%] relative">
             <img
               onClick={() => history.push("/item/" + item._id)}
-              className="h-40 w-[100%] rounded-t-lg object-cover"
+              className="h-40 w-[100%] rounded-t-lg object-cover cursor-pointer hover:opacity-80"
               src={item.images[0]}
               alt=""
             />
-              {!isCart && appState.getUserData().userType === "admin" && (
+            {!isCart && appState.getUserData().userType === "admin" && (
 
-             <div
+              <div
                 onClick={async () => {
                   await deleteItem(itemId);
                   // window.location.reload();
                 }}
-                className="absolute top-2 right-2 ml-2 lg:ml-4 w-[40px] h-[40px] bg-red-400 flex justify-center items-center rounded-md" >
+                className="absolute top-2 right-2 ml-2 lg:ml-4 w-[40px] h-[40px] bg-red-400 flex justify-center items-center rounded-md cursor-pointer" >
                 <i className="fa-solid fa-trash text-white"></i>
-                </div>
-                  )}
+              </div>
+            )}
           </div>
 
           <div className="px-4 py-2  rounded-lg ">
             <h1 className="text-xl font-bold text-gray-700 hover:text-gray-900 hover:cursor-pointer">
               {item.name}
             </h1>
-                <div className="h-[1vh]"></div>
-                        <p className="text-lg text-gray-700 hover:text-gray-900">
-                                      { item.farmer ? `Farmer: `  + item.farmer : `Farmer: ` + "Man Bahadur" }
-                                    </p>
+            <div className="h-[1vh]"></div>
+            <p className="text-lg text-gray-700 hover:text-gray-900">
+              {item.farmer ? `Farmer: ` + item.farmer : `Farmer: ` + "Man Bahadur"}
+            </p>
 
+            <div className="text-lg" >
+              Category: {item.category}
+            </div>
             <p className="text-lg text-green-500 font-bold">
               {`रू ` + item.price + "/" + item.quantityType}
             </p>
-
-
-{/*             <Rating */}
-{/*               initialRating={4.0} */}
-{/*               fullSymbol="fa-solid fa-star text-amber-400 " */}
-{/*               emptySymbol="fa-regular fa-star text-gray-300" */}
-{/*             /> */}
-            {/* <RatingComponent /> */}
-
-            <div className="h-[1vh]"></div>
-            <div className="flex flex-row">
-              <div className="w-[50%] h-[40px] flex flex-row items-center justify-center border border-gray-300 rounded-md px-2">
-                <div
-                  onClick={() => {
-                    if (count > 0) {
-                      setCount((count) => {
-                        return count - 1;
-                      });
-                    }
-                  }}
-                  className="cursor-pointer flex-1 h-[100%] flex justify-center items-center"
-                >
-                  {/*<i className="fa-solid fa-cheatsheet"></i>*/}
-                </div>
-                  {/*{console.log(item)}*/}
-                <div className="flex-1 h-[100%] flex justify-center items-center text-center">
-                    {item.category}
-                </div>
-                {/*<div*/}
-                {/*  // onClick={() => {*/}
-                {/*  //   setCount((count) => count + 1);*/}
-                {/*  //   console.log(count);*/}
-                {/*  // }}*/}
-                {/*  className="cursor-pointer flex-1 h-[100%] flex justify-center items-center text-center"*/}
-                {/*>*/}
-                {/*  /!*<i className="fa-solid fa-plus"></i>*!/*/}
-                {/*</div>*/}
-              </div>
-              {/*<div*/}
-              {/*  onClick={async () => {*/}
-              {/*    await addToCart(item._id, count);*/}
-              {/*  }}*/}
-              {/*  className="ml-2 lg:ml-4 w-[40px] h-[40px] bg-green-400 flex justify-center items-center rounded-md"*/}
-              {/*>*/}
-              {/*  <i className="fa-solid fa-cart-shopping text-white"></i>*/}
-              {/*</div>*/}
-
-              {/*{!isCart && appState.getUserData().userType === "admin" && (*/}
-              {/*  <div*/}
-              {/*    onClick={async () => {*/}
-              {/*      await deleteItem(itemId);*/}
-              {/*    }}*/}
-              {/*    className="ml-2 lg:ml-4 w-[40px] h-[40px] bg-red-400 flex justify-center items-center rounded-md"*/}
-              {/*  >*/}
-              {/*    <i className="fa-solid fa-trash text-white"></i>*/}
-              {/*  </div>*/}
-              {/*)}*/}
-            </div>
           </div>
           <div className="h-[1vh]"></div>
         </motion.div>
