@@ -91,9 +91,9 @@ class _MapPageState extends ConsumerState<MapPage> {
 
           ).map((User user) {
         Coordinate coord1 =
-            Coordinate(user.latitude, user.longitude); // Berlin coordinates
+            Coordinate(user.latitude, user.longitude); // 
         Coordinate coord2 = Coordinate(logged_in_user?.latitude,
-            logged_in_user?.longitude); // Paris coordinates
+            logged_in_user?.longitude); // 
 
         double distance = distanceBetweenCoordinates(coord1, coord2);
 

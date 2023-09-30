@@ -73,7 +73,7 @@ function ShopItem({ itemId, isCart = false }) {
               Category: {item.category}
             </div>
             <p className="text-lg text-green-500 font-bold">
-              {`रू ` + item.price + "/" + item.quantityType}
+              {`रू ` + item.price + "/"+ item.quantityType}
             </p>
           </div>
           <div className="h-[1vh]"></div>
