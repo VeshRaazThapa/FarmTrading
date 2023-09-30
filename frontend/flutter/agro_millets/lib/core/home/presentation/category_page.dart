@@ -88,7 +88,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
   _getHeading( String category) {
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: Builder(
         builder: (context ) {
           if (appCache.isFarmer()) {

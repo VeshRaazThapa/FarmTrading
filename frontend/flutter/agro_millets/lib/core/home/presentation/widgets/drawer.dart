@@ -15,7 +15,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:provider/provider.dart';
-
 import '../../../order/presentation/order_page.dart';
 import '../weather/provider/weatherProvider.dart';
 import '../weather/screens/homeScreen.dart';
@@ -93,18 +92,6 @@ class _AgroDrawerState extends State<AgroDrawer> {
               goToPage(context, const OrderPage());
             },
           ),
-          // if (appCache.isFarmer())
-          // ListTile(
-          //   title: const Text("Chat"),
-          //   leading: const Icon(Icons.chat_bubble_outline),
-          //   onTap: () async {
-          //     await Firebase.initializeApp();
-          //     SharedPreferences prefs = await SharedPreferences.getInstance();
-          //     goToPage(context,
-          //         MyChatApp(prefs: prefs,)
-          //         );
-          //   },
-          // ),
           Consumer(builder: (context, ref, child) {
             return ListTile(
               title: const Text("Logout"),
