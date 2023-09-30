@@ -67,7 +67,7 @@ function OrderItem({itemId, isCart = false}) {
                     whileInView={{opacity: 1}}
                     transition={{delay: 0.25, duration: 0.25}}
                     viewport={{once: true}}
-                    className="border border-slate-300 relative transition duration-500 rounded-lg hover:shadow-m d bg-white "
+                    className="border border-slate-300 relative transition duration-500 rounded-lg hover:shadow-lg d bg-white "
                 >
                     <div className="h-40 w-[100%] relative">
                         <img
@@ -99,13 +99,12 @@ function OrderItem({itemId, isCart = false}) {
                             {item.farmer ? `Farmer: ` + item.farmer : `Farmer: ` + "Man Bahadur"}
                         </p>
                         <div className="flex flex-row justify-between">
-
+                    
+<div>
                         <p className="text-lg text-green-500 font-bold">
-                            {"price :  " + ` रू ` + " " + order.price}
+                            {` रू `+ order.price + "/" + order.quantity + order.quantityType}
                         </p>
-                        <p className="text-lg text-green-500 font-bold">
-                            {"Quantity : " + order.quantity + " " + order.quantityType}
-                        </p>
+                        </div>
                         </div>
                         <div className="flex flex-row justify-between">
 
@@ -140,10 +139,10 @@ function OrderItem({itemId, isCart = false}) {
 
                             {/* Status */}
                             <div
-                                className="w-[52%] h-[40px] flex flex-row items-center justify-center border border-gray-300 rounded-md px-2">
+                                className="w-[52%] h-[40px] flex flex-row items-center justify-center  rounded-md px-2">
                                 <div className="flex-1 h-[100%] flex justify-center items-center text-center">
                                     {order.status && (
-                                        <div className="ml-2 lg:ml-4 w-[80px] h-[40px] flex gap-3 justify-center items-center rounded-md">
+                                        <div className="ml-2 lg:ml-4 w-[80px] h-[40px] flex gap-3 justify-center  items-center rounded-md">
                                             {order.status}
 
                                             {order.status == "Delivering" && (
