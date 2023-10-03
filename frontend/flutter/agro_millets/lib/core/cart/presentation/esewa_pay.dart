@@ -39,6 +39,7 @@ class _TestPageState extends State<EsewaEpay> {
 
 
 
+
   @override
   void initState() {
     super.initState();
@@ -81,7 +82,7 @@ class _TestPageState extends State<EsewaEpay> {
         leading: SizedBox.shrink(),
       ),
       body: WebView(
-        initialUrl: "about:blank",
+        initialUrl: 'https://rc-epay.esewa.com.np',
         javascriptMode: JavascriptMode.unrestricted,
         javascriptChannels: Set.from([
           JavascriptChannel(
