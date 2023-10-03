@@ -12,11 +12,7 @@ class AgroGridView extends StatelessWidget {
     return MasonryGridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(
-        left: 15,
-        right: 15,
-        bottom: 30.0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       crossAxisCount: 2,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,

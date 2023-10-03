@@ -45,10 +45,12 @@ function LoadedPage({ item }) {
       <section className="min-h-[52vh] w-[100%] p-6 lg:p-12 ">
         <div className="flex flex-col lg:flex-row">
           <img
-            className="object-cover h-[100%] w-[100%] lg:w-[40vw] bg-white border-slate-300 rounded-md border-2 p-4"
+            className="object-cover w-50 h-50 lg:w-80 lg:h-60 bg-white border-slate-300 rounded-md border-2 p-4"
             src={item.images}
             alt=""
           />
+
+
           <div className="flex flex-col pl-8 mt-5 lg:mt-0">
             <h1 className="pb-2 text-5xl font-bold">{item.name}</h1>
             <p className="text-lg text-gray-700 hover:text-gray-900">
