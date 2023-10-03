@@ -76,39 +76,11 @@ class _MapPageState extends ConsumerState<MapPage> {
       }
     }
 
-
     ).map((User user) {
       Coordinate coord1 =
       Coordinate(user.latitude, user.longitude); // Berlin coordinates
       Coordinate coord2 = Coordinate(logged_in_user?.latitude,
           logged_in_user?.longitude); // Paris coordinates
-
-      // Define geographic boundaries for your target area
-      double? minLatitude = logged_in_user?.latitude;
-      double maxLatitude = minLatitude! + 0.5;
-      double? minLongitude = logged_in_user?.longitude;
-      double maxLongitude = minLongitude! + 0.5;
-
-      var markers =
-          map.where((user) {
-            if (!appCache.isAdmin())
-              {
-                return user.userType == 'farmer' &&
-                    user.latitude >= minLatitude &&
-                    user.latitude <= maxLatitude &&
-                    user.longitude >= minLongitude &&
-                    user.longitude <= maxLongitude;
-              }
-            else {
-              return true;
-            }
-          }
-
-          ).map((User user) {
-        Coordinate coord1 =
-            Coordinate(user.latitude, user.longitude); // 
-        Coordinate coord2 = Coordinate(logged_in_user?.latitude,
-            logged_in_user?.longitude); // 
 
       double distance = distanceBetweenCoordinates(coord1, coord2);
 
