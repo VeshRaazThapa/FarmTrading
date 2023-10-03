@@ -255,7 +255,7 @@ Future<List<MilletOrder>> getAllOrders(User user) async {
     for (var e in dataMap) {
       list.add(MilletOrder.fromMap(e));
     }
-    debugPrint("Wholesaler Orders $list");
+    //debugPrint("Wholesaler Orders $list");
 
     return list;
   }
@@ -278,7 +278,7 @@ Future<List<MilletOrder>> getAllDeliveries(User user) async {
     for (var e in dataMap) {
       list.add(MilletOrder.fromMap(e));
     }
-    debugPrint("Wholesaler Orders $list");
+    //debugPrint("Wholesaler Orders $list");
 
     return list;
   }
