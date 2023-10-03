@@ -10,30 +10,24 @@ class OrderDetails extends StatefulWidget {
   final MilletItem? item;
   final MilletOrder? itemOrder;
 
-  const OrderDetails({super.key, this.item, this.itemOrder});
+  const OrderDetails({Key? key, this.item, this.itemOrder}) : super(key: key);
 
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
-
 }
-
 
 class _OrderDetailsState extends State<OrderDetails> {
   String? selectedStatus;
 
   @override
   void initState() {
-    selectedStatus = widget.itemOrder?.status!;
-    print('------insided initstat---');
-    print(selectedStatus);
     super.initState();
+    selectedStatus = widget.itemOrder?.status;
+    print('--selectedStatus---');
+    print(selectedStatus);
   }
-
   @override
   Widget build(BuildContext context) {
-
-    print('-----status------');
-    print(selectedStatus);
     return Material(
       color: Colors.white,
       child: SafeArea(
@@ -41,146 +35,13 @@ class _OrderDetailsState extends State<OrderDetails> {
           builder: (_, constraints) => SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Padding(
                 padding: const EdgeInsets.only(top: kToolbarHeight),
                 child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Order Details',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          CloseButton(),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(16.0),
-                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(0, 0, 0, 0.16),
-                            offset: Offset(0, 5),
-                            blurRadius: 10.0,
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Container(
-                            height: 200, // Adjust the height as needed
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  widget.item?.images[0],
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          _buildUserSpecificInfo(),
-                          ListTile(
-                            title: Text('Name'),
-                            trailing: Text('${this.widget.item?.name}'),
-                          ),
-                          if (appCache.isCustomer())
-                            ListTile(
-                            title: Text('Status'),
-                            trailing: Text('${this.widget.itemOrder?.status}'),
-                          ),
-                          if (appCache.isFarmer())
-                            ListTile(
-                              title: Text('Status'),
-                              trailing: DropdownButton<String>(
-                                value: selectedStatus,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    updateOrderStatus(widget.itemOrder!.id,newValue!);
-                                    selectedStatus = newValue!;
-                                  });
-                                },
-                                items: [
-                                  'Processing',
-                                  'Packaging',
-                                  'Delivering'
-                                ].map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(
-                                          value,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                              ),
-
-                            ),
-
-                          ListTile(
-                            title: Text('Order Id'),
-                            trailing: Text('${this.widget.itemOrder?.id}'),
-                          ),
-                          ListTile(
-                            title: Text('Quantity'),
-                            trailing: Text('${this.widget.itemOrder?.quantity}'),
-                          ),
-                          ListTile(
-                            title: Text('Price/item'),
-                            trailing: Text('${this.widget.item?.price}'),
-                          ),
-                          ListTile(
-                            title: Text('Mode of payment'),
-                            trailing: Text('${this.widget.itemOrder?.modeOfPayment}'),
-                          ),
-                          ListTile(
-                            title: Text('Paid'),
-                            trailing: Text('${this.widget.itemOrder?.isPaid}'),
-                          ),
-                           ListTile(
-                            title: Text('Date/Time of Order'),
-                            trailing: Text('${DateFormat('MMMM d, y').format(this.widget.itemOrder!.listedAt)}'),
-                          ),
-                          Divider(),
-                          ListTile(
-                            title: Text(
-                              'Total',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            trailing: Text(
-                              'रू ${this.widget.itemOrder?.price}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  children: [
+                    _buildHeader(),
+                    _buildOrderInfoContainer(),
                   ],
                 ),
               ),
@@ -191,32 +52,96 @@ class _OrderDetailsState extends State<OrderDetails> {
     );
   }
 
-  Widget _buildUserSpecificInfo() {
-    if (appCache.isAdmin()) {
-      return Column(
+  Widget _buildHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // ListTile(
-          //   title: Text('Ordered By'),
-          //   trailing: Text('Wholesaler'),
-          // ),
-          ListTile(
-            title: Text('Ordered From'),
-            trailing: Text('${this.widget.item?.farmer}'),
-          ),
+          Text('Order Details', style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold)),
+          CloseButton(),
         ],
-      );
-    } else if (!appCache.isAdmin() && appCache.isCustomer()) {
-      return ListTile(
-        title: Text('Ordered From'),
-        trailing: Text('${this.widget.item?.farmer}'),
-      );
+      ),
+    );
+  }
+
+  Widget _buildOrderInfoContainer() {
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.16), offset: Offset(0, 5), blurRadius: 10.0)],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildOrderImage(),
+          _buildUserSpecificInfo(),
+          _buildTile('Name', widget.item?.name),
+          if (appCache.isCustomer() || appCache.isFarmer())
+            _buildStatusTile(),
+          _buildTile('Order Id', widget.itemOrder?.id),
+          _buildTile('Quantity', "${widget.itemOrder?.quantity}"),
+          _buildTile('Price/item', "${widget.item?.price}"),
+          _buildTile('Mode of payment', "${widget.itemOrder?.modeOfPayment}"),
+          _buildTile('Paid', "${widget.itemOrder?.isPaid}"),
+          _buildTile('Date/Time of Order', '${DateFormat('MMMM d, y').format(widget.itemOrder!.listedAt)}'),
+          Divider(),
+          _buildTile('Total', 'रू ${widget.itemOrder?.price}', isBold: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderImage() {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(widget.item?.images[0] ?? ''),
+          fit: BoxFit.cover,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
+  Widget _buildTile(String title, String? value, {bool isBold = false}) {
+    return ListTile(
+      title: Text(title, style: TextStyle(fontSize: isBold ? 20 : null, fontWeight: isBold ? FontWeight.bold : null)),
+      trailing: Text(value ?? '', style: TextStyle(fontSize: isBold ? 20 : null, fontWeight: isBold ? FontWeight.bold : null)),
+    );
+  }
+  Widget _buildUserSpecificInfo() {
+    if (appCache.isAdmin() || appCache.isCustomer()) {
+      return _buildTile('Ordered From', widget.item?.farmer);
     }
-      // else if (!appCache.isAdmin() && appCache.isFarmer()) {
-    //   return ListTile(
-    //     title: Text('Ordered By'),
-    //     trailing: Text('Wholesaler'),
-    //   );
-    // }
     return SizedBox.shrink();
   }
-}
+  Widget _buildStatusTile() {
+    return appCache.isFarmer()
+        ? ListTile(
+      title: Text('Status'),
+      trailing:
+      DropdownButton<String>(
+        value: selectedStatus,
+        onChanged: (String? newValue) {
+          setState(() {
+            updateOrderStatus(widget.itemOrder!.id, newValue!); // Uncomment this line if the method is defined.
+            selectedStatus = newValue;
+          });
+        },
+        items: ['Processing', 'Packaging', 'Delivering'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+          );
+        }).toList(),
+      ),
+    )
+        : _buildTile('Status', widget.itemOrder?.status);
+
+
+  }}

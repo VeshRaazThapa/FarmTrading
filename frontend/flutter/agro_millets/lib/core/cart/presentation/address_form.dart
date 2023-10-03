@@ -216,64 +216,64 @@ class _AddAddressFormState extends ConsumerState<AddAddressForm> {
             decoration: _inputDecoration('Postal Code'),
             keyboardType: TextInputType.number,
           ),
-          SizedBox(height: 13),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Default Address Options',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                ClipRect(
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Checkbox(
-                              value: widget.billingAddress.isDefaultShipping,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  isDefaultAddress = newValue!;
-                                });
-                              },
-                            ),
-                            Text('Default Shipping Address'),
-                          ],
-                        ),
-                        if (this.widget.category != 'shipping')
-                          Row(
-                            children: <Widget>[
-                              Checkbox(
-                                value: widget.billingAddress.isDefaultBilling,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    isDefaultBillingAddress = newValue!;
-                                  });
-                                },
-                              ),
-                              Text('Default Billing Address'),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // SizedBox(height: 13),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     color: Colors.white,
+          //     borderRadius: BorderRadius.circular(8.0),
+          //   ),
+          //   child: Column(
+          //     children: <Widget>[
+          //       Padding(
+          //         padding: const EdgeInsets.all(16.0),
+          //         child: Text(
+          //           'Default Address Options',
+          //           style: TextStyle(
+          //             fontWeight: FontWeight.bold,
+          //             fontSize: 18,
+          //           ),
+          //         ),
+          //       ),
+          //       ClipRect(
+          //         child: Container(
+          //           padding: EdgeInsets.all(16.0),
+          //           child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: <Widget>[
+          //               Row(
+          //                 children: <Widget>[
+          //                   Checkbox(
+          //                     value: widget.billingAddress.isDefaultShipping,
+          //                     onChanged: (newValue) {
+          //                       setState(() {
+          //                         isDefaultAddress = newValue!;
+          //                       });
+          //                     },
+          //                   ),
+          //                   Text('Default Shipping Address'),
+          //                 ],
+          //               ),
+          //               if (this.widget.category != 'shipping')
+          //                 Row(
+          //                   children: <Widget>[
+          //                     Checkbox(
+          //                       value: widget.billingAddress.isDefaultBilling,
+          //                       onChanged: (newValue) {
+          //                         setState(() {
+          //                           isDefaultBillingAddress = newValue!;
+          //                         });
+          //                       },
+          //                     ),
+          //                     Text('Default Billing Address'),
+          //                   ],
+          //                 ),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           SizedBox(height: 10), // Add a small space
           Center(child: finishButton),
           // ElevatedButton(

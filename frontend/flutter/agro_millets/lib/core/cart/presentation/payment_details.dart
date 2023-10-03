@@ -108,7 +108,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   if (selectedPaymentOption == 0) {
                     // cash on delivery
                     goToPage(context, const OrderPage());
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                   }
                   if (selectedPaymentOption == 1) {
                     // esewa
@@ -116,7 +116,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   }
                   if (selectedPaymentOption == 2) {
                     // khaltipay
-                    goToPage(context, KhaltiPay());
+                    goToPage(context, KhaltiPay(itemOrder: value,));
                   }
                 });
                 // Payment logic here
