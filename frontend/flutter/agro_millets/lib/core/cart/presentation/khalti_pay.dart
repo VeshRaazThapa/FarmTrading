@@ -2,8 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:khalti/khalti.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-class KhaltiPay extends StatelessWidget {
-  const KhaltiPay({Key? key}) : super(key: key);
+import '../../../models/order_item.dart';
+
+class KhaltiPay extends StatefulWidget {
+  final MilletOrder? itemOrder;
+
+  const KhaltiPay({Key? key, this.itemOrder}) : super(key: key);
+
+  @override
+  _KhaltiPayState createState() => _KhaltiPayState();
+}
+
+class _KhaltiPayState extends State<KhaltiPay> {
+  late final TextEditingController _mobileController, _pinController;
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _mobileController = TextEditingController();
+    _pinController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _mobileController.dispose();
+    _pinController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +46,9 @@ class KhaltiPay extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            WalletPayment(),
+            WalletPayment(itemOrder: widget.itemOrder),
             Banking(paymentType: PaymentType.eBanking),
             Banking(paymentType: PaymentType.mobileCheckout),
           ],
@@ -33,10 +59,12 @@ class KhaltiPay extends StatelessWidget {
 }
 
 class WalletPayment extends StatefulWidget {
-  const WalletPayment({Key? key}) : super(key: key);
+  final MilletOrder? itemOrder;
+
+  const WalletPayment({Key? key, this.itemOrder}) : super(key: key);
 
   @override
-  State<WalletPayment> createState() => _WalletPaymentState();
+  _WalletPaymentState createState() => _WalletPaymentState();
 }
 
 class _WalletPaymentState extends State<WalletPayment> {
@@ -59,6 +87,8 @@ class _WalletPaymentState extends State<WalletPayment> {
 
   @override
   Widget build(BuildContext context) {
+    final itemOrder = widget.itemOrder; // Access itemOrder from the widget
+
     return Form(
       key: _formKey,
       child: ListView(
@@ -85,11 +115,11 @@ class _WalletPaymentState extends State<WalletPayment> {
               final messenger = ScaffoldMessenger.maybeOf(context);
               final initiationModel = await Khalti.service.initiatePayment(
                 request: PaymentInitiationRequestModel(
-                  amount: 1000,
+                  amount: itemOrder?.price as int,
                   mobile: _mobileController.text,
                   productIdentity: 'mac-mini',
                   productName: 'Apple Mac Mini',
-                  transactionPin: _pinController.text,
+                    transactionPin: _pinController.text,
                   productUrl: 'https://khalti.com/bazaar/mac-mini-16-512-m1',
                   additionalData: {
                     'vendor': 'Oliz Store',
@@ -109,11 +139,12 @@ class _WalletPaymentState extends State<WalletPayment> {
                       transactionPin: _pinController.text,
                     ),
                   );
-
+                  print('-------success-----');
                   debugPrint(model.toString());
                 } catch (e) {
                   messenger?.showSnackBar(
                     SnackBar(content: Text(e.toString())),
+
                   );
                 }
               }

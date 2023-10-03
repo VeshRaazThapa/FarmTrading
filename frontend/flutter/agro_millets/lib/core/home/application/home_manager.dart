@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:agro_millets/core/home/application/home_provider.dart';
+import 'package:agro_millets/core/home/presentation/news/constants.dart';
 import 'package:agro_millets/data/cache/app_cache.dart';
 import 'package:agro_millets/globals.dart';
 import 'package:agro_millets/models/millet_item.dart';
@@ -44,7 +45,7 @@ class HomeManager {
 
     timer = Timer.periodic(
       const Duration(seconds: 10),
-          (timer) async {
+      (timer) async {
         if (context.mounted) {
           var data = await getAllItems();
           ref.read(homeProvider).updateItems(data);
@@ -67,7 +68,7 @@ class HomeManager {
 
     timer = Timer.periodic(
       const Duration(seconds: 10),
-          (timer) async {
+      (timer) async {
         if (context.mounted) {
           var data = await getCategoryAll(category);
           ref.read(homeProvider).updateItems(data);
@@ -83,7 +84,7 @@ class HomeManager {
 
     timer = Timer.periodic(
       const Duration(seconds: 10),
-          (timer) async {
+      (timer) async {
         if (context.mounted) {
           var data = await getAllOrders(user);
           ref.read(homeProvider).updateItemOrder(data);
@@ -186,7 +187,7 @@ Future<List<MilletItem>> getAllFarmerItems(String id) async {
     for (var e in dataMap) {
       list.add(MilletItem.fromMap(e));
     }
-    debugPrint("Farmer Items $list");
+    // debugPrint("Farmer Items $list");
 
     return list;
   }
@@ -232,14 +233,14 @@ Future<List<MilletItem>> getAllFarmerCategoryItems(
     for (var e in dataMap) {
       list.add(MilletItem.fromMap(e));
     }
-    debugPrint("Farmer Items $list");
+    // debugPrint("Farmer Items $list");
 
     return list;
   }
   return [];
 }
 
-Future<List<MilletOrder>> getAllOrders(User user) async {
+Future<List<MilletOrder>> getAllOrders(User? user) async {
   var response = await http.get(
     Uri.parse("$API_URL/list/getAllOrder/${appState.value.user!.id}"),
     // body: {"wholesalerID": user.id},
@@ -255,14 +256,13 @@ Future<List<MilletOrder>> getAllOrders(User user) async {
     for (var e in dataMap) {
       list.add(MilletOrder.fromMap(e));
     }
-    //debugPrint("Wholesaler Orders $list");
 
     return list;
   }
   return [];
 }
 
-Future<List<MilletOrder>> getAllDeliveries(User user) async {
+Future<List<MilletOrder>> getAllDeliveries(User? user) async {
   var response = await http.get(
     Uri.parse("$API_URL/list/getAllDeliveries/${appState.value.user!.id}"),
     // body: {"wholesalerID": user.id},
@@ -278,7 +278,7 @@ Future<List<MilletOrder>> getAllDeliveries(User user) async {
     for (var e in dataMap) {
       list.add(MilletOrder.fromMap(e));
     }
-    //debugPrint("Wholesaler Orders $list");
+    // debugPrint("Wholesaler Orders $list");
 
     return list;
   }
@@ -387,7 +387,8 @@ Future<void> deleteItem(String id) async {
   var data = json.decode(response.body);
   showToast(data["message"]);
 }
-Future<void> updateOrderStatus(String id,String status) async {
+
+Future<void> updateOrderStatus(String id, String status) async {
   if (!appState.value.isLoggedIn || appState.value.user == null) {
     showToast("You need to login to perform this action");
     return;
@@ -397,14 +398,18 @@ Future<void> updateOrderStatus(String id,String status) async {
     Uri.parse("$API_URL/list/updateOrderStatus"),
     headers: {"content-type": "application/json"},
     body: json.encode(
-      {
-        "orderId": id,
-        "newStatus": status
-      },
+      {"orderId": id, "newStatus": status},
     ),
   );
 
   //print(response.body.toString());
   var data = json.decode(response.body);
-  showToast(data["message"]);
+  print('----data---');
+  print(data);
+  if (data["statusCode"] == 200) {
+    showSuccessToast("Status Updated to ${status} !");
+
+  } else {
+    showFailureToast("Status Couldn't be updated !");
+  }
 }

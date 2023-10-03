@@ -73,9 +73,6 @@ class _AgroItemOrderState extends State<AgroItemOrder> {
                 ),
                 // Container properties...
                 child: LayoutBuilder(builder: (context, constraints) {
-                  print('-----price-----');
-                  print(widget.itemOrder.price);
-                  print(selectedStatus);
                   return Column(
                     children: [
                       Expanded(

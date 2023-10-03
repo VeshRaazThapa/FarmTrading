@@ -246,14 +246,30 @@ router.post("/addOrder", async (req, res) => {
         console.error("Error updating item quantity:", error);
         // Handle the error accordingly
     }
-
     // After successfully adding the order, delete the corresponding cart item
-    let cart = await Cart.findOne({userId: req.body.listedBy});
-    if (cart) {
-        cart.items = cart.items.filter((e) => e.item !== req.body.item);
-        await cart.save();
-        console.log("Cart item deleted successfully!");
+
+    var cart = await Cart.findOne({userId: req.body.listedBy});
+
+    if (!cart) {
+        return res
+            .status(404)
+            .send(getErrorResponse("No cart exists for this userId"));
     }
+
+    const len = cart.items.length;
+
+    // If itemId doesn't match, add it back to list
+    cart.items = cart.items.filter((e) => e.item.toString() !== item.item.toString());
+
+    if (cart.items.length === len) {
+        // No item was removed, means it doesn't exist
+        return res
+            .status(404)
+            .send(getErrorResponse("No item of this ID is present in your cart"));
+    }
+
+    await cart.save();
+    console.log("Cart item deleted successfully!");
 
 
     return res.send(getSuccessResponse("Order is Added", item));
@@ -278,6 +294,7 @@ router.post('/updateOrderStatus', async (req, res) => {
         if (!updatedOrder) {
             return res.status(404).send(getErrorResponse('Order not found'));
         }
+        await updatedOrder.save();
 
         return res.send(getSuccessResponse('Order status updated', updatedOrder));
     } catch (error) {
@@ -295,7 +312,8 @@ router.get("/getAllDeliveries/:farmerID", async (req, res) => {
     let items = await MilletOrder.find({});
     // console.log(items);
     //TODO: Check if this works
-    items = items.filter((item) => item.farmerId.toString() === farmerID);
+    items = items.filter((item) => item.farmerId.toString() === farmerID).sort((a, b) => b.listedAt - a.listedAt);
+    ;
 
     return res.send(getSuccessResponse("Success", items));
 });
@@ -313,8 +331,9 @@ router.get("/getAllOrder/:wholesalerID", async (req, res) => {
 
     } else {
         //TODO: Check if this works
-        items = items.filter((item) => item.listedBy.toString() === wholesalerID);
-
+        items = items
+            .filter((item) => item.listedBy.toString() === wholesalerID)
+            .sort((a, b) => b.listedAt - a.listedAt);
     }
 
     return res.send(getSuccessResponse("Success", items));

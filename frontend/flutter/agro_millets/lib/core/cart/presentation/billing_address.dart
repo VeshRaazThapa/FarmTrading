@@ -168,7 +168,7 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         child: Text(
-          "Edit Billing Address",
+          "Billing Address",
           style: const TextStyle(
             color: Colors.green,
             fontWeight: FontWeight.w600,
@@ -196,7 +196,7 @@ class _UnpaidPageState extends ConsumerState<UnpaidPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         child: Text(
-          "Edit Shipping Address",
+          "Shipping Address",
           style: const TextStyle(
             color: Colors.green,
             fontWeight: FontWeight.w600,

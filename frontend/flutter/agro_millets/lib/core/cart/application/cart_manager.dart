@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../../home/presentation/news/constants.dart';
+
 class CartManager {
   final BuildContext context;
   Timer? timer;
@@ -80,7 +82,7 @@ class CartManager {
       ),
     );
 
-    showToast("Added Item to cart");
+    showSuccessToast("Added Item to cart");
   }
 
   Future<void> removeItemFromCart({
@@ -98,7 +100,7 @@ class CartManager {
       ),
     );
 
-    showToast("Removed Item from Cart");
+    showSuccessToast("Removed Item from Cart");
   }
   Future<void> incrementItemCountFromCart({
     required String itemId,
@@ -116,7 +118,7 @@ class CartManager {
     );
     print(response);
 
-    showToast("Item count incremented !");
+    showSuccessToast("Item count incremented !");
   }
 
   Future<void> decrementItemCountFromCart({
@@ -134,6 +136,6 @@ class CartManager {
       ),
     );
 
-    showToast("Item Count Decremented !");
+    showSuccessToast("Item Count Decremented !");
   }
 }
