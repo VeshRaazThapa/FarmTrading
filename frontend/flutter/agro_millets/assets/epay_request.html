@@ -125,9 +125,6 @@
         oForm.elements['transaction_uuid'].value = pid;
         oForm.elements['product_service_charge'].value = psc;
         oForm.elements['product_delivery_charge'].value = pdc;
-        var hash = CryptoJS.HmacSHA256("amount=250,total_amount=372.5,transaction_uuid=11-201-16,product_code=EPAYTEST", "8gBm/:&EnhH.1/q");
-        var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
-        oForm.elements['signature'].value = hashInBase64;
         var message = `amount=${amt},total_amount=${tAmt},transaction_uuid=${pid},product_code=EPAYTEST`;
         var hash = CryptoJS.HmacSHA256(message,"8gBm/:&EnhH.1/q");
         var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
