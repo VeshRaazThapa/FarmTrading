@@ -8,6 +8,7 @@ const {default: mongoose} = require("mongoose");
 const {MilletItem} = require("../models/millet_item");
 const nodemailer = require("nodemailer");
 const {MilletOrder} = require("../models/order_item");
+const {Cart} = require("../models/cart");
 /**
  * Login as a user using {email} {password}
  * body: {email:"email",password:"password"}
@@ -323,7 +324,7 @@ router.get("/reset-password/:token", async (req, res) => {
 
 
 });
-router.get('/esewa-success-payment/:orderItemId', async (req, res) => {
+router.get('/esewa-success-payment/:orderItemId/', async (req, res) => {
     const orderItemId = req.params.orderItemId;
     const oid = req.query.oid;
     const refId = req.query.refId;
@@ -343,7 +344,30 @@ router.get('/esewa-success-payment/:orderItemId', async (req, res) => {
         }
         updatedOrder.save();
 
-        console.log(updatedOrder);
+        console.log(updatedOrder.listedBy.toString());
+        console.log(updatedOrder.item.toString());
+
+        var cart = await Cart.findOne({userId: updatedOrder.listedBy.toString()});
+
+        if (!cart) {
+            return res
+                .status(404)
+                .send(getErrorResponse("No cart exists for this userId"));
+        }
+
+        const len = cart.items.length;
+
+        // If itemId doesn't match, add it back to list
+        cart.items = cart.items.filter((e) => e.item.toString() !== updatedOrder.item.toString());
+
+        if (cart.items.length === len) {
+            // No item was removed, means it doesn't exist
+            return res
+                .status(404)
+                .send(getErrorResponse("No item of this ID is present in your cart"));
+        }
+
+        await cart.save();
 
         const successHTML = `
             <!DOCTYPE html>
