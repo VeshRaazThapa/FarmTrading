@@ -89,6 +89,7 @@ class _WalletPaymentState extends State<WalletPayment> {
   Widget build(BuildContext context) {
     final itemOrder = widget.itemOrder; // Access itemOrder from the widget
 
+    var price=itemOrder?.price.toInt();
     return Form(
       key: _formKey,
       child: ListView(
@@ -115,21 +116,20 @@ class _WalletPaymentState extends State<WalletPayment> {
               final messenger = ScaffoldMessenger.maybeOf(context);
               final initiationModel = await Khalti.service.initiatePayment(
                 request: PaymentInitiationRequestModel(
-                  amount: itemOrder?.price as int,
+                  amount: 1000 ,
                   mobile: _mobileController.text,
                   productIdentity: 'mac-mini',
-                  productName: 'Apple Mac Mini',
+                  productName: 'Prdouct',
                     transactionPin: _pinController.text,
                   productUrl: 'https://khalti.com/bazaar/mac-mini-16-512-m1',
                   additionalData: {
-                    'vendor': 'Oliz Store',
-                    'manufacturer': 'Apple Inc.',
+                    'vendor': itemOrder?.farmerId ?? '',
+                    'manufacturer': 'Farm Traders',
                   },
                 ),
               );
 
               final otpCode = await _showOTPSentDialog();
-
               if (otpCode != null) {
                 try {
                   final model = await Khalti.service.confirmPayment(
@@ -138,8 +138,11 @@ class _WalletPaymentState extends State<WalletPayment> {
                       token: initiationModel.token,
                       transactionPin: _pinController.text,
                     ),
-                  );
-                  print('-------success-----');
+                  ).then((value) {
+                    print('-------success-----');
+                    print(value);
+
+                  });
                   debugPrint(model.toString());
                 } catch (e) {
                   messenger?.showSnackBar(
@@ -149,7 +152,7 @@ class _WalletPaymentState extends State<WalletPayment> {
                 }
               }
             },
-            child: const Text('PAY Rs. 10'),
+            child: Text('PAY Rs. ${price ?? 0}'),
           ),
         ],
       ),
