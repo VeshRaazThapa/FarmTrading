@@ -241,15 +241,20 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer())
               //
-              const Text(
+              Container(
+                 padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child:const Text(
                 "Related Products",
                 style: TextStyle(
                   fontSize: 20,
                 ),
               ),
+              ),
            // SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer())
-              _getRecommendedProducts(context),
+            Container(
+            child:  _getRecommendedProducts(context),
+            ),
             SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer())
               const Text(
