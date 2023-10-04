@@ -184,13 +184,13 @@ class _AddAddressFormState extends ConsumerState<AddAddressForm> {
           TextFormField(
             controller: cityController,
             decoration: _inputDecoration('City'),
-            keyboardType: TextInputType.phone,
+            keyboardType: TextInputType.name,
           ),
           SizedBox(height: 16),
           TextFormField(
             controller: areaNameController,
             decoration: _inputDecoration('Area Name'),
-            keyboardType: TextInputType.phone,
+            keyboardType: TextInputType.name,
           ),
           SizedBox(height: 16),
           DropdownButtonFormField<String>(
