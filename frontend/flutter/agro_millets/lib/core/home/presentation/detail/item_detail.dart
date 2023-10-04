@@ -247,7 +247,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                   fontSize: 20,
                 ),
               ),
-            SizedBox(height: 0.015 * getHeight(context)),
+           // SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer())
               _getRecommendedProducts(context),
             SizedBox(height: 0.015 * getHeight(context)),
@@ -258,7 +258,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
                   fontSize: 20,
                 ),
               ),
-            SizedBox(height: 0.015 * getHeight(context)),
+           // SizedBox(height: 0.015 * getHeight(context)),
             if (appCache.isCustomer())
               _getOrderWiseRecommendedProducts(context),
           ],
