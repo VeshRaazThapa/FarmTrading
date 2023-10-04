@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:agro_millets/core/cart/presentation/cart_page.dart';
 import 'package:agro_millets/core/home/presentation/news/constants.dart';
 import 'package:agro_millets/core/home/presentation/widgets/agro_item_order.dart';
+import 'package:agro_millets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -43,7 +45,13 @@ class _TestPageState extends State<EsewaEpay> {
   @override
   void initState() {
     super.initState();
-    itemOrder = widget.itemOrder!;
+    try {
+      itemOrder = widget.itemOrder!;
+
+    } catch(e) {
+      goToPage(context, CartPage());
+      showFailureToast('Payment Failure');
+    }
     // Enable hybrid composition.
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
@@ -106,7 +114,7 @@ class _TestPageState extends State<EsewaEpay> {
         navigationDelegate: (NavigationRequest request) async {
           print('---URL---');
           print(request.url);
-          if (request.url.contains("esewa-success-payment")) {
+          if (request.url.contains("payment-success")) {
 
             var a = await fetchData(request.url);
             showSuccessToast('Payment Success !');
