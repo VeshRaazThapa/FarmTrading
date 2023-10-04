@@ -69,6 +69,24 @@ class AdminAPIs {
     }
     return [];
   }
+  static Future<List<MilletItem>> getAllOrderRecommendedItems(MilletItem item) async {
+
+    var response = await http.get(
+      Uri.parse("$API_URL/list/getOrderRecommendations/${item.id}"),
+    );
+
+    Map data = json.decode(response.body);
+    if (data["statusCode"] == 200) {
+      List dataMap = data["data"];
+      List<MilletItem> list = [];
+
+      for (var e in dataMap) {
+        list.add(MilletItem.fromMap(e));
+      }
+      return list;
+    }
+    return [];
+  }
 
   static Future<List<LatLng>> getAllFarmerCoordinates() async {
     var response = await http.get(

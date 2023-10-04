@@ -242,14 +242,25 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             if (appCache.isCustomer())
               //
               const Text(
+                "Related Products",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            SizedBox(height: 0.015 * getHeight(context)),
+            if (appCache.isCustomer())
+              _getRecommendedProducts(context),
+            SizedBox(height: 0.015 * getHeight(context)),
+            if (appCache.isCustomer())
+              const Text(
                 "You May Like This",
                 style: TextStyle(
                   fontSize: 20,
                 ),
               ),
             SizedBox(height: 0.015 * getHeight(context)),
-            if (appCache.isCustomer()) _getRecommendedProducts(context),
-            //const SizedBox(height: 40),
+            if (appCache.isCustomer())
+              _getOrderWiseRecommendedProducts(context),
           ],
         ),
       ),
@@ -289,76 +300,165 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
   }
 
   FutureBuilder<List<MilletItem>> _getRecommendedProducts(
-      BuildContext context) {
+      BuildContext context,
+      ) {
     return FutureBuilder(
-        future: AdminAPIs.getAllRecommendedItems(widget.item),
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            List<MilletItem> list = snapshot.data ?? [];
-            // print(list);
-            // print('--------------');
-            return SizedBox(
-              height: 400, // Set a specific height here
-              child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Divider(
-                      color: Colors.grey.withOpacity(0.2),
-                    ),
-                  );
-                },
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    width: 150, // Set the width of each product container
-                    child: GestureDetector(
-                      onTap: () {
-                        goToPage(context, ItemDetailPage(item: list[index]));
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              list[index].images[0],
-                              height: 100,
-                              width: 150,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              list[index].name,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              "रू ${list[index].price}/${list[index].quantityType}",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: semiDarkColor,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          }
-
+      future: AdminAPIs.getAllRecommendedItems(widget.item),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        });
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text("Error loading data"),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text("No data available"),
+          );
+        } else {
+          List<MilletItem> list = snapshot.data!;
+          return SizedBox(
+            height: 400, // Set a specific height here
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Divider(
+                    color: Colors.grey.withOpacity(0.2),
+                  ),
+                );
+              },
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  width: 150, // Set the width of each product container
+                  child: GestureDetector(
+                    onTap: () {
+                      goToPage(context, ItemDetailPage(item: list[index]));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network(
+                            list[index].images[0],
+                            height: 100,
+                            width: 150,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            list[index].name,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "रू ${list[index].price}/${list[index].quantityType}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: semiDarkColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  FutureBuilder<List<MilletItem>> _getOrderWiseRecommendedProducts(
+      BuildContext context) {
+    return FutureBuilder(
+      future: AdminAPIs.getAllOrderRecommendedItems(widget.item),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text("Error loading data"),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text("No data available"),
+          );
+        } else {
+          List<MilletItem> list = snapshot.data!;
+          return SizedBox(
+            height: 400, // Set a specific height here
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Divider(
+                    color: Colors.grey.withOpacity(0.2),
+                  ),
+                );
+              },
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  width: 150, // Set the width of each product container
+                  child: GestureDetector(
+                    onTap: () {
+                      goToPage(context, ItemDetailPage(item: list[index]));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network(
+                            list[index].images[0],
+                            height: 100,
+                            width: 150,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            list[index].name,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "रू ${list[index].price}/${list[index].quantityType}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: semiDarkColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
   }
 }

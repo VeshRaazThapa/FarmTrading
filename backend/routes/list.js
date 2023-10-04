@@ -100,7 +100,7 @@ router.post("/getRecommendations", async (req, res) => {
     }
     const pythonScript = 'recommendations.py';
     const productToSearch = itemID; // Replace this with the product id you want to search
-    execFile('python', [pythonScript, productToSearch], (error, stdout, stderr) => {
+    execFile('python3', [pythonScript, productToSearch], (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing the Python script: ${error.message}`);
             return;
@@ -119,6 +119,41 @@ router.post("/getRecommendations", async (req, res) => {
             })
     });
 
+
+});
+router.get("/getOrderRecommendations/:itemID", async (req, res) => {
+    var itemID = req.params.itemID;
+    // Fetch all items from MongoDB
+    try {
+        // Fetch the item by itemID from MongoDB
+
+        // const orderItem = await MilletOrder.findOne({ _item: itemID }); // Assuming itemID is the MongoDB document _id
+        const orderItem = await MilletOrder.findOne({ item: itemID });
+        let filteredOrderItems = await MilletOrder.find({listedBy:orderItem.listedBy});
+
+        const uniqueItemIDs = Array.from(new Set(filteredOrderItems.map(item => item.item.toString())));
+        // Remove the current itemID from uniqueItemIDs
+        const filteredUniqueItemIDs = uniqueItemIDs.filter(id => id !== itemID);
+        if (!filteredUniqueItemIDs) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        const items = MilletItem.find({_id: {$in: filteredUniqueItemIDs}})
+            .then((filteredItems) => {
+//              console.log("Filtered MilletItems:");
+//              console.log(filteredItems);
+                return res.send(getSuccessResponse("Success!", filteredItems));
+
+            })
+            .catch((err) => {
+                console.error("Error filtering MilletItems:", err);
+                return res.status(404).json({ error: 'Item not found' });
+            })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
 
 });
 

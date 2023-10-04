@@ -71,7 +71,7 @@ function OrderItem({itemId, isCart = false}) {
                 >
                     <div className="h-40 w-[100%] relative">
                         <img
-                            // onClick={() => history.push("/item/" + item._id)}
+                            onClick={() => history.push("/item-order/" + order._id)}
                             className="h-40 w-[100%] rounded-t-lg object-cover"
                             src={item.images[0]}
                             alt=""
