@@ -61,8 +61,8 @@ class _TestPageState extends State<EsewaEpay> {
     double pdc = 50;
     double tAmt = txAmt + amt + psc + pdc;
     String scd = "EPAYTEST";
-    String su = "$API_URL/auth/esewa-success-payment/${itemOrder?.id}";
-    String fu = "$API_URL/auth/esewa-failure-payment";
+    String su = "$API_URL/auth/payment-success/${itemOrder?.id}";
+    String fu = "$API_URL/auth/payment-success";
 
     Future<void> fetchData(String url) async {
       final response = await http.get(Uri.parse(url));

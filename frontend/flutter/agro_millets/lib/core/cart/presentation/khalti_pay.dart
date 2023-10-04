@@ -1,8 +1,13 @@
+import 'package:agro_millets/core/home/presentation/news/constants.dart';
+import 'package:agro_millets/core/order/presentation/order_page.dart';
+import 'package:agro_millets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti/khalti.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
-
+import '../../../secrets.dart';
+import '../../admin/application/admin_apis.dart';
 import '../../../models/order_item.dart';
+import 'package:http/http.dart' as http;
 
 class KhaltiPay extends StatefulWidget {
   final MilletOrder? itemOrder;
@@ -139,9 +144,9 @@ class _WalletPaymentState extends State<WalletPayment> {
                       transactionPin: _pinController.text,
                     ),
                   ).then((value) {
-                    print('-------success-----');
-                    print(value);
-
+                    fetchPaymentSuccess(itemOrder!.id);
+                    showSuccessToast('Payment Success!');
+                    goToPage(context, OrderPage());
                   });
                   debugPrint(model.toString());
                 } catch (e) {
@@ -157,6 +162,22 @@ class _WalletPaymentState extends State<WalletPayment> {
         ],
       ),
     );
+  }
+  Future<void> fetchPaymentSuccess(String orderID) async {
+    final url = Uri.parse('$API_URL/auth/payment-success/$orderID'); // Replace with your server URL
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        print('successfully updated');
+      } else {
+        // Handle error response here
+        print('Failed to fetch payment success page. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network or other errors here
+      print('Error fetching payment success page: $e');
+    }
   }
 
   Future<String?> _showOTPSentDialog() {

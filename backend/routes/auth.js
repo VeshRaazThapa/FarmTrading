@@ -324,7 +324,7 @@ router.get("/reset-password/:token", async (req, res) => {
 
 
 });
-router.get('/esewa-success-payment/:orderItemId/', async (req, res) => {
+router.get('/payment-success/:orderItemId/', async (req, res) => {
     const orderItemId = req.params.orderItemId;
     console.log(orderItemId);
     // Update the 'isPaid' status of the order
