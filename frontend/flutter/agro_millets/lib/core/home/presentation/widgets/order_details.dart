@@ -133,7 +133,7 @@ class _OrderDetailsState extends State<OrderDetails> {
             selectedStatus = newValue;
           });
         },
-        items: ['Processing', 'Packaging', 'Delivering'].map<DropdownMenuItem<String>>((String value) {
+        items: ['Processing', 'Packaging', 'Delivered'].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
