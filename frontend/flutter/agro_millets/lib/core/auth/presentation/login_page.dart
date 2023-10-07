@@ -94,7 +94,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   );
                 },
                 child: Text(
-                  "Forget Password?",
+                  "Forgot Password?",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w600,

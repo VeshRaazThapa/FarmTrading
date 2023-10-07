@@ -217,7 +217,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       alignment:
                           Alignment.center, // Center the text inside the button
                       child: Text(
-                        "Save New Password",
+                        "Reset Password",
                         style: TextStyle(
                             fontSize: 16.0), // Adjust font size if needed
                       ),
