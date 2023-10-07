@@ -55,7 +55,7 @@ class _UserDetailsState extends State<UserDetails> {
               ),
               Container(
                 margin: const EdgeInsets.all(16.0),
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 10.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -75,14 +75,10 @@ class _UserDetailsState extends State<UserDetails> {
                       title: Text('User Name'),
                       trailing: Text('${this.widget.user.name}'),
                     ),
-                    // ListTile(
-                    //   title: Text('Email'),
-                    //   trailing: Text('${this.widget.user.email}'),
-                    // ),
                     ListTile(
-                      title:  Text('${this.widget.user.email}'),
-                      trailing:Text('Email')),
-
+                      title: Text('Email'),
+                      trailing: Text('${this.widget.user.email}'),
+                    ),
                     ListTile(
                       title: Text('Phone'),
                       trailing: Text('${this.widget.user.phone}'),
@@ -91,9 +87,6 @@ class _UserDetailsState extends State<UserDetails> {
                     //   title: Text('Address')
                     //   // trailing: Text('${locationName}'),
                     // ),
-                    ListTile(
-                      title:  Text('${locationName}'),
-                      trailing:Text('Address')),
                   ],
                 ),
               ),
